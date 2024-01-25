@@ -3,11 +3,13 @@ from torch import nn, Tensor
 from cortex.model.elemental import MaskLayerNorm1d, swish
 
 
-class mResidualBlock(nn.Module):
+class Conv1dResidBlock(nn.Module):
     """
-    1D Conv residual block with optional layer-norm and swish activation
-    Each block has two conv layers.
+    1D explicit convolution pre-norm residual block with optional layer-norm and swish activation
+    Each block has two convolution layers.
     The order of operations is norm -> act -> conv -> norm -> act -> conv -> add
+
+    This module expects inputs to be a tuple of (features, padding_mask)
     """
 
     def __init__(
