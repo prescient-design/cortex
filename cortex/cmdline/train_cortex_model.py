@@ -10,7 +10,7 @@ import wandb
 from omegaconf import DictConfig, OmegaConf
 from pytorch_lightning.trainer.supporters import CombinedLoader
 
-from cortex.utils import wandb_setup
+from cortex.logging import wandb_setup
 
 
 @hydra.main(config_path="../config/hydra", config_name="train_cortex_model", version_base=None)
