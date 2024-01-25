@@ -12,7 +12,7 @@ from cortex.model.elemental import (
     identity,
     permute_spatial_channel_dims,
 )
-from cortex.model.blocks import Conv1dResidBlock
+from cortex.model.block import Conv1dResidBlock
 from cortex.model.trunk import TrunkNodeOutput
 
 
