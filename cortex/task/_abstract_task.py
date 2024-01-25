@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 import pandas as pd
+from collections import OrderedDict
 
 from cortex.data.data_module import TaskDataModule
 from cortex.model.leaf import LeafNode
@@ -50,18 +51,17 @@ class BaseTask(ABC):
 
         return self.format_batch(batch, corrupt_frac=corrupt_frac)
 
-    def format_batch(self, batch: pd.DataFrame, corrupt_frac: float = None) -> dict:
+    def format_batch(self, batch: OrderedDict, corrupt_frac: float = None) -> dict:
         """
         Format a batch of data for a `NeuralTree` object
         """
         return {
-            "df": batch,
             "root_inputs": self.format_inputs(batch, corrupt_frac=corrupt_frac),
             "leaf_targets": {},
         }
 
     @abstractmethod
-    def format_inputs(self, df: pd.DataFrame) -> dict:
+    def format_inputs(self, batch: OrderedDict) -> dict:
         """
         Format input DataFrame for a `NeuralTree` object
         """
