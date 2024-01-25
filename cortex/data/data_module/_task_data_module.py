@@ -8,8 +8,8 @@ from torch import Generator
 from torch.utils.data import DataLoader, Sampler, random_split
 
 from cortex.data.dataset import ordered_dict_collator
-# TODO port from prescient package
-from prescient.samplers import RandomizedMinorityUpsampler
+# TODO change to prescient.samplers when available
+from cortex.data.samplers import RandomizedMinorityUpsampler
 
 T = TypeVar("T")
 
