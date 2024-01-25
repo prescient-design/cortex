@@ -1,0 +1,38 @@
+[project]
+name = "pytorch-cortex"
+dynamic = ["version", "readme", "dependencies", "optional-dependencies"]
+description = "A modular architecture for deep learning systems."
+authors = [{name = "Samuel Stanton", email = "stanton.samuel@gene.com"}]
+classifiers=[
+    "Development Status :: 3",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+]
+
+[project.scripts]
+cortex_train_model = "cortex.cmdline.train_cortex_model:main"
+cortex_finetune_model = "cortex.cmdline.finetune_cortex_model:main"
+cortex_generate_designs = "cortex.cmdline.generate_designs:main"
+
+
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.in"]}
+optional-dependencies = {dev = {file = ["requirements-dev.in"]}}
+readme = {file = "README.md"}
+
+[tool.setuptools.packages.find]
+include = ["cortex*"]
+
+[tool.setuptools.package-data]
+"cortex.config.hydra" = ["*.yaml"]
+"cortex.assets" = ["*.txt"]
+
+[tool.setuptools_scm]
+search_parent_directories = true
+version_scheme = "no-guess-dev"
+local_scheme = "node-and-date"
+fallback_version = "0.0.0"
