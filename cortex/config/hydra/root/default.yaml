@@ -1,0 +1,19 @@
+full_seq:
+  _target_: cortex.model.root.Conv1dRoot
+  corruption_process:
+    _target_: cortex.corruption.MaskCorruptionProcess
+  tokenizer_transform:
+    _target_: cortex.transform.HuggingFaceTokenizerTransform
+    tokenizer:
+      _target_: cortex.tokenization.CachedBertTokenizerFast
+  max_len: 512
+  out_dim: ${embed_dim}
+  embed_dim: ${embed_dim}
+  channel_dim: ${channel_dim}
+  num_blocks: 4
+  kernel_size: ${kernel_size}
+  dropout_prob: ${dropout_prob}
+  layernorm: true
+  pos_encoding: true
+  train_transforms: null
+  eval_transforms: null

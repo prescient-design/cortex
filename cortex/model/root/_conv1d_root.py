@@ -34,7 +34,7 @@ class Conv1dRootOutput(RootNodeOutput):
     corrupt_frac: Optional[float] = None
 
 
-class SeqCNNRoot(RootNode):
+class Conv1dRoot(RootNode):
     """
     A root node transforming an array of discrete sequences to an array of continuous sequence embeddings
     """
@@ -54,8 +54,6 @@ class SeqCNNRoot(RootNode):
         pos_encoding: bool = True,
         train_transforms=None,
         eval_transforms=None,
-        # device: str = "cuda:0",
-        # dtype: torch.dtype = torch.float32,
         corruption_process: Optional[BaseCorruptionProcess] = None,
         **kwargs,
     ) -> None:
@@ -64,7 +62,6 @@ class SeqCNNRoot(RootNode):
         self.vocab_size = len(self.tokenizer.vocab)
         self.max_len = max_len
         self.pad_tok_idx = self.tokenizer.padding_idx
-        # device = torch.device(device)
         if num_blocks >= 1:
             self.tok_encoder = nn.Embedding(
                 self.vocab_size, embed_dim, padding_idx=self.pad_tok_idx
@@ -188,7 +185,6 @@ class SeqCNNRoot(RootNode):
         # truncate token sequence to max context length
         if tgt_tok_idxs is not None:
             assert src_tok_embs is None
-            # tgt_tok_idxs = tgt_tok_idxs.to(self.device)
             # truncate to max context length, keep final stop token
             if tgt_tok_idxs.size(-1) > self.max_len:
                 tmp_tok_idxs = tgt_tok_idxs[..., : self.max_len - 1]
