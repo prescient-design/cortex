@@ -1,0 +1,14 @@
+torch
+torchtext
+torchvision
+pytorch_warmup
+botorch >= 0.9.4
+wandb
+tabulate
+omegaconf
+hydra-core >= 1.2.0
+tqdm
+pandas
+cachetools
+edlib
+transformers
