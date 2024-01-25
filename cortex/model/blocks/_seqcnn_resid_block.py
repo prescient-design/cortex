@@ -5,11 +5,13 @@ from cortex.model.elemental import MaskLayerNorm1d, swish
 
 class Conv1dResidBlock(nn.Module):
     """
-    1D explicit convolution pre-norm residual block with optional layer-norm and swish activation
+    1D explicit convolution pre-norm residual block with optional layer-norm and swish activation.
     Each block has two convolution layers.
-    The order of operations is norm -> act -> conv -> norm -> act -> conv -> add
+    The order of operations is norm -> act -> conv -> norm -> act -> conv -> add.
 
-    This module expects inputs to be a tuple of (features, padding_mask)
+    This module expects inputs to be a tuple of (features, padding_mask).
+
+    Dropout is applied to the output of the block.
     """
 
     def __init__(
