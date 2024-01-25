@@ -1,0 +1,8 @@
+binding:
+  _target_: cortex.model.branch.Conv1dBranch
+  out_dim: 8
+  embed_dim: ${channel_dim}
+  num_blocks: 2
+  kernel_size: ${kernel_size}
+  dropout_prob: ${dropout_prob}
+  layernorm: true

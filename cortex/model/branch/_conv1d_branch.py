@@ -13,7 +13,7 @@ from cortex.model.elemental import (
     permute_spatial_channel_dims,
 )
 from cortex.model.block import Conv1dResidBlock
-from cortex.model.trunk import TrunkNodeOutput
+from cortex.model.trunk import PaddedTrunkOutput
 
 
 @dataclass
@@ -32,7 +32,7 @@ class Conv1dBranch(BranchNode):
         in_dim: int,
         out_dim: int = 64,
         embed_dim: int = 64,
-        num_layers: int = 2,
+        num_blocks: int = 2,
         kernel_size: int = 5,
         dropout_prob: float = 0.1,
         layernorm: bool = True,
@@ -44,9 +44,9 @@ class Conv1dBranch(BranchNode):
         self.in_dim = in_dim
         self.out_dim = out_dim
         self.embed_dim = embed_dim
-        self.num_layers = num_layers
+        self.num_blocks = num_blocks
 
-        if num_layers == 0:
+        if num_blocks == 0:
             # add projection if dims don't match
             encoder_modules = [
                 Expression(identity)
@@ -59,23 +59,23 @@ class Conv1dBranch(BranchNode):
                 Apply(Expression(permute_spatial_channel_dims)),
             ]  # (B,N,C) -> (B,C,N)
 
-        if num_layers == 1:
+        if num_blocks == 1:
             encoder_modules.append(
                 Conv1dResidBlock(in_dim, out_dim, kernel_size, layernorm, dropout_prob)
             )
-        elif num_layers > 1:
+        elif num_blocks > 1:
             encoder_modules.append(Conv1dResidBlock(in_dim, embed_dim, kernel_size, layernorm, 0.0))
             encoder_modules.extend(
                 [
                     Conv1dResidBlock(embed_dim, embed_dim, kernel_size, layernorm, 0.0)
-                    for _ in range(num_layers - 2)
+                    for _ in range(num_blocks - 2)
                 ]
             )
             encoder_modules.append(
                 Conv1dResidBlock(embed_dim, out_dim, kernel_size, layernorm, dropout_prob)
             )
 
-        if num_layers >= 1:
+        if num_blocks >= 1:
             encoder_modules.append(
                 Apply(Expression(permute_spatial_channel_dims))
             )  # (B,C,N) -> (B,N,C)
@@ -90,7 +90,7 @@ class Conv1dBranch(BranchNode):
 
     def forward(
         self,
-        trunk_outputs: TrunkNodeOutput,
+        trunk_outputs: PaddedTrunkOutput,
     ) -> Conv1dBranchOutput:
         """
         Args:
