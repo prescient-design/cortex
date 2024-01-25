@@ -8,9 +8,10 @@ Docstrings have been added, as well as DDIM sampling and a new collection of bet
 import math
 
 import numpy as np
+from typing import Callable
 
 
-def get_named_beta_schedule(schedule_name, num_diffusion_timesteps):
+def get_named_beta_schedule(schedule_name: str, num_diffusion_timesteps: int) -> np.ndarray:
     """
     Get a pre-defined beta schedule for the given name.
 
@@ -60,7 +61,7 @@ def get_named_beta_schedule(schedule_name, num_diffusion_timesteps):
         raise NotImplementedError(f"unknown beta schedule: {schedule_name}")
 
 
-def _betas_for_alpha_bar2(num_diffusion_timesteps, alpha_bar, max_beta=0.999):
+def _betas_for_alpha_bar2(num_diffusion_timesteps: int, alpha_bar: Callable, max_beta: float = 0.999) -> np.ndarray:
     """
     Create a beta schedule that discretizes the given alpha_t_bar function,
     which defines the cumulative product of (1-beta) over time from t = [0,1].
@@ -81,7 +82,7 @@ def _betas_for_alpha_bar2(num_diffusion_timesteps, alpha_bar, max_beta=0.999):
     return np.array(betas)
 
 
-def _betas_for_alpha_bar(num_diffusion_timesteps, alpha_bar, max_beta=0.999):
+def _betas_for_alpha_bar(num_diffusion_timesteps: int, alpha_bar: Callable, max_beta: float = 0.999) -> np.ndarray:
     """
     Create a beta schedule that discretizes the given alpha_t_bar function,
     which defines the cumulative product of (1-beta) over time from t = [0,1].

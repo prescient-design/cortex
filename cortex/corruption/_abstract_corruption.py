@@ -76,5 +76,5 @@ class CorruptionProcess(ABC):
         return x_corrupt, is_corrupted
 
     @abstractmethod
-    def _corrupt(self, x_start, corrupt_frac: float, *args, **kwargs):
+    def _corrupt(self, x_start: torch.Tensor, corrupt_frac: float, *args, **kwargs):
         pass

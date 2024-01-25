@@ -12,11 +12,11 @@ class GaussianCorruptionProcess(CorruptionProcess):
     independently with probability `corrupt_frac`.
     """
 
-    def __init__(self, noise_variance=10.0, *args, **kwargs):
+    def __init__(self, noise_variance: float = 10.0, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.noise_variance = noise_variance
 
-    def _corrupt(self, x_start: torch.Tensor, corrupt_frac: float, *args, **kwargs):
+    def _corrupt(self, x_start: torch.Tensor, corrupt_frac: float, *args, **kwargs) -> tuple(torch.Tensor, torch.Tensor):
         noise_scale = corrupt_frac * math.sqrt(self.noise_variance)
         x_corrupt = (1.0 - corrupt_frac) * x_start + noise_scale * torch.randn_like(x_start)
         is_corrupted = torch.ones_like(x_start, dtype=torch.bool)
