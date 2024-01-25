@@ -46,7 +46,7 @@ class TaskDataModule(LightningDataModule):
         self._sampler = sampler
         self._batch_size = batch_size
         self._batch_sampler = batch_sampler
-        self._collate_fn = collate_fn
+        self._collate_fn = collate_fn or ordered_dict_collator
         self._drop_last = drop_last
 
         self.datasets = {
@@ -74,7 +74,7 @@ class TaskDataModule(LightningDataModule):
                 train_val.df = pd.concat(
                     [train_val.df, self.datasets["test"].df], ignore_index=True
                 )
-            columns = train_val.columns
+            # columns = train_val.columns
             train_dataset, val_dataset = random_split(
                 train_val,
                 lengths=self._lengths,
@@ -87,18 +87,18 @@ class TaskDataModule(LightningDataModule):
         if stage == "test":
             self._dataset_config.base_dataset.train = False
             test_dataset = hydra.utils.instantiate(self._dataset_config)
-            columns = test_dataset.columns
+            # columns = test_dataset.columns
             self.datasets["test"] = test_dataset
         if stage == "predict":
             self._dataset_config.base_dataset.train = False
             predict_dataset = hydra.utils.instantiate(self._dataset_config)
-            columns = predict_dataset.columns
+            # columns = predict_dataset.columns
             self.datasets["predict"] = predict_dataset
 
         # there's probably a cleaner way to do this, the problem is you don't know the
         # columns until you instantiate the dataset
-        self._collate_fn = self._collate_fn or ordered_dict_collator
-        self._dataloader_kwargs["collate_fn"] = self._collate_fn
+        # self._collate_fn = self._collate_fn or ordered_dict_collator
+        # self._dataloader_kwargs["collate_fn"] = self._collate_fn
 
     def train_dataloader(self):
         return self.get_dataloader(split="train")
