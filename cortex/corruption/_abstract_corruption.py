@@ -4,7 +4,7 @@ from typing import Optional
 import numpy as np
 import torch
 
-from cortex.corruption._diffusion_noise_schedules import get_named_beta_schedule
+from cortex.corruption._diffusion_noise_schedule import get_named_beta_schedule
 
 
 class CorruptionProcess(ABC):
