@@ -1,0 +1,45 @@
+exclude: ".egg-info|_skbuild"
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: check-yaml
+        exclude: mkdocs.yml|templates/.*.yaml
+      - id: check-yaml
+        name: check-yaml-mkdocs
+        # --unsafe is a workaround for the use of !! in mkdocs.yml.
+        args: [--unsafe]
+        files: mkdocs.yml
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: debug-statements
+  - repo: https://github.com/psf/black
+    rev: 22.6.0
+    hooks:
+      - id: black
+        args: [--config=pyproject.toml]
+  - repo: https://github.com/hadialqattan/pycln
+    rev: v1.3.5
+    hooks:
+      - id: pycln
+        args: [--config=pyproject.toml]
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        name: isort (python)
+  - repo: https://github.com/pycqa/flake8
+    rev: 3.9.2
+    hooks:
+      - id: flake8
+        additional_dependencies: [flake8-bugbear==22.8.23, flake8-comprehensions==3.10.0]
+        args: [--config=setup.cfg]
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.6.0
+    hooks:
+      - id: nbstripout
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.254
+    hooks:
+      - id: ruff
+        name: ruff
