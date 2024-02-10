@@ -1,9 +1,8 @@
-# Cortex
-## A Modular Architecture for Deep Learning Systems
-
 <p align="center">
 <img src="docs/assets/cortex_logo_concept_v1.png" width=400px>
 </p>
+
+# A Modular Architecture for Deep Learning Systems
 
 ## What is `cortex`?
 
