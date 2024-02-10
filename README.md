@@ -71,6 +71,12 @@ Supported configs are
 
 Contributions are welcome, especially tutorials and documentation.
 
+### Install pre-commit hooks
+```
+python -m pip install pre-commit
+pre-commit install
+```
+
 ### Testing
 
 `pytest -v --cov-report term-missing --cov=./cortex ./tests`
