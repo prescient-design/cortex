@@ -87,5 +87,5 @@ The cerebral cortex is the outer layer of the brain (i.e. the grey matter). Diff
 `cortex` also provides a flexible superstructure to compose those modules into advanced architectures and route signals between them.
 
 <p align="center">
-<img src="docs/assets/neural_tree.png" width=400px>
+<img src="docs/assets/neural_tree_banner.png" width=1200px>
 </p>
