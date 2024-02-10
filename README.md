@@ -85,3 +85,7 @@ Contributions are welcome, especially tutorials and documentation.
 
 The cerebral cortex is the outer layer of the brain (i.e. the grey matter). Different parts of the cortex are responsible for different functions, including sensation, motor function, and reasoning. The cortex is supported and interconnected by subcortical structures (i.e. the white matter). Similarly the `cortex` package provides modular neural network components for different functions, such as extracting features from different types of inputs, or making predictions for different tasks.
 `cortex` also provides a flexible superstructure to compose those modules into advanced architectures and route signals between them.
+
+<p align="center">
+<img src="docs/assets/neural_tree.png" width=400px>
+</p>
