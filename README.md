@@ -1,5 +1,5 @@
 <p align="center">
-<img src="docs/assets/cortex_logo_concept_v1.png" width=400px>
+<img src="docs/assets/cortex_logo_concept_v1.png" width=300px>
 </p>
 
 # A Modular Architecture for Deep Learning Systems
