@@ -71,9 +71,9 @@ Supported configs are
 
 Contributions are welcome, especially tutorials and documentation.
 
-### Install pre-commit hooks
+### Install dev requirements and pre-commit hooks
 ```
-python -m pip install pre-commit
+python -m pip install -r requirements-dev.txt
 pre-commit install
 ```
 
