@@ -2,7 +2,7 @@
 ## A Modular Architecture for Deep Learning Systems
 
 <p align="center">
-<img src="docs/assets/neural_tree.png" width=400px>
+<img src="docs/assets/cortex_logo_concept_v1.png" width=400px>
 </p>
 
 ## What is `cortex`?
@@ -50,7 +50,7 @@ Deep learning is easy to learn and difficult to master. Seemingly insignificant 
     `pip install -e .[dev]`
 
 ## Running
-  
+
 Use `cortex_train_model --config-name <CONFIG_NAME>` to train, e.g.:
 ```
 cortex_train_model --config-name train_ab_seqcnn wandb_mode=offline fit=smoke_test
