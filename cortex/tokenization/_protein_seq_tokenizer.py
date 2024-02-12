@@ -1,8 +1,65 @@
 import importlib.resources
+from collections import OrderedDict
+from dataclasses import dataclass
 from typing import Optional
 
-from cortex.constants import ALIGNMENT_GAP_TOKEN, CANON_AMINO_ACIDS, COMPLEX_SEP_TOKEN, NULL_TOKENS
+from cortex.constants import (ALIGNMENT_GAP_TOKEN, CANON_AMINO_ACIDS,
+                              COMPLEX_SEP_TOKEN, NULL_TOKENS)
 from cortex.tokenization._cached_bert_tokenizer import CachedBertTokenizerFast
+
+
+@dataclass
+class ProteinComplex:
+    """
+    Dataclass for protein complex.
+    Args:
+        chains: dict[str, str]: an ordered dict of chain_id: chain_sequence pairs (e.g. {"VH": "AVAVAV", "VL": "ACVACA"})
+        species: Optional[str]: species of the complex (e.g. <human>, <mouse>, etc.)
+        format: Optional[str]: format of the complex  (e.g. <igg>, <igm>, etc.)
+    """
+
+    chains: OrderedDict[str, str]
+    species: Optional[str] = None
+    format: Optional[str] = None
+
+
+def tokenize_protein_complex(
+    complex: ProteinComplex,
+    sep_with_chain_ids: bool = False,
+    include_species: bool = False,
+    include_format: bool = False,
+):
+    """
+    Tokenize a protein complex.
+    Args:
+        complex: ProteinComplex: a protein complex dataclass
+        seq_with_chain_ids: bool: whether to include chain ids in the tokenized sequence
+    Returns:
+        str: tokenized protein complex
+
+    Example:
+    >>> complex = ProteinComplex(
+    ...     chains={
+    ...         "VH": "A V A V A V",
+    ...         "VL": "A C V A C A",
+    ...     },
+    ... )
+    >>> tokens = tokenize_protein_complex(complex)
+    >>> tokens
+    "A V A V A V . A C V A C A"
+    """
+    tokens = []
+    if include_species:
+        tokens.append(complex.species)
+    if include_format:
+        tokens.append(complex.format)
+    for chain_count, (chain_id, chain_seq) in enumerate(complex.chains.items()):
+        if sep_with_chain_ids:
+            tokens.append(f"[{chain_id}]")
+        elif chain_count > 0:
+            tokens.append(COMPLEX_SEP_TOKEN)
+        tokens.extend(list(chain_seq.replace(" ", "")))
+    return " ".join(tokens)
 
 
 class ProteinSequenceTokenizerFast(CachedBertTokenizerFast):
