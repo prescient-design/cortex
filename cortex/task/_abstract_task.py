@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
+from collections import OrderedDict
 
 import pandas as pd
-from collections import OrderedDict
 
 from cortex.data.data_module import TaskDataModule
 from cortex.model.leaf import LeafNode

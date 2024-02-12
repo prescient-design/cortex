@@ -1,6 +1,7 @@
 import pandas as pd
 
-from cortex.constants import AB_AG_COMPLEX_COL, ANTIGEN_COL, VARIABLE_HEAVY_COL, VARIABLE_LIGHT_COL
+from cortex.constants import (AB_AG_COMPLEX_COL, ANTIGEN_COL,
+                              VARIABLE_HEAVY_COL, VARIABLE_LIGHT_COL)
 from cortex.transforms._transform import Transform
 from cortex.transforms.functional import tokenize_igg_ag_df
 

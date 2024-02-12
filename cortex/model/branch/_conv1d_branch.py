@@ -5,14 +5,9 @@ from torch import nn
 
 from cortex.model.block import Conv1dResidBlock
 from cortex.model.branch import BranchNode, BranchNodeOutput
-from cortex.model.elemental import (
-    Apply,
-    Expression,
-    MeanPooling,
-    WeightedMeanPooling,
-    identity,
-    permute_spatial_channel_dims,
-)
+from cortex.model.elemental import (Apply, Expression, MeanPooling,
+                                    WeightedMeanPooling, identity,
+                                    permute_spatial_channel_dims)
 from cortex.model.trunk import PaddedTrunkOutput
 
 

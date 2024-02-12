@@ -8,9 +8,11 @@ import torch
 from torch import LongTensor, nn
 from torchtext.transforms import PadTransform, ToTensor
 
-from cortex.corruption import CorruptionProcess, GaussianCorruptionProcess, MaskCorruptionProcess
+from cortex.corruption import (CorruptionProcess, GaussianCorruptionProcess,
+                               MaskCorruptionProcess)
 from cortex.model.block import Conv1dResidBlock
-from cortex.model.elemental import Apply, Expression, SinePosEncoder, permute_spatial_channel_dims
+from cortex.model.elemental import (Apply, Expression, SinePosEncoder,
+                                    permute_spatial_channel_dims)
 from cortex.model.root import RootNode, RootNodeOutput
 from cortex.transforms import HuggingFaceTokenizerTransform
 
@@ -285,13 +287,7 @@ class Conv1dRoot(RootNode):
         seq_array, tgt_tok_idxs, src_tok_embs, corrupt_frac = self.init_seq(
             inputs, seq_array, tgt_tok_idxs, src_tok_embs, corrupt_frac, **kwargs
         )
-        (
-            src_tok_idxs,
-            tgt_tok_idxs,
-            corruption_allowed,
-            is_corrupted,
-            padding_mask,
-        ) = self.tokenize_seq(
+        (src_tok_idxs, tgt_tok_idxs, corruption_allowed, is_corrupted, padding_mask,) = self.tokenize_seq(
             seq_array,
             tgt_tok_idxs,
             src_tok_embs,

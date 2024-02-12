@@ -1,8 +1,10 @@
 import pandas as pd
 import torch
 
-from cortex.constants import ANTIGEN_COL, COMPLEX_SEP_TOKEN, VARIABLE_HEAVY_COL, VARIABLE_LIGHT_COL
-from cortex.tokenization import ProteinComplex, ProteinSequenceTokenizerFast, tokenize_protein_complex
+from cortex.constants import (ANTIGEN_COL, COMPLEX_SEP_TOKEN,
+                              VARIABLE_HEAVY_COL, VARIABLE_LIGHT_COL)
+from cortex.tokenization import (ProteinComplex, ProteinSequenceTokenizerFast,
+                                 tokenize_protein_complex)
 from cortex.transforms.functional import tokenize_igg_ag_df
 
 

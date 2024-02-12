@@ -1,4 +1,5 @@
 from typing import Callable
+
 from torch import Tensor, nn
 
 
