@@ -18,9 +18,7 @@ def main(cfg):
     """
     general setup
     """
-    random.seed(
-        None
-    )  # make sure random seed resets between Hydra multirun jobs for random job-name generation
+    random.seed(None)  # make sure random seed resets between Hydra multirun jobs for random job-name generation
 
     try:
         with warnings.catch_warnings():
@@ -87,7 +85,9 @@ def execute(cfg):
     trainer.fit(
         model,
         train_dataloaders=CombinedLoader(leaf_train_loaders, mode="min_size"),
-        val_dataloaders=CombinedLoader(task_test_loaders, mode="max_size_cycle"),  # change to max_size when lightning upgraded to >1.9.5
+        val_dataloaders=CombinedLoader(
+            task_test_loaders, mode="max_size_cycle"
+        ),  # change to max_size when lightning upgraded to >1.9.5
     )
 
     # save model

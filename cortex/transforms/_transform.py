@@ -12,9 +12,7 @@ def _check_type(
     types_or_checks: tuple[Union[type, Callable[[Any], bool]], ...],
 ) -> bool:
     return any(
-        isinstance(obj, type_or_check)
-        if isinstance(type_or_check, type)
-        else type_or_check(obj)
+        isinstance(obj, type_or_check) if isinstance(type_or_check, type) else type_or_check(obj)
         for type_or_check in types_or_checks
     )
 

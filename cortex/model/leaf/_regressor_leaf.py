@@ -4,13 +4,20 @@ from typing import Optional
 
 import torch
 from botorch.models.transforms.outcome import OutcomeTransform
-from scipy import stats
 from torch import distributions, nn
 
+from cortex.metrics import spearman_rho
 from cortex.model.branch import BranchNodeOutput
 from cortex.model.leaf import LeafNode, LeafNodeOutput
-from cortex.utils import check_scale
-from cortex.metrics import spearman_rho
+
+
+def check_scale(scales: torch.Tensor) -> bool:
+    """
+    Check that scale factors are positive.
+    """
+    if torch.any(scales <= 0.0):
+        raise ValueError("Scale factors must be positive.")
+    return True
 
 
 def diag_gaussian_nll(loc, scale, targets):
@@ -27,9 +34,7 @@ def diag_natural_gaussian_nll(canon_param, targets):
     suff_stat = torch.stack([targets, targets.pow(2)])
     cumulant = diag_gaussian_cumulant(canon_param)
     underlying_measure = 1 / math.sqrt(2 * math.pi)
-    log_likelihood = (
-        math.log(underlying_measure) + (canon_param * suff_stat).sum(0) - cumulant
-    ).mean()
+    log_likelihood = (math.log(underlying_measure) + (canon_param * suff_stat).sum(0) - cumulant).mean()
     return -1.0 * log_likelihood
 
 
@@ -102,7 +107,7 @@ class RegressorLeaf(LeafNode):
     def forward(self, branch_outputs: BranchNodeOutput) -> RegressorLeafOutput:
         res = self.encoder(branch_outputs.pooled_features)
         return self.transform_output(res)
-    
+
     def sample(self, pooled_features, num_samples):
         outputs = self(pooled_features)
         dist = distributions.Normal(outputs.loc, outputs.scale)
@@ -129,10 +134,7 @@ class RegressorLeaf(LeafNode):
         loc = canon_param[0] * var
         scale = var.sqrt()
 
-        if (
-            isinstance(self.outcome_transform, OutcomeTransform)
-            and self.outcome_transform._is_trained
-        ):
+        if isinstance(self.outcome_transform, OutcomeTransform) and self.outcome_transform._is_trained:
             self.outcome_transform.eval()
             # this is equivalent to transforming the training data
             # BoTorch OutcomeTransform expects variance
@@ -148,7 +150,10 @@ class RegressorLeaf(LeafNode):
         return outputs
 
     def loss_from_canon_param(
-        self, canon_param: torch.Tensor, targets: torch.Tensor, label_smoothing: float = 0.0
+        self,
+        canon_param: torch.Tensor,
+        targets: torch.Tensor,
+        label_smoothing: float = 0.0,
     ) -> torch.Tensor:
         device = canon_param.device
         dtype = canon_param.dtype
@@ -178,15 +183,11 @@ class RegressorLeaf(LeafNode):
             )
             label_stats = label_stats.detach()
 
-            smoothed_mean = (
-                label_smoothing * standard_stats[0] + (1.0 - label_smoothing) * label_stats[0]
-            )
+            smoothed_mean = label_smoothing * standard_stats[0] + (1.0 - label_smoothing) * label_stats[0]
             mean_diff = standard_stats[0] - label_stats[0]
             cross_var_term = label_smoothing * (1.0 - label_smoothing) * mean_diff.pow(2)
             smoothed_var = (
-                label_smoothing * standard_stats[1]
-                + (1.0 - label_smoothing) * label_stats[1]
-                + cross_var_term
+                label_smoothing * standard_stats[1] + (1.0 - label_smoothing) * label_stats[1] + cross_var_term
             )
 
             # convert to natural parameters
@@ -209,7 +210,7 @@ class RegressorLeaf(LeafNode):
 
         canon_param = leaf_outputs.canon_param
         return self.loss_from_canon_param(canon_param, targets, label_smoothing)
-    
+
     def evaluate(self, outputs: RegressorLeafOutput, targets):
         loc = outputs.loc
         scale = outputs.scale
@@ -234,9 +235,7 @@ class RegressorLeaf(LeafNode):
                     nn.init.zeros_(m.bias)
 
 
-def format_regressor_ensemble_output(
-    leaf_outputs: list[RegressorLeafOutput], task_key: str
-) -> dict:
+def format_regressor_ensemble_output(leaf_outputs: list[RegressorLeafOutput], task_key: str) -> dict:
     res = {}
     loc = torch.stack([l_out.loc for l_out in leaf_outputs])
     scale = torch.stack([l_out.scale for l_out in leaf_outputs])

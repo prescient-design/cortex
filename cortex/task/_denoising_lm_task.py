@@ -1,10 +1,10 @@
+from collections import OrderedDict
 from typing import Optional
 
 import numpy as np
 import pandas as pd
 import torch
 from transformers import BertTokenizer
-from collections import OrderedDict
 
 from cortex.data.data_module import TaskDataModule
 from cortex.model.leaf import DenoisingLanguageModelLeaf
@@ -41,9 +41,7 @@ class DenoisingLanguageModelTask(BaseTask):
         inputs = {}
         for root_key, input_cols in self.input_map.items():
             inputs[root_key] = {
-                "seq_array": np.concatenate(
-                    [np.array(batch[col]).reshape(-1, 1) for col in input_cols], axis=-1
-                ),
+                "seq_array": np.concatenate([np.array(batch[col]).reshape(-1, 1) for col in input_cols], axis=-1),
                 "corrupt_frac": corrupt_frac,
             }
         return inputs
@@ -68,11 +66,7 @@ class DenoisingLanguageModelTask(BaseTask):
         avg_token_probs = logits.softmax(-1).mean(0)
         top_1 = avg_token_probs.argmax(-1)
         task_metrics = {
-            "nll": -1.0
-            * torch.distributions.Categorical(probs=avg_token_probs)
-            .log_prob(targets)
-            .mean()
-            .item(),
+            "nll": -1.0 * torch.distributions.Categorical(probs=avg_token_probs).log_prob(targets).mean().item(),
             "top_1_acc": top_1.eq(targets).float().mean().item(),
         }
         return task_metrics

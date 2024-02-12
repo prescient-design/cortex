@@ -1,14 +1,14 @@
-from typing import Optional
+from collections import OrderedDict
+from typing import Any, Optional
 
 import hydra
 import pandas as pd
 from omegaconf import DictConfig
 from torch.nn import Sequential
 from torch.utils.data import ConcatDataset, Dataset
+
 from cortex.datasets._dataframe_dataset import DataFrameDataset
 
-from collections import OrderedDict
-from typing import Any
 
 class TransformedDataset(DataFrameDataset):
     def __init__(
@@ -21,9 +21,7 @@ class TransformedDataset(DataFrameDataset):
         if isinstance(base_dataset, DictConfig):
             base_dataset = hydra.utils.instantiate(base_dataset)
         if isinstance(base_dataset, ConcatDataset):
-            data = pd.concat(
-                [dataset._data for dataset in base_dataset.datasets], ignore_index=True
-            )
+            data = pd.concat([dataset._data for dataset in base_dataset.datasets], ignore_index=True)
         else:
             data = base_dataset._data.reset_index(drop=True)
 

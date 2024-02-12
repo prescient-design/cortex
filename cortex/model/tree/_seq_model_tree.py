@@ -7,21 +7,17 @@ import lightning as L
 import numpy as np
 import pandas as pd
 import torch
-from pytorch_lightning.utilities import rank_zero_only
 from botorch.models.transforms.outcome import OutcomeTransform
 from omegaconf import DictConfig, OmegaConf
 from torch import nn
 
-from cortex.model.leaf import (
-    ClassifierLeaf,
-    DenoisingLanguageModelLeaf,
-    RegressorLeaf,
-    format_classifier_ensemble_output,
-    format_denoising_lm_ensemble_output,
-    format_regressor_ensemble_output,
-)
+from cortex.model import online_weight_update_
+from cortex.model.leaf import (ClassifierLeaf, DenoisingLanguageModelLeaf,
+                               RegressorLeaf,
+                               format_classifier_ensemble_output,
+                               format_denoising_lm_ensemble_output,
+                               format_regressor_ensemble_output)
 from cortex.model.tree import NeuralTree
-from cortex.utils import online_weight_update_
 
 
 class SequenceModelTree(NeuralTree, L.LightningModule):
@@ -50,7 +46,13 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
         # decoupled multi-task training requires manual optimization
         self.automatic_optimization = False
         self.save_hyperparameters(
-            ignore=["model_cfg", "root_nodes", "trunk_node", "branch_nodes", "leaf_nodes"]
+            ignore=[
+                "model_cfg",
+                "root_nodes",
+                "trunk_node",
+                "branch_nodes",
+                "leaf_nodes",
+            ]
         )
 
     def train(self, *args, **kwargs):
@@ -89,9 +91,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             l_node = self.leaf_nodes[l_key]
             # link leaf output to root input if needed (e.g. for masked language model leaves)
             r_key = l_node.root_key if hasattr(l_node, "root_key") else None
-            root_outputs = (
-                tree_outputs.root_outputs[r_key] if r_key in tree_outputs.root_outputs else None
-            )
+            root_outputs = tree_outputs.root_outputs[r_key] if r_key in tree_outputs.root_outputs else None
             leaf_outputs = tree_outputs.leaf_outputs[l_key]
 
             # get leaf loss and update weights
@@ -106,9 +106,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             step_metrics.setdefault(task_key, []).append(loss.item())
 
         # log average task losses
-        step_metrics = {
-            f"{task_key}/train_loss": np.mean(losses) for task_key, losses in step_metrics.items()
-        }
+        step_metrics = {f"{task_key}/train_loss": np.mean(losses) for task_key, losses in step_metrics.items()}
         return step_metrics
 
     def training_step_end(self, step_metrics):
@@ -141,9 +139,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             decay_rate = float(self.hparams.fit_cfg.weight_averaging.decay_rate)
         else:
             raise ValueError("Invalid weight averaging method")
-        online_weight_update_(
-            self.state_dict(), self._eval_state_dict, decay_rate, param_prefixes=None
-        )
+        online_weight_update_(self.state_dict(), self._eval_state_dict, decay_rate, param_prefixes=None)
         return w_avg_step_count + 1
 
     def on_train_epoch_start(self):
@@ -175,9 +171,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
         optimizer = hydra.utils.instantiate(fit_cfg.optimizer, params=params)
         return {
             "optimizer": optimizer,
-            "lr_scheduler": {
-                "scheduler": hydra.utils.call(fit_cfg.lr_scheduler, optimizer=optimizer)
-            },
+            "lr_scheduler": {"scheduler": hydra.utils.call(fit_cfg.lr_scheduler, optimizer=optimizer)},
         }
 
     def evaluate(self, *args, **kwargs):
@@ -196,9 +190,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             else:
                 predict_targets[task_key] = None
 
-            predict_out = self.predict(
-                data=task_batch, batch_limit=len(task_batch), predict_tasks=[task_key]
-            )
+            predict_out = self.predict(data=task_batch, batch_limit=len(task_batch), predict_tasks=[task_key])
 
             step_metrics.update(
                 self.prediction_metrics(
@@ -290,9 +282,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
     def build_tree(self, cfg: OmegaConf, skip_task_setup: bool = False) -> dict:
         # create root nodes
         for root_key, root_cfg in cfg.roots.items():
-            self.root_nodes[root_key] = hydra.utils.instantiate(
-                root_cfg, device=self.device, dtype=self.dtype
-            )
+            self.root_nodes[root_key] = hydra.utils.instantiate(root_cfg, device=self.device, dtype=self.dtype)
 
         # create trunk node
         root_out_dims = [r_node.out_dim for r_node in self.root_nodes.values()]
@@ -360,9 +350,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
         batched_out = [
             {
                 k: data_mapper(v)
-                for k, v in self._predict_batch(
-                    data=b, task_keys=predict_tasks, format_outputs=format_outputs
-                ).items()
+                for k, v in self._predict_batch(data=b, task_keys=predict_tasks, format_outputs=format_outputs).items()
             }
             for b in batches
         ]
@@ -379,9 +367,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             targets = predict_targets[task_key]
             task_metrics = task.compute_eval_metrics(predict_out, targets, task_key)
 
-            metrics.update(
-                {f"{task_key}/{log_prefix}_{m_key}": val for m_key, val in task_metrics.items()}
-            )
+            metrics.update({f"{task_key}/{log_prefix}_{m_key}": val for m_key, val in task_metrics.items()})
         return metrics
 
     def _predict_batch(self, *args, **kwargs):
@@ -398,9 +384,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
                 if l_key in task_leaves[t_key] and type(self.leaf_nodes[l_key]) is ClassifierLeaf
             ]
             if len(values) > 0:
-                predict_out.update(
-                    format_classifier_ensemble_output(leaf_outputs=values, task_key=t_key)
-                )
+                predict_out.update(format_classifier_ensemble_output(leaf_outputs=values, task_key=t_key))
 
             # regressor leaves
             values = [
@@ -409,24 +393,19 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
                 if l_key in task_leaves[t_key] and isinstance(self.leaf_nodes[l_key], RegressorLeaf)
             ]
             if len(values) > 0:
-                predict_out.update(
-                    format_regressor_ensemble_output(leaf_outputs=values, task_key=t_key)
-                )
+                predict_out.update(format_regressor_ensemble_output(leaf_outputs=values, task_key=t_key))
 
             # denoising language model leaves
             values = [
                 l_out
                 for l_key, l_out in task_out.items()
-                if l_key in task_leaves[t_key]
-                and isinstance(self.leaf_nodes[l_key], DenoisingLanguageModelLeaf)
+                if l_key in task_leaves[t_key] and isinstance(self.leaf_nodes[l_key], DenoisingLanguageModelLeaf)
             ]
             if len(values) > 0:
                 root_keys = [self.leaf_nodes[l_key].root_key for l_key in task_leaves[t_key]]
                 root_outputs = [task_out[r_key] for r_key in root_keys]
                 predict_out.update(
-                    format_denoising_lm_ensemble_output(
-                        leaf_outputs=values, root_outputs=root_outputs, task_key=t_key
-                    )
+                    format_denoising_lm_ensemble_output(leaf_outputs=values, root_outputs=root_outputs, task_key=t_key)
                 )
 
         return predict_out

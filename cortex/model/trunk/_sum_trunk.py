@@ -3,8 +3,8 @@ from dataclasses import dataclass
 import torch
 from torch import nn
 
-from cortex.model.root import RootNodeOutput
 from cortex.model.elemental import Expression, identity
+from cortex.model.root import RootNodeOutput
 from cortex.model.trunk import TrunkNode, TrunkNodeOutput
 
 
@@ -57,14 +57,9 @@ class SumTrunk(TrunkNode):
         if self.root_projections is None:
             features = [r_out.root_features for r_out in root_outputs]
         else:
-            features = [
-                proj(r_out.root_features)
-                for proj, r_out in zip(self.root_projections, root_outputs)
-            ]
+            features = [proj(r_out.root_features) for proj, r_out in zip(self.root_projections, root_outputs)]
         agg_root_features = torch.stack(features, dim=0).sum(0)
-        agg_padding_mask = (
-            torch.stack([r_out.padding_mask for r_out in root_outputs], dim=0).sum(0).clamp(0, 1)
-        )
+        agg_padding_mask = torch.stack([r_out.padding_mask for r_out in root_outputs], dim=0).sum(0).clamp(0, 1)
 
         outputs = PaddedTrunkOutput(
             trunk_features=self.encoder(agg_root_features),

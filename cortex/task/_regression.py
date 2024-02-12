@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from typing import Optional
 
 import numpy as np
@@ -5,12 +6,11 @@ import pandas as pd
 import torch
 from botorch.models.transforms.outcome import OutcomeTransform
 from scipy import stats
-from collections import OrderedDict
 
 from cortex.data.data_module import TaskDataModule
 from cortex.metrics import spearman_rho
-from cortex.model.leaf import RegressorLeaf
 from cortex.model.elemental import DDPStandardize
+from cortex.model.leaf import RegressorLeaf
 from cortex.task._abstract_task import BaseTask
 
 
@@ -42,16 +42,12 @@ class RegressionTask(BaseTask):
         self.root_key = root_key
         self.nominal_label_var = nominal_label_var
 
-    def fit_transform(
-        self, outcome_transform: OutcomeTransform, device: torch.device, dtype: torch.dtype
-    ) -> None:
+    def fit_transform(self, outcome_transform: OutcomeTransform, device: torch.device, dtype: torch.dtype) -> None:
         """
         Fit an `OutcomeTransform` object to the training data.
         """
         outcome_transform.train()
-        train_df = self.data_module.datasets["train_val"]._data.iloc[
-            self.data_module.datasets["train"].indices
-        ]
+        train_df = self.data_module.datasets["train_val"]._data.iloc[self.data_module.datasets["train"].indices]
         outcomes = self.format_targets(train_df)[self.leaf_key]["targets"]
         outcomes = torch.tensor(outcomes, device=device, dtype=dtype)
         outcome_transform(outcomes)
@@ -74,9 +70,7 @@ class RegressionTask(BaseTask):
         inputs = {}
         for root_key, input_cols in self.input_map.items():
             inputs[root_key] = {
-                "inputs": np.concatenate(
-                    [np.array(batch[col]).reshape(-1, 1) for col in input_cols], axis=-1
-                ),
+                "inputs": np.concatenate([np.array(batch[col]).reshape(-1, 1) for col in input_cols], axis=-1),
                 "corrupt_frac": corrupt_frac,
             }
         return inputs
@@ -87,9 +81,7 @@ class RegressionTask(BaseTask):
         """
         targets = {
             self.leaf_key: {
-                "targets": np.concatenate(
-                    [np.array(batch[col]).reshape(-1, 1) for col in self.outcome_cols], axis=-1
-                )
+                "targets": np.concatenate([np.array(batch[col]).reshape(-1, 1) for col in self.outcome_cols], axis=-1)
             }
         }
         return targets

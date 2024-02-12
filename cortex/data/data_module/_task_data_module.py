@@ -71,9 +71,7 @@ class TaskDataModule(LightningDataModule):
             self._dataset_config.base_dataset.train = True
             train_val = hydra.utils.instantiate(self._dataset_config)
             if self._train_on_everything:
-                train_val.df = pd.concat(
-                    [train_val.df, self.datasets["test"].df], ignore_index=True
-                )
+                train_val.df = pd.concat([train_val.df, self.datasets["test"].df], ignore_index=True)
             # columns = train_val.columns
             train_dataset, val_dataset = random_split(
                 train_val,
@@ -131,9 +129,7 @@ class TaskDataModule(LightningDataModule):
             # Full batch for evaluation on the test set
             if split == "test":
                 self._dataloader_kwargs["batch_size"] = len(self.datasets[split])
-            dataloader = DataLoader(
-                self.datasets[split], shuffle=True, drop_last=True, **self._dataloader_kwargs
-            )
+            dataloader = DataLoader(self.datasets[split], shuffle=True, drop_last=True, **self._dataloader_kwargs)
             if split == "test":
                 self._dataloader_kwargs["batch_size"] = self._batch_size
             return dataloader
@@ -142,11 +138,7 @@ class TaskDataModule(LightningDataModule):
         if self._balance_train_partition is None:
             return [list(range(len(self.datasets["train"])))]
 
-        train_df = (
-            self.datasets["train_val"]
-            ._data.iloc[self.datasets["train"].indices]
-            .reset_index(drop=True)
-        )
+        train_df = self.datasets["train_val"]._data.iloc[self.datasets["train"].indices].reset_index(drop=True)
         if isinstance(self._balance_train_partition, str):
             partition = [self._balance_train_partition]
         else:

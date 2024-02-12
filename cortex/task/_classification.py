@@ -1,19 +1,12 @@
+from collections import OrderedDict
 from typing import Optional
 
 import numpy as np
 import pandas as pd
 from lightning import LightningDataModule
-from sklearn.metrics import (
-    accuracy_score,
-    average_precision_score,
-    f1_score,
-    log_loss,
-    precision_score,
-    recall_score,
-    roc_auc_score,
-    top_k_accuracy_score,
-)
-from collections import OrderedDict
+from sklearn.metrics import (accuracy_score, average_precision_score, f1_score,
+                             log_loss, precision_score, recall_score,
+                             roc_auc_score, top_k_accuracy_score)
 
 from cortex.model.leaf import ClassifierLeaf
 from cortex.task._abstract_task import BaseTask
@@ -65,9 +58,7 @@ class ClassificationTask(BaseTask):
         inputs = {}
         for root_key, input_cols in self.input_map.items():
             inputs[root_key] = {
-                "inputs": np.concatenate(
-                    [np.array(batch[col]).reshape(-1, 1) for col in input_cols], axis=-1
-                ),
+                "inputs": np.concatenate([np.array(batch[col]).reshape(-1, 1) for col in input_cols], axis=-1),
                 "corrupt_frac": corrupt_frac,
             }
         return inputs
@@ -112,9 +103,7 @@ class ClassificationTask(BaseTask):
         return task_metrics
 
 
-def binary_classification_metrics(
-    avg_class_probs: np.ndarray, targets: np.ndarray, labels: list[int]
-):
+def binary_classification_metrics(avg_class_probs: np.ndarray, targets: np.ndarray, labels: list[int]):
     top_1 = avg_class_probs.argmax(-1)
     # ROC AUC is undefined if there is only one class in the test set
     try:
@@ -128,20 +117,14 @@ def binary_classification_metrics(
         "bin_precision": precision_score(y_true=targets, y_pred=top_1),
         "bin_recall": recall_score(y_true=targets, y_pred=top_1),
         "bin_f1": f1_score(y_true=targets, y_pred=top_1),
-        "bin_avg_precision": average_precision_score(
-            y_true=targets, y_score=avg_class_probs[..., 1]
-        ),
+        "bin_avg_precision": average_precision_score(y_true=targets, y_score=avg_class_probs[..., 1]),
     }
     return task_metrics
 
 
-def multiclass_classification_metrics(
-    avg_class_probs: np.ndarray, targets: np.ndarray, labels: list[int]
-):
+def multiclass_classification_metrics(avg_class_probs: np.ndarray, targets: np.ndarray, labels: list[int]):
     task_metrics = {
-        "mc_top_1_acc": top_k_accuracy_score(
-            y_true=targets, y_score=avg_class_probs, k=1, labels=labels
-        ),
+        "mc_top_1_acc": top_k_accuracy_score(y_true=targets, y_score=avg_class_probs, k=1, labels=labels),
         "mc_ovo_auc": roc_auc_score(targets, avg_class_probs, multi_class="ovo", labels=labels),
         "mc_nll": log_loss(targets, avg_class_probs, labels=labels),
     }

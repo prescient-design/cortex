@@ -19,9 +19,7 @@ class DenoisingLanguageModelLeaf(ClassifierLeaf):
     Leaf node which transforms branch sequence features to discrete sequence logits
     """
 
-    def forward(
-        self, branch_outputs: BranchNodeOutput, *args, **kwargs
-    ) -> DenoisingLanguageModelLeafOutput:
+    def forward(self, branch_outputs: BranchNodeOutput, *args, **kwargs) -> DenoisingLanguageModelLeafOutput:
         """
         Args:
             branch_outputs: SeqCNNBranchOutput
@@ -50,9 +48,7 @@ class DenoisingLanguageModelLeaf(ClassifierLeaf):
         tgt_tok_idxs = root_outputs.tgt_tok_idxs.to(logits.device)
 
         is_corrupted = root_outputs.is_corrupted.to(logits.device)
-        masked_logits = torch.masked_select(logits, is_corrupted[..., None]).view(
-            -1, logits.shape[-1]
-        )
+        masked_logits = torch.masked_select(logits, is_corrupted[..., None]).view(-1, logits.shape[-1])
         masked_tok_idxs = torch.masked_select(tgt_tok_idxs, is_corrupted).to(masked_logits.device)
 
         return masked_logits, masked_tok_idxs
@@ -95,9 +91,9 @@ def format_denoising_lm_ensemble_output(
             for lgt, mask in zip(logits, is_corrupted)
         ]
     )
-    masked_tok_idxs = torch.stack(
-        [torch.masked_select(tgt, mask) for tgt, mask in zip(tgt_tok_idxs, is_corrupted)]
-    ).to(masked_logits.device)
+    masked_tok_idxs = torch.stack([torch.masked_select(tgt, mask) for tgt, mask in zip(tgt_tok_idxs, is_corrupted)]).to(
+        masked_logits.device
+    )
 
     res[f"{task_key}_logits"] = masked_logits
     res[f"{task_key}_targets"] = masked_tok_idxs

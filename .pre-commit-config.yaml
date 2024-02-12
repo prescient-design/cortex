@@ -43,3 +43,4 @@ repos:
     hooks:
       - id: ruff
         name: ruff
+        args: [--config=pyproject.toml]

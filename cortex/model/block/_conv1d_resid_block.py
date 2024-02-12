@@ -1,4 +1,4 @@
-from torch import nn, Tensor
+from torch import Tensor, nn
 
 from cortex.model.elemental import MaskLayerNorm1d, swish
 
@@ -56,9 +56,7 @@ class Conv1dResidBlock(nn.Module):
             self.act_fn = nn.ReLU(inplace=True)
 
         if not in_channels == out_channels:
-            self.proj = nn.Conv1d(
-                in_channels, out_channels, kernel_size=1, padding="same", stride=1
-            )
+            self.proj = nn.Conv1d(in_channels, out_channels, kernel_size=1, padding="same", stride=1)
         else:
             self.proj = None
 

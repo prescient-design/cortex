@@ -36,3 +36,9 @@ search_parent_directories = true
 version_scheme = "no-guess-dev"
 local_scheme = "node-and-date"
 fallback_version = "0.0.0"
+
+[tool.black]
+line-length = 120
+
+[tool.ruff]
+line-length = 120

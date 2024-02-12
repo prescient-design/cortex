@@ -16,12 +16,8 @@ class GaussianCorruptionProcess(CorruptionProcess):
         super().__init__(*args, **kwargs)
         self.noise_variance = noise_variance
 
-    def _corrupt(
-        self, x_start: torch.Tensor, corrupt_frac: float, *args, **kwargs
-    ) -> tuple[torch.Tensor]:
+    def _corrupt(self, x_start: torch.Tensor, corrupt_frac: float, *args, **kwargs) -> tuple[torch.Tensor]:
         noise_scale = corrupt_frac * math.sqrt(self.noise_variance)
-        x_corrupt = (1.0 - corrupt_frac) * x_start + noise_scale * torch.randn_like(
-            x_start
-        )
+        x_corrupt = (1.0 - corrupt_frac) * x_start + noise_scale * torch.randn_like(x_start)
         is_corrupted = torch.ones_like(x_start, dtype=torch.bool)
         return x_corrupt, is_corrupted

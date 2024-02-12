@@ -6,9 +6,9 @@ Docstrings have been added, as well as DDIM sampling and a new collection of bet
 """
 
 import math
+from typing import Callable
 
 import numpy as np
-from typing import Callable
 
 
 def get_named_beta_schedule(schedule_name: str, num_diffusion_timesteps: int) -> np.ndarray:
@@ -53,9 +53,7 @@ def get_named_beta_schedule(schedule_name: str, num_diffusion_timesteps: int) ->
         beta_mid = scale * 0.0001  # scale * 0.02
         beta_end = scale * 0.02
         first_part = np.linspace(beta_start, beta_mid, 10, dtype=np.float64)
-        second_part = np.linspace(
-            beta_mid, beta_end, num_diffusion_timesteps - 10, dtype=np.float64
-        )
+        second_part = np.linspace(beta_mid, beta_end, num_diffusion_timesteps - 10, dtype=np.float64)
         return np.concatenate([first_part, second_part])
     else:
         raise NotImplementedError(f"unknown beta schedule: {schedule_name}")

@@ -8,19 +8,12 @@ import torch
 from torch import LongTensor, nn
 from torchtext.transforms import PadTransform, ToTensor
 
-from cortex.corruption import (
-    BaseCorruptionProcess,
-    GaussianCorruptionProcess,
-    MaskCorruptionProcess,
-)
-from cortex.model.root import RootNode, RootNodeOutput
-from cortex.model.elemental import (
-    Apply,
-    Expression,
-    PositionalEncoding,
-    permute_spatial_channel_dims,
-)
+from cortex.corruption import (CorruptionProcess, GaussianCorruptionProcess,
+                               MaskCorruptionProcess)
 from cortex.model.block import Conv1dResidBlock
+from cortex.model.elemental import (Apply, Expression, SinePosEncoder,
+                                    permute_spatial_channel_dims)
+from cortex.model.root import RootNode, RootNodeOutput
 from cortex.transforms import HuggingFaceTokenizerTransform
 
 
@@ -54,7 +47,7 @@ class Conv1dRoot(RootNode):
         pos_encoding: bool = True,
         train_transforms=None,
         eval_transforms=None,
-        corruption_process: Optional[BaseCorruptionProcess] = None,
+        corruption_process: Optional[CorruptionProcess] = None,
         **kwargs,
     ) -> None:
         super().__init__()
@@ -63,14 +56,10 @@ class Conv1dRoot(RootNode):
         self.max_len = max_len
         self.pad_tok_idx = self.tokenizer.padding_idx
         if num_blocks >= 1:
-            self.tok_encoder = nn.Embedding(
-                self.vocab_size, embed_dim, padding_idx=self.pad_tok_idx
-            )
+            self.tok_encoder = nn.Embedding(self.vocab_size, embed_dim, padding_idx=self.pad_tok_idx)
         # optional positional encoding
         if pos_encoding:
-            self.pos_encoder = PositionalEncoding(
-                embed_dim, dropout_prob, max_len, batch_first=True
-            )
+            self.pos_encoder = SinePosEncoder(embed_dim, dropout_prob, max_len, batch_first=True)
         else:
             self.pos_encoder = None
 
@@ -88,23 +77,29 @@ class Conv1dRoot(RootNode):
             }
             if num_blocks == 1:
                 encoder_modules.append(
-                   Conv1dResidBlock(embed_dim, out_dim, dropout_p=dropout_prob, **resid_block_kwargs)
+                    Conv1dResidBlock(embed_dim, out_dim, dropout_p=dropout_prob, **resid_block_kwargs)
                 )
             else:
                 encoder_modules.append(Conv1dResidBlock(embed_dim, channel_dim, **resid_block_kwargs))
 
                 encoder_modules.extend(
                     [
-                       Conv1dResidBlock(
-                            channel_dim, channel_dim, dilation=dilation, **resid_block_kwargs
+                        Conv1dResidBlock(
+                            channel_dim,
+                            channel_dim,
+                            dilation=dilation,
+                            **resid_block_kwargs,
                         )
                         for _ in range(num_blocks - 2)
                     ]
                 )
 
                 encoder_modules.append(
-                   Conv1dResidBlock(
-                        channel_dim, out_dim, dropout_p=dropout_prob, **resid_block_kwargs
+                    Conv1dResidBlock(
+                        channel_dim,
+                        out_dim,
+                        dropout_p=dropout_prob,
+                        **resid_block_kwargs,
                     )
                 )
 
@@ -206,9 +201,7 @@ class Conv1dRoot(RootNode):
             else:
                 src_tok_idxs = tgt_tok_idxs
                 is_corrupted = (
-                    torch.full_like(src_tok_idxs, False, dtype=torch.bool)
-                    if is_corrupted is None
-                    else is_corrupted
+                    torch.full_like(src_tok_idxs, False, dtype=torch.bool) if is_corrupted is None else is_corrupted
                 )
 
             padding_mask = src_tok_idxs != self.pad_tok_idx
@@ -218,7 +211,13 @@ class Conv1dRoot(RootNode):
             assert padding_mask is not None
             src_tok_idxs = None
 
-        return src_tok_idxs, tgt_tok_idxs, corruption_allowed, is_corrupted, padding_mask
+        return (
+            src_tok_idxs,
+            tgt_tok_idxs,
+            corruption_allowed,
+            is_corrupted,
+            padding_mask,
+        )
 
     def embed_seq(
         self,
@@ -233,9 +232,7 @@ class Conv1dRoot(RootNode):
         if src_tok_embs is None:
             src_tok_embs = self.tok_encoder(src_tok_idxs)
             if normalize_embeds:
-                src_tok_embs = src_tok_embs / src_tok_embs.norm(dim=-1, keepdim=True).clamp_min(
-                    1e-6
-                )
+                src_tok_embs = src_tok_embs / src_tok_embs.norm(dim=-1, keepdim=True).clamp_min(1e-6)
                 src_tok_embs = src_tok_embs * math.sqrt(self.embed_dim)
 
         # apply gaussian embedding corruption
@@ -248,9 +245,7 @@ class Conv1dRoot(RootNode):
             )
             is_corrupted = is_corrupted.sum(-1).bool()
         else:
-            none_corrupted = torch.zeros(*src_tok_embs.shape[:-1], dtype=torch.bool).to(
-                src_tok_embs.device
-            )
+            none_corrupted = torch.zeros(*src_tok_embs.shape[:-1], dtype=torch.bool).to(src_tok_embs.device)
             is_corrupted = none_corrupted if is_corrupted is None else is_corrupted
 
         return src_tok_embs, is_corrupted
@@ -292,13 +287,7 @@ class Conv1dRoot(RootNode):
         seq_array, tgt_tok_idxs, src_tok_embs, corrupt_frac = self.init_seq(
             inputs, seq_array, tgt_tok_idxs, src_tok_embs, corrupt_frac, **kwargs
         )
-        (
-            src_tok_idxs,
-            tgt_tok_idxs,
-            corruption_allowed,
-            is_corrupted,
-            padding_mask,
-        ) = self.tokenize_seq(
+        (src_tok_idxs, tgt_tok_idxs, corruption_allowed, is_corrupted, padding_mask,) = self.tokenize_seq(
             seq_array,
             tgt_tok_idxs,
             src_tok_embs,

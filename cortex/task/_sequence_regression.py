@@ -1,12 +1,13 @@
+from collections import OrderedDict
+
 import numpy as np
 import pandas as pd
 import torch
 from scipy import stats
-from collections import OrderedDict
 
 from cortex.metrics import spearman_rho
-from cortex.model.leaf import SequenceRegressorLeaf, adjust_sequence_mask
 from cortex.model.elemental import DDPStandardize
+from cortex.model.leaf import SequenceRegressorLeaf, adjust_sequence_mask
 from cortex.task._regression import RegressionTask
 
 
@@ -15,9 +16,7 @@ class SequenceRegressionTask(RegressionTask):
         inputs = {}
         for root_key, input_cols in self.input_map.items():
             inputs[root_key] = {
-                "inputs": np.concatenate(
-                    [np.array(batch[col]).reshape(-1, 1) for col in input_cols], axis=-1
-                ),
+                "inputs": np.concatenate([np.array(batch[col]).reshape(-1, 1) for col in input_cols], axis=-1),
                 "corrupt_frac": corrupt_frac,
             }
         return inputs
@@ -67,9 +66,7 @@ class SequenceRegressionTask(RegressionTask):
 
         new_shape = list(loc.shape[:-3]) + [-1, self.out_dim]
         loc = torch.masked_select(loc, padded_position_mask[..., None]).reshape(*new_shape).numpy()
-        scale = (
-            torch.masked_select(scale, padded_position_mask[..., None]).reshape(*new_shape).numpy()
-        )
+        scale = torch.masked_select(scale, padded_position_mask[..., None]).reshape(*new_shape).numpy()
 
         diff = targets - loc.mean(0)
         norm_factor = np.linalg.norm(np.abs(targets) + np.abs(loc.mean(0)), axis=-1, keepdims=True)

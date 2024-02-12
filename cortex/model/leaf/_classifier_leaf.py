@@ -8,12 +8,24 @@ from torch.nn import functional as F
 from cortex.model.branch import BranchNodeOutput
 from cortex.model.leaf import LeafNode, LeafNodeOutput
 from cortex.model.root import RootNodeOutput
-from cortex.utils import check_probs
 
 
 @dataclass
 class ClassifierLeafOutput(LeafNodeOutput):
     logits: torch.Tensor
+
+
+def check_probs(probs: torch.Tensor, dim: int = -1) -> bool:
+    """
+    Check that the probabilities are valid
+    """
+    if torch.any(probs < 0) or torch.any(probs > 1):
+        raise ValueError("Probabilities must be between 0 and 1")
+
+    if not torch.allclose(probs.sum(dim=dim), torch.ones(probs.shape[:-1])):
+        raise ValueError("Probabilities must sum to 1")
+
+    return True
 
 
 class ClassifierLeaf(LeafNode):
@@ -54,7 +66,11 @@ class ClassifierLeaf(LeafNode):
     def forward(self, branch_outputs: BranchNodeOutput) -> ClassifierLeafOutput:
         """
         Args:
-            branch_outputs: {'branch_features': torch.Tensor, 'branch_mask': torch.Tensor, 'pooled_features': torch.Tensor}
+            branch_outputs: {
+                'branch_features': torch.Tensor,
+                'branch_mask': torch.Tensor,
+                'pooled_features': torch.Tensor
+            }
         Returns:
             outputs: {'logits': torch.Tensor}
         """

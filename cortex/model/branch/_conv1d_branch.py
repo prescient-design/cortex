@@ -3,16 +3,11 @@ from dataclasses import dataclass
 import torch
 from torch import nn
 
-from cortex.model.branch import BranchNode, BranchNodeOutput
-from cortex.model.elemental import (
-    Apply,
-    Expression,
-    MeanPooling,
-    WeightedMeanPooling,
-    identity,
-    permute_spatial_channel_dims,
-)
 from cortex.model.block import Conv1dResidBlock
+from cortex.model.branch import BranchNode, BranchNodeOutput
+from cortex.model.elemental import (Apply, Expression, MeanPooling,
+                                    WeightedMeanPooling, identity,
+                                    permute_spatial_channel_dims)
 from cortex.model.trunk import PaddedTrunkOutput
 
 
@@ -49,9 +44,7 @@ class Conv1dBranch(BranchNode):
         if num_blocks == 0:
             # add projection if dims don't match
             encoder_modules = [
-                Expression(identity)
-                if in_dim == out_dim
-                else Apply(nn.Linear(in_dim, out_dim, bias=False))
+                Expression(identity) if in_dim == out_dim else Apply(nn.Linear(in_dim, out_dim, bias=False))
             ]
         else:
             # conv layers expect inputs with shape (batch_size, input_dim, num_tokens)
@@ -60,25 +53,16 @@ class Conv1dBranch(BranchNode):
             ]  # (B,N,C) -> (B,C,N)
 
         if num_blocks == 1:
-            encoder_modules.append(
-                Conv1dResidBlock(in_dim, out_dim, kernel_size, layernorm, dropout_prob)
-            )
+            encoder_modules.append(Conv1dResidBlock(in_dim, out_dim, kernel_size, layernorm, dropout_prob))
         elif num_blocks > 1:
             encoder_modules.append(Conv1dResidBlock(in_dim, embed_dim, kernel_size, layernorm, 0.0))
             encoder_modules.extend(
-                [
-                    Conv1dResidBlock(embed_dim, embed_dim, kernel_size, layernorm, 0.0)
-                    for _ in range(num_blocks - 2)
-                ]
+                [Conv1dResidBlock(embed_dim, embed_dim, kernel_size, layernorm, 0.0) for _ in range(num_blocks - 2)]
             )
-            encoder_modules.append(
-                Conv1dResidBlock(embed_dim, out_dim, kernel_size, layernorm, dropout_prob)
-            )
+            encoder_modules.append(Conv1dResidBlock(embed_dim, out_dim, kernel_size, layernorm, dropout_prob))
 
         if num_blocks >= 1:
-            encoder_modules.append(
-                Apply(Expression(permute_spatial_channel_dims))
-            )  # (B,C,N) -> (B,N,C)
+            encoder_modules.append(Apply(Expression(permute_spatial_channel_dims)))  # (B,C,N) -> (B,N,C)
 
         self.encoder = nn.Sequential(*encoder_modules)
         if pooling_type == "mean":
@@ -101,9 +85,7 @@ class Conv1dBranch(BranchNode):
         trunk_features = trunk_outputs.trunk_features
         padding_mask = trunk_outputs.padding_mask
 
-        branch_features, branch_mask = self.encoder(
-            (trunk_features, padding_mask.to(trunk_features))
-        )
+        branch_features, branch_mask = self.encoder((trunk_features, padding_mask.to(trunk_features)))
         pooled_features = self.pooling_op(branch_features, branch_mask)
 
         branch_outputs = Conv1dBranchOutput(

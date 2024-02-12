@@ -48,9 +48,7 @@ class SequenceRegressorLeaf(RegressorLeaf):
 
 
 def adjust_sequence_mask(mask: torch.Tensor, tgt_tensor: torch.Tensor) -> torch.Tensor:
-    padded_position_mask = torch.full(
-        tgt_tensor.shape[:-1], False, dtype=torch.bool, device=tgt_tensor.device
-    )
+    padded_position_mask = torch.full(tgt_tensor.shape[:-1], False, dtype=torch.bool, device=tgt_tensor.device)
     padded_len = padded_position_mask.size(-1)
     unpadded_len = mask.size(-1)
     if padded_len < unpadded_len:
