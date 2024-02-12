@@ -3,9 +3,16 @@ from typing import Optional
 
 import numpy as np
 from lightning import LightningDataModule
-from sklearn.metrics import (accuracy_score, average_precision_score, f1_score,
-                             log_loss, precision_score, recall_score,
-                             roc_auc_score, top_k_accuracy_score)
+from sklearn.metrics import (
+    accuracy_score,
+    average_precision_score,
+    f1_score,
+    log_loss,
+    precision_score,
+    recall_score,
+    roc_auc_score,
+    top_k_accuracy_score,
+)
 
 from cortex.model.leaf import ClassifierLeaf
 from cortex.task._abstract_task import BaseTask

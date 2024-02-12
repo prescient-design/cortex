@@ -12,11 +12,14 @@ from omegaconf import DictConfig, OmegaConf
 from torch import nn
 
 from cortex.model import online_weight_update_
-from cortex.model.leaf import (ClassifierLeaf, DenoisingLanguageModelLeaf,
-                               RegressorLeaf,
-                               format_classifier_ensemble_output,
-                               format_denoising_lm_ensemble_output,
-                               format_regressor_ensemble_output)
+from cortex.model.leaf import (
+    ClassifierLeaf,
+    DenoisingLanguageModelLeaf,
+    RegressorLeaf,
+    format_classifier_ensemble_output,
+    format_denoising_lm_ensemble_output,
+    format_regressor_ensemble_output,
+)
 from cortex.model.tree import NeuralTree
 
 
