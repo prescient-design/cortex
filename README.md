@@ -73,7 +73,7 @@ Contributions are welcome, especially tutorials and documentation.
 
 ### Install dev requirements and pre-commit hooks
 ```
-python -m pip install -r requirements-dev.txt
+python -m pip install -r requirements-dev.in
 pre-commit install
 ```
 
