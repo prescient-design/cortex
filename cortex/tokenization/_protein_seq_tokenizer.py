@@ -3,8 +3,7 @@ from collections import OrderedDict
 from dataclasses import dataclass
 from typing import Optional
 
-from cortex.constants import (ALIGNMENT_GAP_TOKEN, CANON_AMINO_ACIDS,
-                              COMPLEX_SEP_TOKEN, NULL_TOKENS)
+from cortex.constants import ALIGNMENT_GAP_TOKEN, CANON_AMINO_ACIDS, COMPLEX_SEP_TOKEN, NULL_TOKENS
 from cortex.tokenization._cached_bert_tokenizer import CachedBertTokenizerFast
 
 
