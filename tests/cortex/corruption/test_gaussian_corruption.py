@@ -23,8 +23,6 @@ def test_gaussian_corruption():
     # input should be unchanged where corruption_allowed is False
     corruption_allowed = torch.rand_like(x_start) < 0.5
     timestep = corruption_process.max_steps // 2
-    x_corrupt, is_corrupted = corruption_process(
-        x_start, timestep=timestep, corruption_allowed=corruption_allowed
-    )
+    x_corrupt, is_corrupted = corruption_process(x_start, timestep=timestep, corruption_allowed=corruption_allowed)
     assert torch.any(torch.masked_select(is_corrupted, corruption_allowed))
     assert not torch.any(torch.masked_select(is_corrupted, ~corruption_allowed))

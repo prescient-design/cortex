@@ -11,9 +11,7 @@ def test_mask_corruption():
 
     # 0th timestep should return uncorrupted input
     x_start = torch.arange(1, 128)
-    x_corrupt, is_corrupted = corruption_process(
-        x_start, timestep=0, corruption_allowed=None, mask_val=0
-    )
+    x_corrupt, is_corrupted = corruption_process(x_start, timestep=0, corruption_allowed=None, mask_val=0)
     assert torch.allclose(x_start, x_corrupt)
     assert not torch.any(is_corrupted)
 
