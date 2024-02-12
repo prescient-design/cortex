@@ -2,7 +2,6 @@ from collections import OrderedDict
 from typing import Optional
 
 import numpy as np
-import pandas as pd
 from lightning import LightningDataModule
 from sklearn.metrics import (accuracy_score, average_precision_score, f1_score,
                              log_loss, precision_score, recall_score,
