@@ -4,19 +4,20 @@ defaults:
   - model_globals: default
   - roots: [protein_seq]
   - trunk: default
-  - branches: [protein_property]
+  - branches: [protein_property, generation]
   - tree: protein_model
   - tasks:
-    - protein_property/delta_g
+    - protein_property/log_fluorescence
+    - generation/gfp
   - _self_
 
 fit:
-  batch_size: 32
+  batch_size: 128
 
 trainer:
   _target_: lightning.Trainer
   accelerator: gpu
-  max_epochs: 64
+  max_epochs: 32
   devices: 1
   # devices: 8
   # strategy: ddp
@@ -43,8 +44,10 @@ tree:
 tasks:
 
   protein_property:
-    delta_g:
-      # ensemble_size: ${ensemble_size}
+    log_fluorescence:
+      ensemble_size: ${ensemble_size}
+  generation:
+    gfp:
       ensemble_size: 1
 
 train_on_everything: false

@@ -83,7 +83,9 @@ class RegressionTask(BaseTask):
         """
         targets = {
             self.leaf_key: {
-                "targets": np.concatenate([np.array(batch[col]).reshape(-1, 1) for col in self.outcome_cols], axis=-1)
+                "targets": np.concatenate(
+                    [np.array(batch[col]).astype(float).reshape(-1, 1) for col in self.outcome_cols], axis=-1
+                )
             }
         }
         return targets

@@ -57,7 +57,9 @@ class DataFrameDataset(Dataset):
             raise ValueError(
                 f"Dataset not found at {path}. " "If `download` is `True`, the dataset will be downloaded."
             )
+        self._data = self._read_data(path, dedup=dedup, train=train, random_seed=random_seed, **kwargs)
 
+    def _read_data(self, path: str, dedup: bool, train: bool, random_seed: int, **kwargs: Any) -> DataFrame:
         if self._target.endswith(".csv"):
             data = pd.read_csv(path / self._target, **kwargs)
         elif self._target.endswith(".parquet"):
@@ -76,7 +78,7 @@ class DataFrameDataset(Dataset):
         test_indices = data.index.difference(train_indices)
 
         select_indices = train_indices if train else test_indices
-        self._data = data.loc[select_indices].reset_index(drop=True)
+        return data.loc[select_indices].reset_index(drop=True)
 
     def __len__(self) -> int:
         return len(self._data)
