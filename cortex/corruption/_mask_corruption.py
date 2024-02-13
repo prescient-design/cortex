@@ -21,7 +21,7 @@ class MaskCorruptionProcess(CorruptionProcess):
         *args,
         **kwargs,
     ):
-        return super().__call__(x_start, timestep, corrupt_frac, corruption_allowed, mask_val=mask_val, *args, **kwargs)
+        return super().__call__(x_start, timestep, corrupt_frac, corruption_allowed, *args, mask_val=mask_val, **kwargs)
 
     def _corrupt(
         self, x_start: torch.Tensor, corrupt_frac: float, mask_val: int, *args, **kwargs

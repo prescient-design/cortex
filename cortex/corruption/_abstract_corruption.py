@@ -66,7 +66,7 @@ class CorruptionProcess(ABC):
             is_corrupted = torch.full_like(x_start, False, dtype=torch.bool)
             return x_start, is_corrupted
 
-        x_corrupt, is_corrupted = self._corrupt(x_start, corrupt_frac=corrupt_frac, *args, **kwargs)
+        x_corrupt, is_corrupted = self._corrupt(x_start, *args, corrupt_frac=corrupt_frac, **kwargs)
         # only change values where corruption_allowed is True
         if corruption_allowed is not None:
             corruption_allowed = corruption_allowed.to(x_start.device)
