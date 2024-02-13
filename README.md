@@ -42,7 +42,7 @@ Deep learning is easy to learn and difficult to master. Seemingly insignificant 
 
     To update the frozen dependencies run
 
-    `pip-compile --resolver=backtracking requirements.in > requirements.txt`.
+    `pip-compile --resolver=backtracking requirements.in`.
 
 3.  Install cortex.
 
