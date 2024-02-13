@@ -21,7 +21,7 @@ class SequenceRegressorLeaf(RegressorLeaf):
         targets: torch.Tensor,
         position_mask: Optional[np.ndarray] = None,
         *args,
-        **kwargs
+        **kwargs,
     ) -> torch.Tensor:
         if self.label_smoothing == "corrupt_frac" and hasattr(root_outputs, "corrupt_frac"):
             label_smoothing = root_outputs.corrupt_frac

@@ -8,7 +8,6 @@ from pandas import DataFrame
 from torch.utils.data import Dataset
 
 from cortex.io import download_and_extract_archive
-from cortex.transforms import Transform
 
 T = TypeVar("T")
 

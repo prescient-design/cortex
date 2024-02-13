@@ -67,7 +67,7 @@ def execute(cfg):
 
     if os.path.exists(ckpt_file) and cfg.save_ckpt:
         msg = f"checkpoint already exists at {ckpt_file} and will be overwritten!"
-        warnings.warn(msg, UserWarning)
+        warnings.warn(msg, UserWarning, stacklevel=2)
 
     # instantiate model
     model = hydra.utils.instantiate(cfg.tree)

@@ -8,6 +8,7 @@ from torch import Generator
 from torch.utils.data import DataLoader, Sampler, random_split
 
 from cortex.data.dataset import ordered_dict_collator
+
 # TODO change to prescient.samplers when available
 from cortex.data.samplers import RandomizedMinorityUpsampler
 
@@ -115,7 +116,7 @@ class TaskDataModule(LightningDataModule):
                 sampler=sampler,
                 batch_sampler=self._batch_sampler,
                 drop_last=self._drop_last,
-                **self._dataloader_kwargs
+                **self._dataloader_kwargs,
             )
         else:
             # Full batch for evaluation on the test set

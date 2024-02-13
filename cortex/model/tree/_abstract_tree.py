@@ -139,7 +139,7 @@ class NeuralTree(ABC, nn.Module):
     ) -> None:
         if branch_key in self.branch_nodes:
             msg = f"Branch {branch_key} already exists, no new branch added."
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
         else:
             self.branch_nodes[branch_key] = hydra.utils.instantiate(branch_cfg)
 
@@ -150,6 +150,6 @@ class NeuralTree(ABC, nn.Module):
     ) -> None:
         if leaf_key in self.leaf_nodes:
             msg = f"Leaf {leaf_key} already exists, no new leaf added."
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
         else:
             self.leaf_nodes[leaf_key] = leaf_node

@@ -1,12 +1,16 @@
 import random
 
-import numpy as np
 import pandas as pd
 
-from cortex.constants import (AB_AG_COMPLEX_COL, ANTIGEN_COL,
-                              ANTIGEN_COMPLEX_TOKEN,
-                              VARIABLE_HEAVY_CHAIN_TOKEN, VARIABLE_HEAVY_COL,
-                              VARIABLE_LIGHT_CHAIN_TOKEN, VARIABLE_LIGHT_COL)
+from cortex.constants import (
+    AB_AG_COMPLEX_COL,
+    ANTIGEN_COL,
+    ANTIGEN_COMPLEX_TOKEN,
+    VARIABLE_HEAVY_CHAIN_TOKEN,
+    VARIABLE_HEAVY_COL,
+    VARIABLE_LIGHT_CHAIN_TOKEN,
+    VARIABLE_LIGHT_COL,
+)
 from cortex.tokenization import ProteinComplex, tokenize_protein_complex
 
 
@@ -17,7 +21,6 @@ def tokenize_igg_ag_df(
     use_custom_format_tokens: bool = False,
     inplace: bool = False,
 ) -> pd.DataFrame:
-
     if not inplace:
         data = data.copy()
 

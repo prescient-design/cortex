@@ -19,7 +19,7 @@ class MaskCorruptionProcess(CorruptionProcess):
         corrupt_frac: Optional[float] = None,
         corruption_allowed: Optional[torch.Tensor] = None,
         *args,
-        **kwargs
+        **kwargs,
     ):
         return super().__call__(x_start, timestep, corrupt_frac, corruption_allowed, mask_val=mask_val, *args, **kwargs)
 

@@ -50,6 +50,7 @@ class DDPStandardize(Standardize):
                 "Key '_is_trained' not found in state_dict. Setting to True. "
                 "In a future release, this will result in an error.",
                 DeprecationWarning,
+                stacklevel=2,
             )
             state_dict = {**state_dict, "_is_trained": torch.tensor(1.0)}
         super().load_state_dict(state_dict, strict=strict)

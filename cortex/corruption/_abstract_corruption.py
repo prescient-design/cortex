@@ -50,7 +50,7 @@ class CorruptionProcess(ABC):
         corrupt_frac: Optional[float] = None,
         corruption_allowed: Optional[torch.Tensor] = None,
         *args,
-        **kwargs
+        **kwargs,
     ) -> tuple[torch.Tensor]:
         # can't pass both timestep and noise_frac
         assert timestep is None or corrupt_frac is None
