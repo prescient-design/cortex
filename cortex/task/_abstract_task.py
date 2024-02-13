@@ -13,6 +13,8 @@ class BaseTask(ABC):
         data_module: TaskDataModule,
         input_map: dict[str, str],
         leaf_key: str,
+        corrupt_train_inputs: bool = False,
+        corrupt_inference_inputs: bool = False,
         **kwargs,
     ) -> None:
         """
@@ -26,6 +28,8 @@ class BaseTask(ABC):
             "val": iter(self.data_module.val_dataloader()),
             "test": iter(self.data_module.test_dataloader()),
         }
+        self.corrupt_train_inputs = corrupt_train_inputs
+        self.corrupt_inference_inputs = corrupt_inference_inputs
 
     def sample_minibatch(self, split: str = "train", as_df: bool = False) -> dict | pd.DataFrame:
         """

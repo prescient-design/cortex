@@ -68,11 +68,10 @@ class TaskDataModule(LightningDataModule):
 
     def setup(self, stage=None):
         if stage == "fit":
-            self._dataset_config.base_dataset.train = True
+            self._dataset_config.train = True
             train_val = hydra.utils.instantiate(self._dataset_config)
             if self._train_on_everything:
                 train_val.df = pd.concat([train_val.df, self.datasets["test"].df], ignore_index=True)
-            # columns = train_val.columns
             train_dataset, val_dataset = random_split(
                 train_val,
                 lengths=self._lengths,
@@ -83,20 +82,13 @@ class TaskDataModule(LightningDataModule):
             self.datasets["train"] = train_dataset
             self.datasets["val"] = val_dataset
         if stage == "test":
-            self._dataset_config.base_dataset.train = False
+            self._dataset_config.train = False
             test_dataset = hydra.utils.instantiate(self._dataset_config)
-            # columns = test_dataset.columns
             self.datasets["test"] = test_dataset
         if stage == "predict":
             self._dataset_config.base_dataset.train = False
             predict_dataset = hydra.utils.instantiate(self._dataset_config)
-            # columns = predict_dataset.columns
             self.datasets["predict"] = predict_dataset
-
-        # there's probably a cleaner way to do this, the problem is you don't know the
-        # columns until you instantiate the dataset
-        # self._collate_fn = self._collate_fn or ordered_dict_collator
-        # self._dataloader_kwargs["collate_fn"] = self._collate_fn
 
     def train_dataloader(self):
         return self.get_dataloader(split="train")
@@ -145,10 +137,4 @@ class TaskDataModule(LightningDataModule):
             partition = list(self._balance_train_partition)
 
         index_list = list(train_df.groupby(partition).indices.values())
-        # partition_col = self._balance_train_partition
-        # index_list = []
-        # for partition_val in train_df[partition_col].unique():
-        #     partition_df = train_df[train_df[partition_col] == partition_val]
-        #     partition_indices = partition_df.index.values.tolist()
-        #     index_list.append(partition_indices)
         return index_list

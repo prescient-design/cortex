@@ -23,18 +23,20 @@ class ClassificationTask(BaseTask):
         leaf_key: str,
         class_col: str,
         num_classes: int,
-        corrupt_inputs: Optional[bool] = False,
         root_key: Optional[str] = None,
+        corrupt_train_inputs: bool = False,
+        corrupt_inference_inputs: bool = False,
         **kwargs,
     ) -> None:
         super().__init__(
             data_module=data_module,
             input_map=input_map,
             leaf_key=leaf_key,
+            corrupt_train_inputs=corrupt_train_inputs,
+            corrupt_inference_inputs=corrupt_inference_inputs,
         )
         self.class_col = class_col
         self.num_classes = num_classes
-        self.corrupt_inputs = corrupt_inputs
         self.root_key = root_key
 
         if "mask_inputs" in kwargs:
@@ -77,7 +79,7 @@ class ClassificationTask(BaseTask):
         """
         Create the leaf node for this task to be added to a `NeuralTree` object.
         """
-        label_smoothing = "corrupt_frac" if self.corrupt_inputs else 0.0
+        label_smoothing = "corrupt_frac" if self.corrupt_train_inputs else 0.0
         return ClassifierLeaf(
             in_dim=in_dim,
             num_classes=self.num_classes,

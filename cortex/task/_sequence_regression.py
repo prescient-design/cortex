@@ -42,7 +42,7 @@ class SequenceRegressionTask(RegressionTask):
         """
         Create the leaf node for this task to be added to a `NeuralTree` object.
         """
-        label_smoothing = "corrupt_frac" if self.corrupt_inputs else 0.0
+        label_smoothing = "corrupt_frac" if self.corrupt_train_inputs else 0.0
         outcome_transform = DDPStandardize(m=self.out_dim)
         return SequenceRegressorLeaf(
             in_dim=in_dim,

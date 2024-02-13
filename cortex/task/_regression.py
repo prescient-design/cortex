@@ -25,7 +25,8 @@ class RegressionTask(BaseTask):
         input_map: dict[str, str],
         outcome_cols: list[str],
         leaf_key: str,
-        corrupt_inputs: bool = False,
+        corrupt_train_inputs: bool = False,
+        corrupt_inference_inputs: bool = False,
         root_key: Optional[str] = None,
         nominal_label_var: float = 0.25**2,
         **kwargs,
@@ -35,10 +36,11 @@ class RegressionTask(BaseTask):
             data_module=data_module,
             input_map=input_map,
             leaf_key=leaf_key,
+            corrupt_train_inputs=corrupt_train_inputs,
+            corrupt_inference_inputs=corrupt_inference_inputs,
         )
         self.outcome_cols = outcome_cols
         self.out_dim = len(self.outcome_cols)
-        self.corrupt_inputs = corrupt_inputs
         self.root_key = root_key
         self.nominal_label_var = nominal_label_var
 
@@ -90,7 +92,7 @@ class RegressionTask(BaseTask):
         """
         Create the leaf node for this task to be added to a `NeuralTree` object.
         """
-        label_smoothing = "corrupt_frac" if self.corrupt_inputs else 0.0
+        label_smoothing = "corrupt_frac" if self.corrupt_train_inputs else 0.0
         outcome_transform = DDPStandardize(m=self.out_dim)
         return RegressorLeaf(
             in_dim=in_dim,

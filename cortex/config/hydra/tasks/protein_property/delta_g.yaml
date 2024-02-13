@@ -1,0 +1,23 @@
+delta_g:
+  _target_: cortex.task.RegressionTask
+  input_map:
+    protein_seq: ['tokenized_seq']
+  outcome_cols: ['foldx_total_energy']
+  corrupt_train_inputs: true
+  corrupt_inference_inputs: false
+  root_key: protein_seq
+  nominal_label_var: 0.01
+  data_module:
+    _target_: cortex.data.data_module.TaskDataModule
+    _recursive_: false
+    batch_size: ${fit.batch_size}
+    balance_train_partition: null
+    drop_last: true
+    lengths: [1.0, 0.0]
+    train_on_everything: false
+    num_workers: ${num_workers}
+    dataset_config:
+      _target_: cortex.data.dataset.RedFluorescentProteinDataset
+      root: ${dataset_root_dir}
+      download: ${download_datasets}
+      train: ???

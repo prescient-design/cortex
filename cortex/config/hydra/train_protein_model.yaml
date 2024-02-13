@@ -1,0 +1,56 @@
+defaults:
+  - general_settings: default
+  - logging: default
+  - model_globals: default
+  - roots: [protein_seq]
+  - trunk: default
+  - branches: [protein_property]
+  - tree: protein_model
+  - tasks:
+    - protein_property/delta_g
+  - _self_
+
+fit:
+  batch_size: 32
+
+trainer:
+  _target_: lightning.Trainer
+  accelerator: gpu
+  max_epochs: 64
+  devices: 1
+  # devices: 8
+  # strategy: ddp
+  num_sanity_val_steps: 1
+
+
+tree:
+  _recursive_: false
+  fit_cfg:
+    reinitialize_roots: true
+    linear_probing: false
+    weight_averaging: null
+    optimizer:
+      _target_: torch.optim.Adam
+      lr: 5e-3
+      weight_decay: 0.
+      betas: [0.99, 0.999]
+      fused: false
+    lr_scheduler:
+      _target_: transformers.get_cosine_schedule_with_warmup
+      num_warmup_steps: 10
+      num_training_steps: ${trainer.max_epochs}
+
+tasks:
+
+  protein_property:
+    delta_g:
+      # ensemble_size: ${ensemble_size}
+      ensemble_size: 1
+
+train_on_everything: false
+linear_probing: false
+dataset_root_dir: /home/stantos5/scratch/datasets
+download_datasets: true
+num_workers: 2
+
+ckpt_name: ${exp_name}_${job_name}

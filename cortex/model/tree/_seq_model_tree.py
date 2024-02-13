@@ -23,13 +23,15 @@ from cortex.model.tree import NeuralTree
 class SequenceModelTree(NeuralTree, L.LightningModule):
     def __init__(
         self,
-        # model_cfg: DictConfig,
-        root_nodes: nn.ModuleDict,
-        trunk_node: nn.Module,
-        branch_nodes: nn.ModuleDict,
-        leaf_nodes: nn.ModuleDict,
+        root_nodes: Optional[nn.ModuleDict] = None,
+        trunk_node: Optional[nn.Module] = None,
+        branch_nodes: Optional[nn.ModuleDict] = None,
+        leaf_nodes: Optional[nn.ModuleDict] = None,
         fit_cfg: Optional[DictConfig] = None,  # hyperparameters for training
     ):
+        root_nodes = root_nodes or nn.ModuleDict()
+        branch_nodes = branch_nodes or nn.ModuleDict()
+        leaf_nodes = leaf_nodes or nn.ModuleDict()
         super().__init__(
             root_nodes=root_nodes,
             trunk_node=trunk_node,
@@ -47,7 +49,6 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
         self.automatic_optimization = False
         self.save_hyperparameters(
             ignore=[
-                "model_cfg",
                 "root_nodes",
                 "trunk_node",
                 "branch_nodes",
@@ -81,6 +82,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
 
         # fit outcome normalization transforms (if any)
         step_metrics = {}
+        batch_size = {}
         for l_key, l_node in self.leaf_nodes.items():
             task_key, _ = l_key.rsplit("_", 1)
             task = self.task_dict[task_key]
@@ -104,9 +106,13 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             self.manual_backward(loss)
             opt.step()
             step_metrics.setdefault(task_key, []).append(loss.item())
+            batch_size.setdefault(task_key, []).append(batch[l_key]["batch_size"])
 
         # log average task losses
         step_metrics = {f"{task_key}/train_loss": np.mean(losses) for task_key, losses in step_metrics.items()}
+        step_metrics.update(
+            {f"{task_key}/train_batch_size": np.mean(batch_sizes) for task_key, batch_sizes in batch_size.items()}
+        )
         return step_metrics
 
     def training_step_end(self, step_metrics):
@@ -115,12 +121,41 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
         if w_avg_enabled:
             self._w_avg_step_count = self._weight_average_update(self._w_avg_step_count)
 
+        # step_metrics = pd.DataFrame.from_records(step_metrics)
+        # step_metrics = step_metrics.mean().to_dict()
+
+        # task_keys = set()
+        # for key in step_metrics.keys():
+        #     task_key = key.split("/")[0]
+        #     task_keys.add(task_key)
+
+        # for t_key in task_keys:
+        #     task_metrics = {key: val for key, val in step_metrics.items() if key.startswith(t_key)}
+        #     batch_size = task_metrics[f"{t_key}/train_batch_size"]
+        #     del task_metrics[f"{t_key}/train_batch_size"]
+        #     self.log_dict(task_metrics, logger=True, prog_bar=True, batch_size=batch_size)
+
+        return step_metrics
+
         # log metrics
         # step_metrics = {key: sum(val) / len(val) for key, val in step_metrics.items()}
-        lr_sched = self.lr_schedulers()
-        step_metrics["lr"] = lr_sched.get_lr()[0]
 
-        self.log_dict(step_metrics, prog_bar=True)
+        # self.log_dict(step_metrics, prog_bar=True)
+
+    def training_epoch_end(self, step_metrics):
+        step_metrics = pd.DataFrame.from_records(step_metrics)
+        step_metrics = step_metrics.mean().to_dict()
+
+        task_keys = set()
+        for key in step_metrics.keys():
+            task_key = key.split("/")[0]
+            task_keys.add(task_key)
+
+        for t_key in task_keys:
+            task_metrics = {key: val for key, val in step_metrics.items() if key.startswith(t_key)}
+            batch_size = task_metrics[f"{t_key}/train_batch_size"]
+            del task_metrics[f"{t_key}/train_batch_size"]
+            self.log_dict(task_metrics, prog_bar=True, batch_size=batch_size)
 
     def _weight_average_update(
         self,
@@ -206,7 +241,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
 
     def validation_epoch_end(self, step_metrics):
         step_metrics = pd.DataFrame.from_records(step_metrics)
-        step_metrics = step_metrics.median().to_dict()
+        step_metrics = step_metrics.mean().to_dict()
 
         task_keys = set()
         for key in step_metrics.keys():
@@ -217,7 +252,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             task_metrics = {key: val for key, val in step_metrics.items() if key.startswith(t_key)}
             batch_size = task_metrics[f"{t_key}/val_batch_size"]
             del task_metrics[f"{t_key}/val_batch_size"]
-            self.log_dict(task_metrics, prog_bar=True, batch_size=batch_size)
+            self.log_dict(task_metrics, prog_bar=False, batch_size=batch_size)
 
         # step_metrics = {key: sum(val) / len(val) for key, val in step_metrics.items()}
         # self.log_dict(step_metrics, prog_bar=True, batch_size=len(task_batch))
@@ -370,8 +405,70 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             metrics.update({f"{task_key}/{log_prefix}_{m_key}": val for m_key, val in task_metrics.items()})
         return metrics
 
-    def _predict_batch(self, *args, **kwargs):
-        raise NotImplementedError
+    def _predict_batch(
+        self,
+        data: pd.DataFrame,
+        format_outputs: bool = True,
+        task_keys: Optional[list[str]] = None,
+    ) -> dict:
+        """
+        Args:
+            aa_seqs: [(AbHC, AbLC, Ag), ...]
+            predict_tasks: list of task keys indicating which task predictions are required.
+                Defaults to `None`, which indicates all tasks are required without enumeration.
+        """
+        task_out = {}
+        task_keys = list(self.task_dict.keys()) if task_keys is None else task_keys
+
+        group_leaves = []
+        group_tasks = []
+        for l_key in self.leaf_nodes:
+            # strip off the ensemble index {task_key}_{idx}
+            task_key, _ = l_key.rsplit("_", 1)
+            if not self.task_dict[task_key].corrupt_inference_inputs:
+                group_leaves.append(l_key)
+                group_tasks.append(task_key)
+
+        if len(group_leaves) > 0:
+            group_inputs = {}
+            for task_key in group_tasks:
+                group_inputs.update(self.task_dict[task_key].format_inputs(data, corrupt_frac=0.0))
+            with torch.no_grad():
+                group_outputs = self(group_inputs, leaf_keys=group_leaves)
+            task_out.update(group_outputs.branch_outputs)
+            task_out.update(group_outputs.leaf_outputs)
+
+        group_leaves = []
+        group_tasks = []
+        for l_key in self.leaf_nodes:
+            # strip off the ensemble index {task_key}_{idx}
+            task_key, _ = l_key.rsplit("_", 1)
+            if self.task_dict[task_key].corrupt_inference_inputs:
+                group_leaves.append(l_key)
+                group_tasks.append(task_key)
+        if len(group_leaves) > 0:
+            group_inputs = {}
+            for task_key in group_tasks:
+                group_inputs.update(self.task_dict[task_key].format_inputs(data, corrupt_frac=0.5))
+            with torch.no_grad():
+                group_outputs = self(group_inputs, leaf_keys=group_leaves)
+            task_out.update(group_outputs.root_outputs)
+            task_out.update(group_outputs.leaf_outputs)
+
+        task_leaves = {}
+        for task_key in self.task_dict:
+            task_leaves[task_key] = [l_key for l_key in self.leaf_nodes.keys() if l_key.startswith(task_key)]
+
+        if format_outputs:
+            predict_out = self.format_task_outputs(
+                task_out=task_out,
+                task_keys=task_keys,
+                task_leaves=task_leaves,
+            )
+        else:
+            predict_out = task_out
+
+        return predict_out
 
     def format_task_outputs(self, task_out, task_keys, task_leaves):
         # format leaf output to more useful form

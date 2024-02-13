@@ -12,8 +12,6 @@ from cortex.task._abstract_task import BaseTask
 
 
 class DenoisingLanguageModelTask(BaseTask):
-    corrupt_inputs = True
-
     def __init__(
         self,
         data_module: TaskDataModule,
@@ -30,6 +28,8 @@ class DenoisingLanguageModelTask(BaseTask):
             data_module=data_module,
             input_map=input_map,
             leaf_key=leaf_key,
+            corrupt_train_inputs=True,
+            corrupt_inference_inputs=True,
         )
         self.vocab_size = len(tokenizer.vocab)
         self.root_key = root_key

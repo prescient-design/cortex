@@ -1,0 +1,17 @@
+# @package _global_
+# Directories for loading and storing data
+ckpt_name: ${job_name}
+ckpt_file: ${ckpt_name}.pt
+ckpt_cfg: ${ckpt_name}.yaml
+save_ckpt: true
+
+data_dir: /home/stantos5/scratch/code/remote/prescient-github/cortex/temp
+project_name: cortex
+__version__: null
+exp_name: dry_run
+job_name: null
+timestamp: ${now:%Y-%m-%d_%H-%M-%S}
+log_dir: ${data_dir}/${exp_name}/${job_name}/${timestamp}  # use this directory for local output
+wandb_mode: online
+wandb_host: https://api.wandb.ai
+warnings_filter: ignore
