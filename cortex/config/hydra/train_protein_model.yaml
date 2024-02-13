@@ -8,6 +8,7 @@ defaults:
   - tree: protein_model
   - tasks:
     - protein_property/log_fluorescence
+    - protein_property/stability
     - generation/gfp
   - _self_
 
@@ -17,7 +18,7 @@ fit:
 trainer:
   _target_: lightning.Trainer
   accelerator: gpu
-  max_epochs: 32
+  max_epochs: 64
   devices: 1
   # devices: 8
   # strategy: ddp
@@ -45,7 +46,11 @@ tasks:
 
   protein_property:
     log_fluorescence:
-      ensemble_size: ${ensemble_size}
+      # ensemble_size: ${ensemble_size}
+      ensemble_size: 2
+    stability:
+      # ensemble_size: ${ensemble_size}
+      ensemble_size: 2
   generation:
     gfp:
       ensemble_size: 1

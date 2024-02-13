@@ -1,8 +1,8 @@
-log_fluorescence:
+stability:
   _target_: cortex.task.RegressionTask
   input_map:
     protein_seq: ['tokenized_seq']
-  outcome_cols: ['log_fluorescence']
+  outcome_cols: ['stability_score']
   corrupt_train_inputs: true
   corrupt_inference_inputs: false
   root_key: protein_seq
@@ -17,7 +17,7 @@ log_fluorescence:
     train_on_everything: false
     num_workers: ${num_workers}
     dataset_config:
-      _target_: cortex.data.dataset.TAPEFluorescenceDataset
+      _target_: cortex.data.dataset.TAPEStabilityDataset
       root: ${dataset_root_dir}
       download: ${download_datasets}
       train: ???

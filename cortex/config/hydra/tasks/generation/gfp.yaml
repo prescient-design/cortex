@@ -15,7 +15,7 @@ gfp:
     train_on_everything: false
     num_workers: ${num_workers}
     dataset_config:
-      _target_: cortex.data.dataset.GFPFluorescenceDataset
+      _target_: cortex.data.dataset.TAPEFluorescenceDataset
       root: ${dataset_root_dir}
       download: ${download_datasets}
       train: ???
