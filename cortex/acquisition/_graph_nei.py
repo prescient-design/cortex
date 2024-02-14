@@ -1,11 +1,9 @@
 import numpy as np
 import torch
 from botorch.acquisition.logei import qLogExpectedImprovement
-from botorch.acquisition.multi_objective.logei import \
-    qLogExpectedHypervolumeImprovement
+from botorch.acquisition.multi_objective.logei import qLogExpectedHypervolumeImprovement
 from botorch.acquisition.objective import IdentityMCObjective
-from botorch.utils.multi_objective.box_decompositions import \
-    FastNondominatedPartitioning
+from botorch.utils.multi_objective.box_decompositions import FastNondominatedPartitioning
 from botorch.utils.multi_objective.hypervolume import infer_reference_point
 from botorch.utils.multi_objective.pareto import is_non_dominated
 
