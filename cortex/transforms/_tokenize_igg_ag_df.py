@@ -1,7 +1,6 @@
 import pandas as pd
 
-from cortex.constants import (AB_AG_COMPLEX_COL, ANTIGEN_COL,
-                              VARIABLE_HEAVY_COL, VARIABLE_LIGHT_COL)
+from cortex.constants import AB_AG_COMPLEX_COL, ANTIGEN_COL, VARIABLE_HEAVY_COL, VARIABLE_LIGHT_COL
 from cortex.transforms._transform import Transform
 from cortex.transforms.functional import tokenize_igg_ag_df
 
@@ -20,7 +19,7 @@ class TokenizeIggAgComplex(Transform):
         use_custom_chain_tokens: bool = True,
         use_custom_format_tokens: bool = True,
         *args,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(*args, **kwargs)
         self._randomize_chain_order = randomize_chain_order

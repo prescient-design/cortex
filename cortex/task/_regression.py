@@ -2,7 +2,6 @@ from collections import OrderedDict
 from typing import Optional
 
 import numpy as np
-import pandas as pd
 import torch
 from botorch.models.transforms.outcome import OutcomeTransform
 from scipy import stats
@@ -31,7 +30,6 @@ class RegressionTask(BaseTask):
         nominal_label_var: float = 0.25**2,
         **kwargs,
     ) -> None:
-
         super().__init__(
             data_module=data_module,
             input_map=input_map,

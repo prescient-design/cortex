@@ -16,3 +16,4 @@ lightning == 1.9.5
 pytorch-lightning == 1.9.5
 universal-pathlib
 pyarrow
+s3fs
