@@ -40,7 +40,7 @@ class Conv1dRoot(RootNode):
         num_blocks: int = 2,
         kernel_size: int = 5,
         dilation: int = 1,
-        dropout_prob: float = 0.1,
+        dropout_prob: float = 0.0,
         layernorm: bool = True,
         pos_encoding: bool = True,
         train_transforms=None,

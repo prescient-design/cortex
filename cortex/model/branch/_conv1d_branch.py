@@ -34,7 +34,7 @@ class Conv1dBranch(BranchNode):
         embed_dim: int = 64,
         num_blocks: int = 2,
         kernel_size: int = 5,
-        dropout_prob: float = 0.1,
+        dropout_prob: float = 0.0,
         layernorm: bool = True,
         pooling_type: str = "mean",
         **kwargs,
