@@ -58,7 +58,7 @@ class RegressionTask(BaseTask):
         Format a batch of data for a `NeuralTree` object
         """
         return {
-            "df": batch,
+            # "df": batch,
             "root_inputs": self.format_inputs(batch, corrupt_frac=corrupt_frac),
             "leaf_targets": self.format_targets(batch),
         }

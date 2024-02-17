@@ -152,6 +152,8 @@ class Conv1dRoot(RootNode):
 
         if self.corruption_process is not None and corrupt_frac is None:
             corrupt_frac = self.corruption_process.sample_corrupt_frac()
+        else:
+            corrupt_frac = 0.0
 
         return seq_array, tgt_tok_idxs, src_tok_embs, corrupt_frac
 

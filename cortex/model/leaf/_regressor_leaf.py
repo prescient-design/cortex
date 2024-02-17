@@ -212,11 +212,11 @@ class RegressorLeaf(LeafNode):
         return self.loss_from_canon_param(canon_param, targets, label_smoothing)
 
     def evaluate(self, outputs: RegressorLeafOutput, targets):
-        loc = outputs.loc
-        scale = outputs.scale
+        loc = outputs.loc.detach().cpu()
+        scale = outputs.scale.detach().cpu()
         targets = self._preprocess_targets(targets, loc.device, loc.dtype)
         nrmse = torch.norm(loc - targets) / torch.norm(targets).clamp_min(1e-6)
-        s_rho = spearman_rho(loc.cpu().numpy(), targets.cpu().numpy())
+        s_rho = spearman_rho(loc.numpy(), targets.numpy())
         metrics = {
             "nll": self.loss_fn(loc, scale, targets).item(),
             "nrmse": nrmse.item(),

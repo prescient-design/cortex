@@ -20,6 +20,7 @@ def tokenize_gfp_df(data: pd.DataFrame) -> pd.DataFrame:
 
 class TAPEStabilityDataset(DataFrameDataset):
     _name = "tape_stability"
+    _target = "stability"
     columns = [
         "tokenized_seq",
         "stability_score",

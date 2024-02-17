@@ -41,6 +41,7 @@ class Conv1dResidBlock(nn.Module):
             kernel_size,
             padding="same",
             stride=stride,
+            bias=False,
             dilation=dilation,
         )
         if layernorm:

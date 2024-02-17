@@ -31,7 +31,7 @@ class Conv1dBranch(BranchNode):
         self,
         in_dim: int,
         out_dim: int = 64,
-        embed_dim: int = 64,
+        channel_dim: int = 64,
         num_blocks: int = 2,
         kernel_size: int = 5,
         dropout_prob: float = 0.0,
@@ -43,7 +43,7 @@ class Conv1dBranch(BranchNode):
         # create encoder
         self.in_dim = in_dim
         self.out_dim = out_dim
-        self.embed_dim = embed_dim
+        self.channel_dim = channel_dim
         self.num_blocks = num_blocks
 
         if num_blocks == 0:
@@ -60,11 +60,11 @@ class Conv1dBranch(BranchNode):
         if num_blocks == 1:
             encoder_modules.append(Conv1dResidBlock(in_dim, out_dim, kernel_size, layernorm, dropout_prob))
         elif num_blocks > 1:
-            encoder_modules.append(Conv1dResidBlock(in_dim, embed_dim, kernel_size, layernorm, 0.0))
+            encoder_modules.append(Conv1dResidBlock(in_dim, channel_dim, kernel_size, layernorm, 0.0))
             encoder_modules.extend(
-                [Conv1dResidBlock(embed_dim, embed_dim, kernel_size, layernorm, 0.0) for _ in range(num_blocks - 2)]
+                [Conv1dResidBlock(channel_dim, channel_dim, kernel_size, layernorm, 0.0) for _ in range(num_blocks - 2)]
             )
-            encoder_modules.append(Conv1dResidBlock(embed_dim, out_dim, kernel_size, layernorm, dropout_prob))
+            encoder_modules.append(Conv1dResidBlock(channel_dim, out_dim, kernel_size, layernorm, dropout_prob))
 
         if num_blocks >= 1:
             encoder_modules.append(Apply(Expression(permute_spatial_channel_dims)))  # (B,C,N) -> (B,N,C)
