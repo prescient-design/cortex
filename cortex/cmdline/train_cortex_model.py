@@ -8,7 +8,6 @@ import lightning as L
 import torch
 import wandb
 from omegaconf import DictConfig, OmegaConf
-from pytorch_lightning.trainer.supporters import CombinedLoader
 
 from cortex.logging import wandb_setup
 
@@ -73,21 +72,10 @@ def execute(cfg):
     model = hydra.utils.instantiate(cfg.tree)
     model.build_tree(cfg, skip_task_setup=False)
 
-    # set up dataloaders
-    leaf_train_loaders = {}
-    task_test_loaders = {}
-    for l_key in model.leaf_nodes:
-        task_key, _ = l_key.rsplit("_", 1)
-        leaf_train_loaders[l_key] = model.task_dict[task_key].data_module.train_dataloader()
-        if task_key not in task_test_loaders:
-            task_test_loaders[task_key] = model.task_dict[task_key].data_module.test_dataloader()
-
     trainer.fit(
         model,
-        train_dataloaders=CombinedLoader(leaf_train_loaders, mode="min_size"),
-        val_dataloaders=CombinedLoader(
-            task_test_loaders, mode="max_size_cycle"
-        ),  # change to max_size when lightning upgraded to >1.9.5
+        train_dataloaders=model.get_dataloader(split="train"),
+        val_dataloaders=model.get_dataloader(split="val"),
     )
 
     # save model
