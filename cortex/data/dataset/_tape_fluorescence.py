@@ -20,6 +20,7 @@ def tokenize_gfp_df(data: pd.DataFrame) -> pd.DataFrame:
 
 class TAPEFluorescenceDataset(DataFrameDataset):
     _name = "tape_fluorescence"
+    _target = "fluorescence"
     columns = [
         "tokenized_seq",
         "log_fluorescence",

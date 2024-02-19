@@ -1,0 +1,16 @@
+_target_: cortex.model.tree.SequenceModelTree
+_recursive_: false
+fit_cfg:
+  reinitialize_roots: false
+  linear_probing: false
+  weight_averaging: null
+  optimizer:
+    _target_: torch.optim.Adam
+    lr: 5e-3
+    weight_decay: 0.
+    betas: [0.99, 0.999]
+    fused: false
+  lr_scheduler:
+    _target_: transformers.get_cosine_schedule_with_warmup
+    num_warmup_steps: 1
+    num_training_steps: ${max_epochs}

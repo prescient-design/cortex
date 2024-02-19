@@ -9,6 +9,7 @@ import pandas as pd
 import torch
 from botorch.models.transforms.outcome import OutcomeTransform
 from omegaconf import DictConfig, OmegaConf
+from pytorch_lightning.trainer.supporters import CombinedLoader
 from torch import nn
 
 from cortex.model import online_weight_update_
@@ -69,6 +70,23 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             self._train_state_dict = copy.deepcopy(self.state_dict())
             self.load_state_dict(self._eval_state_dict)
         return super().eval(*args, **kwargs)
+
+    def get_dataloader(self, split="train"):
+        loaders = {}
+        for l_key in self.leaf_nodes:
+            task_key, _ = l_key.rsplit("_", 1)
+            if split == "train":
+                loaders[l_key] = self.task_dict[task_key].data_module.train_dataloader()
+            elif split == "val" and task_key not in loaders:
+                loaders[task_key] = self.task_dict[task_key].data_module.test_dataloader()
+            elif split == "val":
+                pass
+            else:
+                raise ValueError(f"Invalid split {split}")
+
+        # change val to max_size when lightning upgraded to >1.9.5
+        mode = "min_size" if split == "train" else "max_size_cycle"
+        return CombinedLoader(loaders, mode=mode)
 
     def training_step(self, batch: dict, batch_idx: int, dataloader_idx: Optional[int] = None):
         leaf_keys = list(batch.keys())

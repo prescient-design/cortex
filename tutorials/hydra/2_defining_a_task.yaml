@@ -1,0 +1,13 @@
+defaults:
+  - tree: sequence_model
+  - roots: [protein_seq]
+  - trunk: sum_trunk
+  - branches: [protein_property]
+  - tasks:
+    - log_fluorescence
+
+feature_dim: 32
+kernel_size: 3
+batch_size: 2
+max_epochs: 0
+data_dir: ./.cache

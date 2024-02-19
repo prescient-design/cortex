@@ -1,0 +1,12 @@
+protein_seq:
+  _target_: cortex.model.root.Conv1dRoot
+  tokenizer_transform:
+    _target_: cortex.transforms.HuggingFaceTokenizerTransform
+    tokenizer:
+      _target_: cortex.tokenization.ProteinSequenceTokenizerFast
+  max_len: 256
+  embed_dim: ${feature_dim}
+  channel_dim: ${feature_dim}
+  out_dim: ${feature_dim}
+  num_blocks: 2
+  kernel_size: ${kernel_size}

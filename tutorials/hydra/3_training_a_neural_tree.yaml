@@ -1,0 +1,20 @@
+defaults:
+  - tree: sequence_model
+  - roots: [protein_seq]
+  - trunk: sum_trunk
+  - branches: [protein_property]
+  - tasks:
+    - log_fluorescence
+
+feature_dim: 32
+kernel_size: 3
+batch_size: 32
+max_epochs: 2
+data_dir: ./.cache
+wandb_mode: offline
+random_seed: 42
+
+trainer:
+  _target_: lightning.Trainer
+  max_epochs: ${max_epochs}
+  num_sanity_val_steps: 1

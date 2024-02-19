@@ -43,7 +43,6 @@ tree:
       num_training_steps: ${trainer.max_epochs}
 
 tasks:
-
   protein_property:
     log_fluorescence:
       # ensemble_size: ${ensemble_size}

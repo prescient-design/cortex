@@ -1,0 +1,17 @@
+protein_property:
+  log_fluorescence:
+    _target_: cortex.task.RegressionTask
+    input_map:
+      protein_seq: ['tokenized_seq']
+    outcome_cols: ['log_fluorescence']
+    root_key: protein_seq
+    ensemble_size: 1
+    data_module:
+      _target_: cortex.data.data_module.TaskDataModule
+      _recursive_: false
+      batch_size: ${batch_size}
+      dataset_config:
+        _target_: cortex.data.dataset.TAPEFluorescenceDataset
+        root: ${data_dir}
+        download: true
+        train: ???
