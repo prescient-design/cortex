@@ -1,0 +1,23 @@
+protein_generation:
+  protein_seq:
+    _target_: cortex.task.DenoisingLanguageModelTask
+    tokenizer:
+      _target_: cortex.tokenization.ProteinSequenceTokenizerFast
+    input_map:
+      protein_seq: ['tokenized_seq']
+    root_key: protein_seq
+    ensemble_size: 1
+    data_module:
+      _target_: cortex.data.data_module.TaskDataModule
+      _recursive_: false
+      batch_size: ${batch_size}
+      balance_train_partition: null
+      drop_last: true
+      lengths: [1.0, 0.0]
+      train_on_everything: false
+      num_workers: 1
+      dataset_config:
+        _target_: cortex.data.dataset.TAPEFluorescenceDataset
+        root: ${data_dir}
+        download: true
+        train: ???
