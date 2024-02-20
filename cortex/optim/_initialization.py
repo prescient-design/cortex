@@ -3,20 +3,19 @@ from botorch.utils.multi_objective.pareto import is_non_dominated
 
 from cortex.acquisition import get_joint_objective_values
 from cortex.model import infer_with_model
+from cortex.model.tree import NeuralTree
 
 
 def select_initial_sequences(
     data: pd.DataFrame,
-    ckpt_dir: str,
-    ckpt_name: str,
+    model: NeuralTree,
     graph_objectives: list[str],
     graph_constraints: dict[str, list[str]],
     graph_obj_transform: dict[str, dict[str, float]],
 ):
     predictions = infer_with_model(
         data=data,
-        cfg_fpath=f"{ckpt_dir}/{ckpt_name}.yaml",
-        weight_fpath=f"{ckpt_dir}/{ckpt_name}.pt",
+        model=model,
     )
 
     obj_vals = get_joint_objective_values(

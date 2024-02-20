@@ -121,6 +121,9 @@ class Conv1dRoot(RootNode):
         # default random initialization
         pass
 
+    def get_token_embedding(self, tok_idx: int):
+        return self.tok_encoder(torch.tensor(tok_idx, device=self.device))
+
     @property
     def device(self):
         return self.tok_encoder.weight.device

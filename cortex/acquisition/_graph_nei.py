@@ -112,7 +112,7 @@ def tree_output_to_dict(
     result: dict[str, Tensor] = {}
 
     for objective in objectives:
-        result[objective] = fetch_task_outputs(tree_output, objective)["loc"]
+        result[objective] = fetch_task_outputs(tree_output, objective)["loc"].squeeze(-1)
 
         if scaling is not None and objective in scaling:
             result[f"{objective}_scaled"] = scale_value(
@@ -144,7 +144,7 @@ def get_graph_nei_runtime_kwargs(
 
     tree_output_dict = tree_output_to_dict(tree_output, objectives=objectives, constraints=constraints, scaling=scaling)
     f_baseline = get_joint_objective_values(
-        input=tree_output_dict,
+        inputs=tree_output_dict,
         objectives=objectives,
         constraints=constraints,
         scaling=scaling,

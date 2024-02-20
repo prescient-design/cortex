@@ -528,6 +528,50 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
 
         return predict_out
 
+    def call_from_str_array(
+        self, str_array, root_key: Optional[str] = None, leaf_keys: Optional[list[str]] = None, **kwargs
+    ):
+        if root_key is None:
+            root_key = _infer_root_key(self.root_nodes)
+        root_inputs = {root_key: {"seq_array": str_array, **kwargs}}
+        return self(root_inputs=root_inputs, leaf_keys=leaf_keys)
+
+    def call_from_tok_idxs(
+        self,
+        tok_idxs: torch.LongTensor,
+        root_key: Optional[str] = None,
+        leaf_keys: Optional[list[str]] = None,
+        **kwargs,
+    ):
+        if root_key is None:
+            root_key = _infer_root_key(self.root_nodes)
+        root_inputs = {root_key: {"tgt_tok_idxs": tok_idxs, **kwargs}}
+        return self(root_inputs=root_inputs, leaf_keys=leaf_keys)
+
+    def call_from_tok_embs(
+        self,
+        tok_embs: torch.FloatTensor,
+        root_key: Optional[str] = None,
+        leaf_keys: Optional[list[str]] = None,
+        **kwargs,
+    ):
+        if root_key is None:
+            root_key = _infer_root_key(self.root_nodes)
+        root_inputs = {root_key: {"src_tok_embs": tok_embs, **kwargs}}
+        return self(root_inputs=root_inputs, leaf_keys=leaf_keys)
+
+    def get_tokenizer(self, root_key: Optional[str] = None):
+        if root_key is None:
+            root_key = _infer_root_key(self.root_nodes)
+        return self.root_nodes[root_key].tokenizer
+
+
+def _infer_root_key(root_nodes):
+    if len(root_nodes) == 1:
+        return list(root_nodes.keys())[0]
+    else:
+        raise ValueError("root_key must be provided when there are multiple root nodes")
+
 
 def get_param_prefixes(tree_outputs):
     param_prefixes = []

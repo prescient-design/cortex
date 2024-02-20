@@ -9,8 +9,9 @@ from cortex.io import load_hydra_config, load_model_checkpoint
 
 def infer_with_model(
     data: pd.DataFrame,
-    cfg_fpath: str,
-    weight_fpath: str,
+    model: Optional[torch.nn.Module] = None,
+    cfg_fpath: Optional[str] = None,
+    weight_fpath: Optional[str] = None,
     batch_limit: int = 32,
     cpu_offload: bool = True,
     device: Optional[torch.device] = None,
@@ -54,11 +55,17 @@ def infer_with_model(
     elif dtype is None:
         dtype = torch.float64
 
-    # load Hydra config from s3 or locally
-    cfg = load_hydra_config(cfg_fpath)
+    if model is None and (cfg_fpath is None or weight_fpath is None):
+        raise ValueError("Either model or cfg_fpath and weight_fpath must be provided")
 
-    # load model checkpoint from s3 or locally
-    model, _ = load_model_checkpoint(cfg, weight_fpath, device=device, dtype=dtype)
+    if model is not None and (cfg_fpath is not None or weight_fpath is not None):
+        raise ValueError("Only one of model or cfg_fpath and weight_fpath must be provided")
+
+    if model is None:
+        # load Hydra config from s3 or locally
+        cfg = load_hydra_config(cfg_fpath)
+        # load model checkpoint from s3 or locally
+        model, _ = load_model_checkpoint(cfg, weight_fpath, device=device, dtype=dtype)
 
     # model forward pass
     with torch.inference_mode():
