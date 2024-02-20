@@ -26,11 +26,11 @@ Deep learning is easy to learn and difficult to master. Seemingly insignificant 
 
 ## Installation
 
-    ```bash
-    conda create --name cortex-env python=3.10 -y && conda activate cortex-env
-    python -m pip install -r requirements.in
-    pip install -e .
-    ```
+```bash
+conda create --name cortex-env python=3.10 -y && conda activate cortex-env
+python -m pip install -r requirements.in
+pip install -e .
+```
 
 
 If you have a package version issue we provide pinned versions of all dependencies in `requirements.txt`.
@@ -44,7 +44,8 @@ pip-compile --resolver=backtracking requirements.in
 ## Running
 
 Use `cortex_train_model --config-name <CONFIG_NAME>` to train, e.g.:
-```
+
+```bash
 cortex_train_model --config-name train_protein_model wandb_mode=offline
 ```
 
@@ -70,7 +71,7 @@ pre-commit install
 ### Testing
 
 ```bash
-pytest -v --cov-report term-missing --cov=./cortex ./tests
+python -m pytest -v --cov-report term-missing --cov=./cortex ./tests
 ```
 
 ### Build and browse docs locally
@@ -82,7 +83,7 @@ python -m http.server
 ```
 
 Then open `http://localhost:8000` in your browser.
-```
+
 
 
 ### Maintainers

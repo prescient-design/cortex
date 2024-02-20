@@ -10,9 +10,7 @@ from torch.distributions.kl import kl_divergence
 
 from cortex.attribution import approximate_occlusion
 from cortex.corruption import GaussianCorruptionProcess, MaskCorruptionProcess
-from cortex.optim._coordinate_selection import (
-    mlm_pseudo_log_likelihood,
-)
+from cortex.model.leaf import mlm_pseudo_log_likelihood
 
 
 class LaMBO(object):
@@ -227,15 +225,6 @@ class LaMBO(object):
             return self.objective(tree_output)
 
         null_embedding = self.model.root_nodes[self.domain_name].get_token_embedding(self.tokenizer.masking_idx)
-        # model_call = partial(self.model.call_from_tok_embs, root_key=self.domain_name)
-        # self._coordinate_score = NOSCoordinateScore(
-        #     model=model_call,
-        #     value_fn=self.objective,
-        #     logp_fn=mlm_conditional_log_likelihood,
-        #     x_instances=tok_idxs,
-        #     lambda_val=0.0,
-        #     root_key=self.domain_name,
-        # )
 
         # edit_idxs are all corruptible and mutable positions
         pos_is_feasible = is_corruptible * self.is_mutable
@@ -252,24 +241,6 @@ class LaMBO(object):
             edit_idxs = torch.multinomial(position_probs, self.num_mutations_per_step, replacement=False)
             edit_idxs = edit_idxs.sort(dim=-1).values
 
-            # edit_probs = self.model.edit_probs(
-            #     acq_fn=self.objective,
-            #     base_tok_idxs=tgt_tok_idxs,
-            #     temp=self.feature_attr_temp,
-            #     is_mutable=self.is_mutable,
-            # )
-            # edit_idxs = torch.multinomial(
-            #     edit_probs, self.num_mutations_per_step, replacement=False
-            # )
-            # edit_idxs = edit_idxs.sort(dim=-1).values
-
-            # edit_idxs = greedy_occlusion_selection(
-            #     tok_idxs=tok_idxs,
-            #     score_fn=self._coordinate_score,
-            #     num_coordinates=self.num_mutations_per_step,
-            #     null_value=self.tokenizer.masking_idx,
-            #     is_excluded=~pos_is_feasible,
-            # )
             self._corruption_allowed = torch.zeros_like(tok_idxs)
             self._corruption_allowed = self._corruption_allowed.scatter(dim=-1, index=edit_idxs, value=1).bool()
             print(f"Selected edit positions: {edit_idxs}")
@@ -304,8 +275,9 @@ class LaMBO(object):
         # update latent features only at masked locations
         with torch.no_grad():
             new_activations = torch.where(is_corrupted[..., None], activations + delta, activations)
-            activations.copy_(new_activations)
+            # activations.copy_(new_activations)
             # compute token logits from updated features
+            trunk_outputs.trunk_features = new_activations
             sample_tok_idxs = self.decode(trunk_outputs, non_viable_idxs)
             sample_tok_idxs = torch.where(is_corrupted, sample_tok_idxs, tgt_tok_idxs)
 

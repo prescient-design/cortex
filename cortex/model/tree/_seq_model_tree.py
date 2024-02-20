@@ -13,14 +13,12 @@ from pytorch_lightning.trainer.supporters import CombinedLoader
 from torch import nn
 
 from cortex.model import online_weight_update_
-from cortex.model.leaf import (
-    ClassifierLeaf,
+from cortex.model.leaf._classifier_leaf import ClassifierLeaf, format_classifier_ensemble_output
+from cortex.model.leaf._denoising_lm_leaf import (
     DenoisingLanguageModelLeaf,
-    RegressorLeaf,
-    format_classifier_ensemble_output,
     format_denoising_lm_ensemble_output,
-    format_regressor_ensemble_output,
 )
+from cortex.model.leaf._regressor_leaf import RegressorLeaf, format_regressor_ensemble_output
 from cortex.model.tree import NeuralTree
 
 
