@@ -4,24 +4,13 @@
 
 # A Modular Architecture for Deep Learning Systems
 
+## Notice: Alpha Release
+This is an alpha release. The API is subject to change and the documentation is incomplete.
+
 ## What is `cortex`?
 
 The `cortex` library provides a modular framework for neural network model composition for advanced use cases like multitask models, guided generative models, and multi-modal models.
 Rather than tack on auxiliary abstractions to a single input --> single task model, `cortex` is built from the ground up to make adding new inputs or tasks to the model as seamless as possible.
-
-In addition to streamlining advanced model construction, `cortex` provides meticulous implementations of classification and regression, addressing common challenges such as
-- imbalanced classes
-- disjoint multitask datasets
-- noisy observations
-- variable length inputs
-
-Currently `cortex` supports SMILES-encoded small molecule and protein sequence inputs.
-`cortex` can also provide epistemic and aleatoric uncertainty estimates (i.e. model uncertainty and measurement uncertainty) for use in decision-making problems such as active learning or black-box optimization.
-
-## Why should I use `cortex`?
-
-Deep learning is easy to learn and difficult to master. Seemingly insignificant bugs or design choices can dramatically affect performance. Unfortunately highly optimized model implementations are often very difficult to extend to new problems because the code is overly prescriptive.
-`cortex` is designed to abstract away as many of these details as possible, while providing maximum flexibility to the user.
 
 
 ## Installation
@@ -52,8 +41,8 @@ cortex_train_model --config-name train_protein_model wandb_mode=offline
 
 ## How to launch a WANDB sweep
 
-1. Configure the sweep `.yaml`, e.g. `./wandb_config/ab_model_sweep.yaml`
-2. Run `wandb sweep wandb_config/ab_model_sweep.yaml`
+1. Configure the sweep `.yaml`, e.g. `./config/wandb/protein_model_sweep.yaml`
+2. Run `wandb sweep ./config/wandb/protein_model_sweep.yaml`
 3. Launch the wandb agents using a scheduler of your choice, e.g. SLURM or LSF
 
 
