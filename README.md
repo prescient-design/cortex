@@ -26,60 +26,63 @@ Deep learning is easy to learn and difficult to master. Seemingly insignificant 
 
 ## Installation
 
-1.  Create a new conda environment.
-
     ```bash
     conda create --name cortex-env python=3.10 -y && conda activate cortex-env
+    python -m pip install -r requirements.in
+    pip install -e .
     ```
 
-2.  (optional) If desired install dependencies from frozen requirements files.
 
-    `pip install -r requirements.txt -r requirements-dev.txt`
+If you have a package version issue we provide pinned versions of all dependencies in `requirements.txt`.
+To update the frozen dependencies run
 
-    These files fix the exact version of all dependencies and therefore should create a known good environment.
-    However, this is likely more stringent than strictly necessary and can make it difficult to work in environments with multiple projects installed.
-    If you skip this step, all dependencies will be fetched during package installation based on `requirements.in` which attempts to be as loose as possible in specifying compatible package versions.
+```bash
+pip-compile --resolver=backtracking requirements.in
+```
 
-    To update the frozen dependencies run
-
-    `pip-compile --resolver=backtracking requirements.in`.
-
-3.  Install cortex.
-
-    `pip install -e .[dev]`
 
 ## Running
 
 Use `cortex_train_model --config-name <CONFIG_NAME>` to train, e.g.:
 ```
-cortex_train_model --config-name train_ab_seqcnn wandb_mode=offline fit=smoke_test
+cortex_train_model --config-name train_protein_model wandb_mode=offline
 ```
 
-Supported configs are
 
-- `train_ab_seqcnn` to train a SeqCNN from scratch.
-
-
-## How to launch a WANDB sweep on a cluster
+## How to launch a WANDB sweep
 
 1. Configure the sweep `.yaml`, e.g. `./wandb_config/ab_model_sweep.yaml`
 2. Run `wandb sweep wandb_config/ab_model_sweep.yaml`
-3. Copy the sweep id to `scripts/wandb_agent_array.bsub`
-4. Run `bsub < scripts/wandb_agent_array.bsub`
+3. Launch the wandb agents using a scheduler of your choice, e.g. SLURM or LSF
+
 
 ## Contributing
 
-Contributions are welcome, especially tutorials and documentation.
+Contributions are welcome!
 
 ### Install dev requirements and pre-commit hooks
-```
+
+```bash
 python -m pip install -r requirements-dev.in
 pre-commit install
 ```
 
 ### Testing
 
-`pytest -v --cov-report term-missing --cov=./cortex ./tests`
+```bash
+pytest -v --cov-report term-missing --cov=./cortex ./tests
+```
+
+### Build and browse docs locally
+
+```bash
+make -C docs html
+cd docs/build/html
+python -m http.server
+```
+
+Then open `http://localhost:8000` in your browser.
+```
 
 
 ### Maintainers
