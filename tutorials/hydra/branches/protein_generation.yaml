@@ -1,0 +1,6 @@
+protein_generation:
+  _target_: cortex.model.branch.Conv1dBranch
+  out_dim: 32
+  channel_dim: ${feature_dim}
+  num_blocks: 0
+  kernel_size: ${kernel_size}

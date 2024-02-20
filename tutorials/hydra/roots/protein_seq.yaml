@@ -1,5 +1,7 @@
 protein_seq:
   _target_: cortex.model.root.Conv1dRoot
+  corruption_process:
+    _target_: cortex.corruption.MaskCorruptionProcess
   tokenizer_transform:
     _target_: cortex.transforms.HuggingFaceTokenizerTransform
     tokenizer:

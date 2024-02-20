@@ -1,0 +1,11 @@
+_target_: cortex.optim.generative.LaMBO
+max_num_solutions: ${num_samples}
+num_mutations_per_step: 8
+max_guidance_updates: 4
+guidance_step_size: 0.1
+guidance_layer: trunk
+kl_weight: 0.25
+feature_attr_temp: 1.0
+domain_name: protein_seq
+exclude_initial_solution: false
+resample_edit_positions: true

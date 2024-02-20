@@ -1,0 +1,12 @@
+tag: log_fluorescence
+static_kwargs:
+  _target_: cortex.acquisition.GraphNEI
+  objectives:
+    - log_fluorescence
+  constraints: null
+  scaling: null
+runtime_kwargs:
+  _target_: cortex.acquisition.get_graph_nei_runtime_kwargs
+  objectives: ${guidance_objective.static_kwargs.objectives}
+  constraints: ${guidance_objective.static_kwargs.constraints}
+  scaling: ${guidance_objective.static_kwargs.scaling}

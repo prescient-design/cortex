@@ -153,3 +153,6 @@ class NeuralTree(ABC, nn.Module):
             warnings.warn(msg, stacklevel=2)
         else:
             self.leaf_nodes[leaf_key] = leaf_node
+
+    def call_from_trunk_output(self, trunk_output, leaf_keys: Optional[list[str]] = None, **kwargs):
+        return self(root_inputs=None, trunk_outputs=trunk_output, leaf_keys=leaf_keys, **kwargs)

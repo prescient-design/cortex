@@ -49,14 +49,4 @@ class TAPEFluorescenceDataset(DataFrameDataset):
         data.loc[:, "log_fluorescence"] = np.array([val[0] for val in data["log_fluorescence"].values])
         data = tokenize_gfp_df(data)
 
-        # import pdb; pdb.set_trace()
-
-        # if self.columns is None:
-        #     self.columns = list(data.columns)
-
-        # if dedup:
-        # data.drop_duplicates(inplace=True, ignore_index=True)
-
-        # import pdb; pdb.set_trace()
-
         return data
