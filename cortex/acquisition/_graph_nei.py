@@ -177,6 +177,7 @@ class GraphNEI(object):
         """
         Very simple implementation of PropertyDAG + NEHVI
         """
+
         self.objectives = objectives
         self.constraints = constraints
         self.scaling = scaling

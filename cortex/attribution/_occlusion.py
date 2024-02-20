@@ -29,6 +29,7 @@ def approximate_occlusion(
     """
     First-order Taylor expansion of the occlusion score.
     """
+
     tok_embeddings = torch.nn.Parameter(tok_embeddings)
     score = score_fn(tok_embeddings).sum()
     score.backward()
@@ -58,6 +59,7 @@ def greedy_occlusion_search(
     This process is repeated until `num_coordinates` coordinates are selected.
     Returns a tensor of indices of selected coordinates.
     """
+
     num_feasible = (~is_excluded).float().sum(-1)
     assert torch.all(num_feasible >= num_coordinates), "Not enough feasible coordinates"
     is_selected = torch.zeros_like(tok_idxs, dtype=torch.bool)
