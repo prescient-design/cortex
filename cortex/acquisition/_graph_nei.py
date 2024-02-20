@@ -1,4 +1,6 @@
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 import torch
@@ -10,7 +12,8 @@ from botorch.utils.multi_objective.hypervolume import infer_reference_point
 from botorch.utils.multi_objective.pareto import is_non_dominated
 from torch import Tensor
 
-from cortex.model.tree import NeuralTree, NeuralTreeOutput
+if TYPE_CHECKING:
+    from cortex.model.tree import NeuralTree, NeuralTreeOutput
 
 GRAPH_OBJECTIVES = ["stability", "log_fluorescence"]
 GRAPH_CONSTRAINTS = {}

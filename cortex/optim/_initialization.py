@@ -1,9 +1,15 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pandas as pd
 from botorch.utils.multi_objective.pareto import is_non_dominated
 
 from cortex.acquisition import get_joint_objective_values
 from cortex.model import infer_with_model
-from cortex.model.tree import NeuralTree
+
+if TYPE_CHECKING:
+    from cortex.model.tree import NeuralTree
 
 
 def select_initial_sequences(
