@@ -2,7 +2,6 @@
 name = "pytorch-cortex"
 dynamic = ["version", "readme", "dependencies", "optional-dependencies"]
 description = "A modular architecture for deep learning systems."
-long_description_content_type = "text/markdown"
 authors = [{name = "Samuel Stanton", email = "stanton.samuel@gene.com"}]
 classifiers=[
     "Development Status :: 3 - Alpha",
