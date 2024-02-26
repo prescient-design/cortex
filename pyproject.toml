@@ -22,7 +22,7 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.in"]}
 optional-dependencies = {dev = {file = ["requirements-dev.in"]}}
-readme = {file = "README.md"}
+readme = {file = "README.rst"}
 
 [tool.setuptools.packages.find]
 include = ["cortex*"]
