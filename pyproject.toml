@@ -4,7 +4,7 @@ dynamic = ["version", "readme", "dependencies", "optional-dependencies"]
 description = "A modular architecture for deep learning systems."
 authors = [{name = "Samuel Stanton", email = "stanton.samuel@gene.com"}]
 classifiers=[
-    "Development Status :: 3",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
     "Programming Language :: Python :: 3",
 ]
