@@ -5,6 +5,10 @@ from torch import Tensor, nn
 
 
 class SinePosEncoder(nn.Module):
+    """
+    Sinusoidal positional encoding for Transformer models
+    """
+
     def __init__(
         self,
         embed_dim: int,
@@ -12,9 +16,6 @@ class SinePosEncoder(nn.Module):
         max_len: int = 5000,
         batch_first: bool = False,
     ) -> None:
-        """
-        Sinusoidal positional encoding for Transformer models
-        """
         super().__init__()
         self.dropout = nn.Dropout(p=dropout)
         self.batch_first = batch_first

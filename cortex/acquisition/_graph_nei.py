@@ -1,4 +1,6 @@
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 import torch
@@ -10,7 +12,8 @@ from botorch.utils.multi_objective.hypervolume import infer_reference_point
 from botorch.utils.multi_objective.pareto import is_non_dominated
 from torch import Tensor
 
-from cortex.model.tree import NeuralTree, NeuralTreeOutput, fetch_task_outputs
+if TYPE_CHECKING:
+    from cortex.model.tree import NeuralTree, NeuralTreeOutput
 
 GRAPH_OBJECTIVES = ["stability", "log_fluorescence"]
 GRAPH_CONSTRAINTS = {}
@@ -112,7 +115,7 @@ def tree_output_to_dict(
     result: dict[str, Tensor] = {}
 
     for objective in objectives:
-        result[objective] = fetch_task_outputs(tree_output, objective)["loc"].squeeze(-1)
+        result[objective] = tree_output.fetch_task_outputs(objective)["loc"].squeeze(-1)
 
         if scaling is not None and objective in scaling:
             result[f"{objective}_scaled"] = scale_value(
@@ -123,7 +126,7 @@ def tree_output_to_dict(
 
     if constraints is not None:
         for constraint in constraints:
-            constraint_values = fetch_task_outputs(tree_output, constraint)["logits"]
+            constraint_values = tree_output.fetch_task_outputs(constraint)["logits"]
             constraint_values = constraint_values.softmax(dim=-1)[..., 1]
 
             result[constraint] = constraint_values
@@ -174,6 +177,7 @@ class GraphNEI(object):
         """
         Very simple implementation of PropertyDAG + NEHVI
         """
+
         self.objectives = objectives
         self.constraints = constraints
         self.scaling = scaling

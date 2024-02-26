@@ -7,6 +7,10 @@ import cortex
 
 
 def wandb_setup(cfg: DictConfig):
+    """
+    Runs `wandb.init` and `wandb.login`.
+    The values in `cfg` are logged to the wandb run.
+    """
     if not hasattr(cfg, "wandb_host"):
         cfg["wandb_host"] = "https://api.wandb.ai"
 
@@ -32,7 +36,10 @@ def wandb_setup(cfg: DictConfig):
     wandb.config.update(log_cfg)
 
 
-def flatten_config(d: DictConfig, parent_key="", sep="/"):
+def flatten_config(d: DictConfig, parent_key: str = "", sep: str = "/"):
+    """
+    Flatten a nested `DictConfig` object into a flat dictionary for logging.
+    """
     items = []
     for k, v in d.items():
         new_key = parent_key + sep + k if parent_key else k

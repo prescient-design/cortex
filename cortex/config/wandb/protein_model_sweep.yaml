@@ -1,0 +1,20 @@
+project: PROJECT_NAME
+entity: WANDB_USERNAME
+method: grid
+
+parameters:
+  exp_name:
+    value: example_sweep
+  seed:
+    distribution: int_uniform
+    min: 0
+    max: 2
+
+program: cortex/cmdline/train_cortex_model.py
+command:
+  - ${env}
+  - ${interpreter}
+  - ${program}
+  - "--config-name"
+  - "train_protein_model"
+  - ${args_no_hyphens}

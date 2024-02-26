@@ -10,7 +10,7 @@ from omegaconf import DictConfig
 from torch import nn
 
 from cortex.model.branch import BranchNodeOutput
-from cortex.model.leaf import LeafNode, LeafNodeOutput
+from cortex.model.leaf._abstract_leaf import LeafNode, LeafNodeOutput
 from cortex.model.root import RootNodeOutput
 from cortex.model.trunk import TrunkNodeOutput
 
@@ -22,17 +22,16 @@ class NeuralTreeOutput:
     branch_outputs: dict[str, BranchNodeOutput]
     leaf_outputs: dict[str, LeafNodeOutput]
 
-
-def fetch_task_outputs(tree_output: NeuralTreeOutput, task_key: str):
-    outputs = []
-    for leaf_key in tree_output.leaf_outputs:
-        if leaf_key.startswith(task_key):
-            outputs.append(tree_output.leaf_outputs[leaf_key])
-    if len(outputs) == 0:
-        raise ValueError(f"Task {task_key} not found in tree output")
-    field_names = [f.name for f in fields(outputs[0])]
-    outputs = {name: torch.stack([getattr(out, name) for out in outputs]) for name in field_names}
-    return outputs
+    def fetch_task_outputs(self, task_key: str):
+        outputs = []
+        for leaf_key in self.leaf_outputs:
+            if leaf_key.startswith(task_key):
+                outputs.append(self.leaf_outputs[leaf_key])
+        if len(outputs) == 0:
+            raise ValueError(f"Task {task_key} not found in tree output")
+        field_names = [f.name for f in fields(outputs[0])]
+        outputs = {name: torch.stack([getattr(out, name) for out in outputs]) for name in field_names}
+        return outputs
 
 
 class NeuralTree(ABC, nn.Module):
