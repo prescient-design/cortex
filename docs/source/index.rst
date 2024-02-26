@@ -12,6 +12,7 @@ Cortex: A Modular Architecture for Deep Learning Systems
 ========================================================
 
 Welcome to the documentation for the Cortex project.
+This is an alpha release. The API is subject to change and the documentation is incomplete.
 
 .. toctree::
    :maxdepth: 2

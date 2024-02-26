@@ -14,6 +14,12 @@ from cortex.model.leaf import mlm_pseudo_log_likelihood
 
 
 class LaMBO(object):
+    """
+    This class implements the LaMBO-2 algorithm for optimization of discrete sequences.
+
+    https://arxiv.org/abs/2305.20009
+    """
+
     def __init__(
         self,
         params: torch.LongTensor,
@@ -72,6 +78,9 @@ class LaMBO(object):
         return self.model.root_nodes[self.domain_name].eval_transform
 
     def step(self) -> None:
+        """
+        Each call of LaMBO.step() corresponds to one guided diffusion step
+        """
         self.model.eval()
         self.model.requires_grad_(False)
 
@@ -218,6 +227,11 @@ class LaMBO(object):
         padding_mask: torch.BoolTensor,
         is_corruptible: torch.BoolTensor,
     ):
+        """
+        Choose edit positions (i.e. the infilling region) for diffusion.
+        If `resample_edit_positions` is True, the infilling region can change between steps.
+        """
+
         def coord_score(tok_embeddings):
             tree_output = self.model.call_from_tok_embs(
                 tok_embeddings, root_key=self.domain_name, corrupt_frac=0.0, padding_mask=padding_mask
@@ -272,10 +286,12 @@ class LaMBO(object):
         tokenizer,
         non_viable_idxs,
     ):
+        """
+        Update the guided activations, decode out to sequence and check for improvement.
+        """
         # update latent features only at masked locations
         with torch.no_grad():
             new_activations = torch.where(is_corrupted[..., None], activations + delta, activations)
-            # activations.copy_(new_activations)
             # compute token logits from updated features
             trunk_outputs.trunk_features = new_activations
             sample_tok_idxs = self.decode(trunk_outputs, non_viable_idxs)
@@ -315,6 +331,10 @@ class LaMBO(object):
         tgt_tok_embs,
         tgt_padding_mask,
     ):
+        """
+        Set up inputs for the forward pass of each guidance update.
+        Corrupt a random subset of the positions selected previously as the infilling region.
+        """
         corrupt_frac = 1.0 / math.sqrt(1 + self._step_count)
 
         root_inputs = {self.domain_name: {}}

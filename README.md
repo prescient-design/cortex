@@ -75,9 +75,19 @@ Then open `http://localhost:8000` in your browser.
 
 
 
-### Maintainers
+### Citation
 
-- Samuel Stanton
+A standalone whitepaper is in progress, in the meantime please cite the following paper if you use `cortex` in your research:
+
+```
+@article{gruver2024protein,
+  title={Protein design with guided discrete diffusion},
+  author={Gruver, Nate and Stanton, Samuel and Frey, Nathan and Rudner, Tim GJ and Hotzel, Isidro and Lafrance-Vanasse, Julien and Rajpal, Arvind and Cho, Kyunghyun and Wilson, Andrew G},
+  journal={Advances in Neural Information Processing Systems},
+  volume={36},
+  year={2024}
+}
+```
 
 
 ## What's in the name?
