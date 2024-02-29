@@ -1,0 +1,93 @@
+:py:mod:`cortex.model.root._conv1d_root`
+========================================
+
+.. py:module:: cortex.model.root._conv1d_root
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   cortex.model.root._conv1d_root.Conv1dRootOutput
+   cortex.model.root._conv1d_root.Conv1dRoot
+
+
+
+
+.. py:class:: Conv1dRootOutput
+
+
+   Bases: :py:obj:`cortex.model.root.RootNodeOutput`
+
+   .. py:attribute:: padding_mask
+      :type: torch.Tensor
+
+      
+
+   .. py:attribute:: src_tok_idxs
+      :type: Optional[torch.LongTensor]
+
+      
+
+   .. py:attribute:: tgt_tok_idxs
+      :type: Optional[torch.LongTensor]
+
+      
+
+   .. py:attribute:: src_tok_embs
+      :type: Optional[torch.Tensor]
+
+      
+
+   .. py:attribute:: is_corrupted
+      :type: Optional[torch.Tensor]
+
+      
+
+   .. py:attribute:: corrupt_frac
+      :type: Optional[float]
+
+      
+
+
+.. py:class:: Conv1dRoot(tokenizer_transform: cortex.transforms.HuggingFaceTokenizerTransform, max_len: int, out_dim: int = 64, embed_dim: int = 64, channel_dim: int = 256, num_blocks: int = 2, kernel_size: int = 5, dilation: int = 1, dropout_prob: float = 0.0, layernorm: bool = True, pos_encoding: bool = True, train_transforms=None, eval_transforms=None, corruption_process: Optional[cortex.corruption.CorruptionProcess] = None, **kwargs)
+
+
+   Bases: :py:obj:`cortex.model.root.RootNode`
+
+   A root node transforming an array of discrete sequences to an array of continuous sequence embeddings
+
+   .. py:property:: device
+
+
+   .. py:method:: initialize_weights(**kwargs)
+
+
+   .. py:method:: get_token_embedding(tok_idx: int)
+
+
+   .. py:method:: init_seq(inputs: Optional[Union[numpy.ndarray, torch.Tensor]] = None, seq_array: Optional[numpy.ndarray] = None, tgt_tok_idxs: Optional[torch.LongTensor] = None, src_tok_embs: Optional[torch.Tensor] = None, corrupt_frac: float = 0.0, **kwargs)
+
+
+   .. py:method:: tokenize_seq(seq_array: Optional[numpy.ndarray] = None, tgt_tok_idxs: Optional[torch.LongTensor] = None, src_tok_embs: Optional[torch.Tensor] = None, padding_mask: Optional[torch.Tensor] = None, corrupt_frac: float = 0.0, is_corrupted: Optional[torch.Tensor] = None, corruption_allowed: Optional[torch.Tensor] = None)
+
+
+   .. py:method:: embed_seq(src_tok_idxs: Optional[torch.LongTensor] = None, src_tok_embs: Optional[torch.Tensor] = None, corrupt_frac: float = 0.0, is_corrupted: Optional[torch.Tensor] = None, corruption_allowed: Optional[torch.Tensor] = None, normalize_embeds: bool = True)
+
+
+   .. py:method:: process_seq(src_tok_embs: Optional[torch.Tensor] = None, padding_mask: Optional[torch.Tensor] = None)
+
+
+   .. py:method:: forward(inputs: Optional[Union[numpy.ndarray, torch.Tensor]] = None, seq_array: Optional[numpy.ndarray] = None, tgt_tok_idxs: Optional[torch.LongTensor] = None, src_tok_embs: Optional[torch.Tensor] = None, padding_mask: Optional[torch.Tensor] = None, corrupt_frac: float = 0.0, is_corrupted: Optional[torch.Tensor] = None, corruption_allowed: Optional[torch.Tensor] = None, **kwargs) -> Conv1dRootOutput
+
+      :param seq_array: (batch_size,) array of discrete sequences (e.g. text strings)
+
+      :returns: {'root_features': torch.Tensor, 'padding_mask': torch.Tensor}
+      :rtype: outputs
+
+
+

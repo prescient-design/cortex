@@ -1,0 +1,15 @@
+:py:mod:`cortex.assets`
+=======================
+
+.. py:module:: cortex.assets
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   protein_seq_tokenizer_32/index.rst
+
+

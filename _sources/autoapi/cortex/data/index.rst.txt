@@ -1,0 +1,17 @@
+:py:mod:`cortex.data`
+=====================
+
+.. py:module:: cortex.data
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   data_module/index.rst
+   dataset/index.rst
+   samplers/index.rst
+
+

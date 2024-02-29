@@ -1,0 +1,36 @@
+:py:mod:`cortex.transforms._tokenize_igg_ag_df`
+===============================================
+
+.. py:module:: cortex.transforms._tokenize_igg_ag_df
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   cortex.transforms._tokenize_igg_ag_df.TokenizeIggAgComplex
+
+
+
+
+.. py:class:: TokenizeIggAgComplex(randomize_chain_order: bool = False, use_custom_chain_tokens: bool = True, use_custom_format_tokens: bool = True, *args, **kwargs)
+
+
+   Bases: :py:obj:`cortex.transforms._transform.Transform`
+
+   .. py:attribute:: _output_column
+
+      
+
+   .. py:attribute:: _required_columns
+
+      
+
+   .. py:method:: transform(data: pandas.DataFrame, *args, **kwargs) -> pandas.DataFrame
+
+
+

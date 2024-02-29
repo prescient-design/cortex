@@ -1,0 +1,40 @@
+:py:mod:`cortex.optim`
+======================
+
+.. py:module:: cortex.optim
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   generative/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   _initialization/index.rst
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   cortex.optim.select_initial_sequences
+
+
+
+.. py:function:: select_initial_sequences(data: pandas.DataFrame, model: cortex.model.tree.NeuralTree, graph_objectives: list[str], graph_constraints: dict[str, list[str]], graph_obj_transform: dict[str, dict[str, float]])
+
+

@@ -1,0 +1,41 @@
+:py:mod:`cortex.metrics`
+========================
+
+.. py:module:: cortex.metrics
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   _edit_dist/index.rst
+   _spearman_rho/index.rst
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   cortex.metrics.edit_dist
+   cortex.metrics.spearman_rho
+
+
+
+.. py:function:: edit_dist(x: str, y: str)
+
+   Computes the edit distance between two strings.
+
+
+.. py:function:: spearman_rho(scores: numpy.ndarray, targets: numpy.ndarray)
+
+   Compute the Spearman's rank correlation coefficient between scores and targets,
+   averaged across the last dimension.
+
+

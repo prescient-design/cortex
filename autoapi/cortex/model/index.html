@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cortex.model &#8212; cortex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=12dfc556" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cortex.model.block" href="block/index.html" />
+    <link rel="prev" title="cortex.metrics._spearman_rho" href="../metrics/_spearman_rho/index.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-cortex.model">
+<span id="cortex-model"></span><h1><a class="reference internal" href="#module-cortex.model" title="cortex.model"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model</span></code></a><a class="headerlink" href="#module-cortex.model" title="Link to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="block/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.block</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="block/_conv1d_resid_block/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.block._conv1d_resid_block</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="branch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.branch</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="branch/_abstract_branch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.branch._abstract_branch</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="branch/_conv1d_branch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.branch._conv1d_branch</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elemental/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.elemental</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elemental/_apply/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.elemental._apply</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elemental/_ddp_standardize/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.elemental._ddp_standardize</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elemental/_expression/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.elemental._expression</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elemental/_functional/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.elemental._functional</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elemental/_layernorm/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.elemental._layernorm</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elemental/_mean_pooling/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.elemental._mean_pooling</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elemental/_sine_pos_encoder/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.elemental._sine_pos_encoder</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="leaf/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.leaf</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="leaf/_abstract_leaf/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.leaf._abstract_leaf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="leaf/_classifier_leaf/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.leaf._classifier_leaf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="leaf/_denoising_lm_leaf/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.leaf._denoising_lm_leaf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="leaf/_regressor_leaf/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.leaf._regressor_leaf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="leaf/_seq_regressor_leaf/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.leaf._seq_regressor_leaf</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="root/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.root</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="root/_abstract_root/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.root._abstract_root</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="root/_conv1d_root/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.root._conv1d_root</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.tree</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tree/_abstract_tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.tree._abstract_tree</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="tree/_seq_model_tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.tree._seq_model_tree</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="trunk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.trunk</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="trunk/_abstract_trunk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.trunk._abstract_trunk</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="trunk/_sum_trunk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.trunk._sum_trunk</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_infer_with_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model._infer_with_model</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="_weight_averaging/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model._weight_averaging</span></code></a></li>
+</ul>
+</div>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.model.infer_with_model" title="cortex.model.infer_with_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">infer_with_model</span></code></a>(→ dict[str, numpy.ndarray])</p></td>
+<td><p>A functional interface for inference with a cortex model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cortex.model.online_weight_update_" title="cortex.model.online_weight_update_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">online_weight_update_</span></code></a>(src_state_dict, tgt_state_dict, ...)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.model.infer_with_model">
+<span class="sig-prename descclassname"><span class="pre">cortex.model.</span></span><span class="sig-name descname"><span class="pre">infer_with_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.nn.Module</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg_fpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_fpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpu_offload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.device</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.dtype</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cortex.model.infer_with_model" title="Link to this definition">¶</a></dt>
+<dd><p>A functional interface for inference with a cortex model.</p>
+<p>Usage:</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python title=”Example of inference with a cortex model checkpoint.”
+from cortex.model import infer_with_model</p>
+<p>ckpt_dir = &lt;TODO&gt;
+ckpt_name = &lt;TODO&gt;
+predictions = infer_with_model(</p>
+<blockquote>
+<div><p>data=df,
+cfg_fpath=f”{ckpt_dir}/{ckpt_name}.yaml”,
+weight_fpath=f”{ckpt_dir}/{ckpt_name}.pt”,</p>
+</div></blockquote>
+<section id="id5">
+<h4>)<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">param data<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dataframe containing the sequences to predict on.</p>
+</dd>
+<dt class="field-even">type data<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-odd">param cfg_fpath<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The path to the Hydra config file on S3.</p>
+</dd>
+<dt class="field-even">type cfg_fpath<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">param weight_fpath<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The path to the PyTorch model weights on S3.</p>
+</dd>
+<dt class="field-even">type weight_fpath<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">param batch_limit<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The maximum number of sequences to predict on at once. Defaults to 32.</p>
+</dd>
+<dt class="field-even">type batch_limit<span class="colon">:</span></dt>
+<dd class="field-even"><p>int, optional</p>
+</dd>
+<dt class="field-odd">param cpu_offload<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether to use cpu offload.
+If true, will run prediction with cpu offload. Defaults to True</p>
+</dd>
+<dt class="field-even">type cpu_offload<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool, optional</p>
+</dd>
+<dt class="field-odd">param device<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The device to run the model on. Defaults to None.</p>
+</dd>
+<dt class="field-even">type device<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.device, optional</p>
+</dd>
+<dt class="field-odd">param dtype<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The dtype to run the model on. Defaults to None.</p>
+</dd>
+<dt class="field-even">type dtype<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.dtype, optional</p>
+</dd>
+<dt class="field-odd">returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dict of NumPy arrays of the predictions.</p>
+</dd>
+<dt class="field-even">rtype<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict[str, np.ndarray]</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.model.online_weight_update_">
+<span class="sig-prename descclassname"><span class="pre">cortex.model.</span></span><span class="sig-name descname"><span class="pre">online_weight_update_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_state_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_state_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_prefixes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.online_weight_update_" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">cortex</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">API Reference</a><ul>
+  <li><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex</span></code></a><ul>
+      <li>Previous: <a href="../metrics/_spearman_rho/index.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.metrics._spearman_rho</span></code></a></li>
+      <li>Next: <a href="block/index.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cortex.model.block</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Sam Stanton.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../../../_sources/autoapi/cortex/model/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

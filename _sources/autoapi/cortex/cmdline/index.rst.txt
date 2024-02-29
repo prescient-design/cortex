@@ -1,0 +1,15 @@
+:py:mod:`cortex.cmdline`
+========================
+
+.. py:module:: cortex.cmdline
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   train_cortex_model/index.rst
+
+

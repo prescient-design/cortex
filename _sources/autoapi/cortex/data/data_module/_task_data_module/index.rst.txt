@@ -1,0 +1,55 @@
+:py:mod:`cortex.data.data_module._task_data_module`
+===================================================
+
+.. py:module:: cortex.data.data_module._task_data_module
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   cortex.data.data_module._task_data_module.TaskDataModule
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   cortex.data.data_module._task_data_module.T
+
+
+.. py:data:: T
+
+   
+
+.. py:class:: TaskDataModule(dataset_config: omegaconf.DictConfig, train_on_everything: bool = False, lengths: Union[Sequence[float], None] = None, seed: int = 3735928559, batch_size: int = 1, shuffle: Optional[bool] = None, balance_train_partition: Optional[Union[str, list[str]]] = None, sampler: Union[Iterable, torch.utils.data.Sampler, None] = None, batch_sampler: Union[Iterable[Sequence], torch.utils.data.Sampler[Sequence], None] = None, num_workers: int = 0, collate_fn: Union[Callable[[T], Any], None] = None, pin_memory: bool = True, drop_last: bool = False, skip_task_setup: bool = False)
+
+
+   Bases: :py:obj:`lightning.LightningDataModule`
+
+   .. py:method:: setup(stage=None)
+
+
+   .. py:method:: train_dataloader()
+
+
+   .. py:method:: val_dataloader()
+
+
+   .. py:method:: test_dataloader()
+
+
+   .. py:method:: get_dataloader(split: str = 'train')
+
+
+   .. py:method:: _partition_train_indices()
+
+
+

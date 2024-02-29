@@ -1,0 +1,30 @@
+:py:mod:`cortex.data.samplers._randomized_minority_sampler`
+===========================================================
+
+.. py:module:: cortex.data.samplers._randomized_minority_sampler
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   cortex.data.samplers._randomized_minority_sampler.RandomizedMinorityUpsampler
+
+
+
+
+.. py:class:: RandomizedMinorityUpsampler
+
+
+   Bases: :py:obj:`cortex.data.samplers._minority_upsampler.MinorityUpsampler`
+
+   Randomized version of Upsampler.
+
+   .. py:method:: __iter__()
+
+
+

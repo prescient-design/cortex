@@ -1,0 +1,34 @@
+:py:mod:`cortex.corruption._mask_corruption`
+============================================
+
+.. py:module:: cortex.corruption._mask_corruption
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   cortex.corruption._mask_corruption.MaskCorruptionProcess
+
+
+
+
+.. py:class:: MaskCorruptionProcess
+
+
+   Bases: :py:obj:`cortex.corruption._abstract_corruption.CorruptionProcess`
+
+   Corrupt input tensor with mask values. Each tensor element is corrupted
+   independently with probability `corrupt_frac`.
+
+   .. py:method:: __call__(x_start: torch.Tensor, mask_val: int, timestep: Optional[int] = None, corrupt_frac: Optional[float] = None, corruption_allowed: Optional[torch.Tensor] = None, *args, **kwargs)
+
+
+   .. py:method:: _corrupt(x_start: torch.Tensor, corrupt_frac: float, mask_val: int, *args, **kwargs) -> tuple[torch.Tensor]
+
+
+

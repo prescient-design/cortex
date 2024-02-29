@@ -1,0 +1,30 @@
+:py:mod:`cortex.model.elemental._apply`
+=======================================
+
+.. py:module:: cortex.model.elemental._apply
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   cortex.model.elemental._apply.Apply
+
+
+
+
+.. py:class:: Apply(module: Callable, dim: int = 0)
+
+
+   Bases: :py:obj:`torch.nn.Module`
+
+   `nn.Module` which applies a function to a specific dimension of the input
+
+   .. py:method:: forward(x: Iterable) -> Iterable
+
+
+

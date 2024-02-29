@@ -1,0 +1,22 @@
+:py:mod:`cortex.io._verify_checksum`
+====================================
+
+.. py:module:: cortex.io._verify_checksum
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   cortex.io._verify_checksum.verify_checksum
+
+
+
+.. py:function:: verify_checksum(path: str, checksum: str, **kwargs) -> bool
+
+

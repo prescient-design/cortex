@@ -1,0 +1,30 @@
+:py:mod:`cortex.model.elemental._layernorm`
+===========================================
+
+.. py:module:: cortex.model.elemental._layernorm
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   cortex.model.elemental._layernorm.MaskLayerNorm1d
+
+
+
+
+.. py:class:: MaskLayerNorm1d
+
+
+   Bases: :py:obj:`torch.nn.LayerNorm`
+
+   Transformer-style layer-norm layer
+
+   .. py:method:: forward(inp: tuple[torch.Tensor, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor]
+
+
+

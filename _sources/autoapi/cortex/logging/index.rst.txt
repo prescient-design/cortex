@@ -1,0 +1,34 @@
+:py:mod:`cortex.logging`
+========================
+
+.. py:module:: cortex.logging
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   _wandb_setup/index.rst
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   cortex.logging.wandb_setup
+
+
+
+.. py:function:: wandb_setup(cfg: omegaconf.DictConfig)
+
+   Runs `wandb.init` and `wandb.login`.
+   The values in `cfg` are logged to the wandb run.
+
+

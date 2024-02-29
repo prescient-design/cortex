@@ -1,0 +1,22 @@
+:py:mod:`cortex.optim._initialization`
+======================================
+
+.. py:module:: cortex.optim._initialization
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   cortex.optim._initialization.select_initial_sequences
+
+
+
+.. py:function:: select_initial_sequences(data: pandas.DataFrame, model: cortex.model.tree.NeuralTree, graph_objectives: list[str], graph_constraints: dict[str, list[str]], graph_obj_transform: dict[str, dict[str, float]])
+
+

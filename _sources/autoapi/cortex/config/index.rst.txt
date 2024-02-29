@@ -1,0 +1,15 @@
+:py:mod:`cortex.config`
+=======================
+
+.. py:module:: cortex.config
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   hydra/index.rst
+
+

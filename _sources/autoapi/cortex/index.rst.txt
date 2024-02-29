@@ -1,0 +1,37 @@
+:py:mod:`cortex`
+================
+
+.. py:module:: cortex
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   acquisition/index.rst
+   assets/index.rst
+   attribution/index.rst
+   cmdline/index.rst
+   config/index.rst
+   constants/index.rst
+   corruption/index.rst
+   data/index.rst
+   io/index.rst
+   logging/index.rst
+   metrics/index.rst
+   model/index.rst
+   optim/index.rst
+   task/index.rst
+   tokenization/index.rst
+   transforms/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: __version__
+
+   
+
