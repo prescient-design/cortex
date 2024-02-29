@@ -17,8 +17,7 @@ Rather than tack on auxiliary abstractions to a single input --> single task mod
 
 ```bash
 conda create --name cortex-env python=3.10 -y && conda activate cortex-env
-python -m pip install -r requirements.in
-pip install -e .
+python -m pip install pytorch-cortex
 ```
 
 

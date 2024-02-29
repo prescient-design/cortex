@@ -209,8 +209,7 @@ class GraphNEI(object):
         self.has_pointwise_reference = False
 
     def get_objective_vals(self, tree_output: NeuralTreeOutput):
-        if isinstance(tree_output, NeuralTreeOutput):
-            tree_output_dict = tree_output_to_dict(tree_output, self.objectives, self.constraints, self.scaling)
+        tree_output_dict = tree_output_to_dict(tree_output, self.objectives, self.constraints, self.scaling)
         return get_joint_objective_values(
             tree_output_dict,
             self.objectives,
@@ -219,7 +218,7 @@ class GraphNEI(object):
         )
 
     def __call__(self, input: NeuralTreeOutput | torch.Tensor, pointwise=True):
-        if isinstance(input, NeuralTreeOutput):
+        if not torch.is_tensor(input):
             obj_val_samples = self.get_objective_vals(input)
 
         else:
