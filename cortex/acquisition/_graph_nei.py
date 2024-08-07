@@ -18,9 +18,10 @@ if TYPE_CHECKING:
 GRAPH_OBJECTIVES = ["stability", "log_fluorescence"]
 GRAPH_CONSTRAINTS = {}
 # rescale stability and log_fluorescence to [0, 1]
+# {"scale": 1 / (max - min), "shift": -min}
 GRAPH_OBJ_TRANSFORM = {
-    "stability": {"scale": 1 / 2.0, "shift": 2.0},
-    "log_fluorescence": {"scale": 1 / 7.0, "shift": -4.0},
+    "stability": {"scale": 1 / 5.37, "shift": 1.97},
+    "log_fluorescence": {"scale": 1 / 2.84, "shift": -1.28},
 }
 
 
