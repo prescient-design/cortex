@@ -1,5 +1,4 @@
 torch
-torchtext
 torchvision
 pytorch_warmup
 botorch >= 0.9.4
