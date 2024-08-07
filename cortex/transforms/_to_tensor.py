@@ -3,9 +3,10 @@
 from typing import Any, Optional
 
 import torch
-import torch.nn.functional as F
 from torch import Tensor
 from torch.nn import Module
+
+from cortex.transforms.functional import to_tensor
 
 
 class ToTensor(Module):
@@ -28,4 +29,4 @@ class ToTensor(Module):
         :type input: Union[List[int], List[List[int]]]
         :rtype: Tensor
         """
-        return F.to_tensor(input, padding_value=self.padding_value, dtype=self.dtype)
+        return to_tensor(input, padding_value=self.padding_value, dtype=self.dtype)
