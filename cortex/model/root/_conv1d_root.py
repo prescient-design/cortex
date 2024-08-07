@@ -6,13 +6,12 @@ from typing import Optional, Union
 import numpy as np
 import torch
 from torch import LongTensor, nn
-from torchtext.transforms import PadTransform, ToTensor
 
 from cortex.corruption import CorruptionProcess, GaussianCorruptionProcess, MaskCorruptionProcess
 from cortex.model.block import Conv1dResidBlock
 from cortex.model.elemental import Apply, Expression, SinePosEncoder, permute_spatial_channel_dims
 from cortex.model.root import RootNode, RootNodeOutput
-from cortex.transforms import HuggingFaceTokenizerTransform
+from cortex.transforms import HuggingFaceTokenizerTransform, PadTransform, ToTensor
 
 
 @dataclass
