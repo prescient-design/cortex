@@ -1,0 +1,33 @@
+cortex.model.leaf._abstract_leaf
+================================
+
+.. py:module:: cortex.model.leaf._abstract_leaf
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.leaf._abstract_leaf.LeafNodeOutput
+   cortex.model.leaf._abstract_leaf.LeafNode
+
+
+Module Contents
+---------------
+
+.. py:class:: LeafNodeOutput
+
+.. py:class:: LeafNode
+
+   Bases: :py:obj:`abc.ABC`, :py:obj:`torch.nn.Module`
+
+
+   Receives task-specific features and returns task outputs
+
+
+   .. py:method:: forward(*args, **kwargs)
+      :abstractmethod:
+
+
+

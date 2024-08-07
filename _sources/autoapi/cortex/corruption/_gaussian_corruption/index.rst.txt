@@ -1,0 +1,33 @@
+cortex.corruption._gaussian_corruption
+======================================
+
+.. py:module:: cortex.corruption._gaussian_corruption
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.corruption._gaussian_corruption.GaussianCorruptionProcess
+
+
+Module Contents
+---------------
+
+.. py:class:: GaussianCorruptionProcess(noise_variance: float = 10.0, *args, **kwargs)
+
+   Bases: :py:obj:`cortex.corruption._abstract_corruption.CorruptionProcess`
+
+
+   Corrupt input tensor with additive Gaussian noise with
+   variance `noise_variance`. Each tensor element is corrupted
+   independently with probability `corrupt_frac`.
+
+
+   .. py:attribute:: noise_variance
+
+
+   .. py:method:: _corrupt(x_start: torch.Tensor, corrupt_frac: float, *args, **kwargs) -> tuple[torch.Tensor]
+
+

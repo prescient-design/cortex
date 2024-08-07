@@ -1,0 +1,29 @@
+cortex.logging._wandb_setup
+===========================
+
+.. py:module:: cortex.logging._wandb_setup
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.logging._wandb_setup.wandb_setup
+   cortex.logging._wandb_setup.flatten_config
+
+
+Module Contents
+---------------
+
+.. py:function:: wandb_setup(cfg: omegaconf.DictConfig)
+
+   Runs `wandb.init` and `wandb.login`.
+   The values in `cfg` are logged to the wandb run.
+
+
+.. py:function:: flatten_config(d: omegaconf.DictConfig, parent_key: str = '', sep: str = '/')
+
+   Flatten a nested `DictConfig` object into a flat dictionary for logging.
+
+

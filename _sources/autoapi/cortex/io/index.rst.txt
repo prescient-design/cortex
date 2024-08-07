@@ -1,0 +1,111 @@
+cortex.io
+=========
+
+.. py:module:: cortex.io
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/io/_download/index
+   /autoapi/cortex/io/_load_hydra_config/index
+   /autoapi/cortex/io/_load_model_checkpoint/index
+   /autoapi/cortex/io/_md5/index
+   /autoapi/cortex/io/_parse_s3_path/index
+   /autoapi/cortex/io/_verify_checksum/index
+   /autoapi/cortex/io/_verify_integrity/index
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.io.download
+   cortex.io.download_and_extract_archive
+   cortex.io.load_hydra_config
+   cortex.io.load_model_checkpoint
+   cortex.io.parse_s3_path
+   cortex.io.verify_checksum
+   cortex.io.verify_integrity
+
+
+Package Contents
+----------------
+
+.. py:function:: download(source: Union[str, pathlib.Path], destination: Union[str, pathlib.Path], filename: Union[str, None] = None, checksum: Union[str, None] = None, maximum_redirect_url_hops: int = 3, boto3_s3_client: Union[botocore.client.BaseClient, None] = None)
+
+   Download a file from a URL and save it to a local path.
+   Supports standard URLs, Google Drive, and S3.
+
+   :param source: The URL of the file to be downloaded.
+   :type source: str | Path
+   :param destination: The local directory where the downloaded file will be saved.
+   :type destination: str | Path
+   :param filename: The name of the file to be saved, by default None.
+   :type filename: str | None, optional
+   :param checksum: The checksum of the file to be downloaded, by default None.
+   :type checksum: str | None, optional
+   :param maximum_redirect_url_hops: The maximum number of hops to follow when resolving a URL redirect, by default 3.
+   :type maximum_redirect_url_hops: int, optional
+   :param boto3_s3_client: The boto S3 client to use, by default None.
+   :type boto3_s3_client: BaseClient | None, optional
+
+
+.. py:function:: download_and_extract_archive(resource: Union[str, pathlib.Path], source: Union[str, pathlib.Path], destination: Union[str, pathlib.Path, None] = None, name: Union[str, None] = None, checksum: Union[str, None] = None, remove_archive: bool = False) -> None
+
+   Download and extract an archive file.
+
+   :param resource: The URL of the resource to download.
+   :type resource: str
+   :param source: The directory where the archive file will be downloaded.
+   :type source: str
+   :param destination: The directory where the archive file will be extracted, by default None.
+   :type destination: str, optional
+   :param name: The name of the archive file, by default None.
+   :type name: str, optional
+   :param checksum: The checksum of the archive file, by default None.
+   :type checksum: str, optional
+   :param remove_archive: Whether to remove the archive file after extraction, by default False.
+   :type remove_archive: bool, optional
+
+
+.. py:function:: load_hydra_config(cfg_fpath: str) -> omegaconf.DictConfig
+
+   Load saved OmegaConf object from YAML file.
+   :param cfg_fpath: path to YAML file. Must point to local file or S3 object.
+
+   :returns: OmegaConf object
+
+
+.. py:function:: load_model_checkpoint(cfg: omegaconf.DictConfig, weight_fpath: str, device: torch.device, dtype: torch.dtype, skip_task_setup: bool = True)
+
+   Load cortex neural tree checkpoint from S3 or local file.
+   :param cfg: DictConfig object containing model config
+   :param weight_fpath: path to model checkpoint. Must point to local file or S3 object.
+   :param device: torch.device
+   :param dtype: torch.dtype
+
+   :returns: cortex.tree.NeuralTree object
+             task_dict: dict mapping task keys to cortex.task.BaseTask objects
+   :rtype: surrogate_model
+
+
+.. py:function:: parse_s3_path(s3_path: Union[upath.UPath, pathlib.Path, str])
+
+   Parse an S3 path and return the bucket name and key.
+
+   :param s3_path: The S3 bucket path of the file to be downloaded.
+   :type s3_path: Union[UPath, Path, str]
+
+   :returns: * **bucket_name** (*str*) -- The name of the S3 bucket.
+             * **bucket_key** (*str*) -- The key of the S3 bucket.
+
+
+.. py:function:: verify_checksum(path: str, checksum: str, **kwargs) -> bool
+
+.. py:function:: verify_integrity(path: str, checksum: Optional[str] = None) -> bool
+
