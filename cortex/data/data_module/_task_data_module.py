@@ -67,12 +67,13 @@ class TaskDataModule(LightningDataModule):
             self.setup(stage="test")
             self.setup(stage="fit")
 
-    def setup(self, stage=None):
+    def setup(self, stage=None, dataset_kwargs=None):
+        dataset_kwargs = dataset_kwargs or {}
         if stage == "fit":
             self._dataset_config.train = True
-            train_val = hydra.utils.instantiate(self._dataset_config)
+            train_val = hydra.utils.instantiate(self._dataset_config, **dataset_kwargs)
             if self._train_on_everything:
-                train_val.df = pd.concat([train_val.df, self.datasets["test"].df], ignore_index=True)
+                train_val.df = pd.concat([train_val._data, self.datasets["test"]._data], ignore_index=True)
             train_dataset, val_dataset = random_split(
                 train_val,
                 lengths=self._lengths,
@@ -84,11 +85,11 @@ class TaskDataModule(LightningDataModule):
             self.datasets["val"] = val_dataset
         if stage == "test":
             self._dataset_config.train = False
-            test_dataset = hydra.utils.instantiate(self._dataset_config)
+            test_dataset = hydra.utils.instantiate(self._dataset_config, **dataset_kwargs)
             self.datasets["test"] = test_dataset
         if stage == "predict":
             self._dataset_config.base_dataset.train = False
-            predict_dataset = hydra.utils.instantiate(self._dataset_config)
+            predict_dataset = hydra.utils.instantiate(self._dataset_config, **dataset_kwargs)
             self.datasets["predict"] = predict_dataset
 
     def train_dataloader(self):
