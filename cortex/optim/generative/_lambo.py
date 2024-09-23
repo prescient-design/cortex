@@ -5,7 +5,6 @@ from typing import Callable, Optional
 import numpy as np
 import pandas as pd
 import torch
-import wandb
 from torch.distributions.kl import kl_divergence
 
 from cortex.attribution import approximate_occlusion
@@ -218,7 +217,7 @@ class LaMBO(object):
             "masked_obj_loss": obj_loss.item(),
             "token_entropy": entropy.item(),
         }
-        wandb.log(metrics)
+        return metrics
 
     def _coordinate_selection(
         self,
