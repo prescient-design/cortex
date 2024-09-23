@@ -140,6 +140,19 @@ class LaMBO(object):
 
         delta = torch.nn.Parameter(torch.zeros_like(activations))
         optimizer = torch.optim.Adam([delta], lr=self.guidance_step_size)
+        metrics = {"step": self._step_count}
+
+        # get initial solution before guidance
+        tgt_tok_idxs, tgt_obj_vals = self._update_solution(
+            trunk_outputs,
+            activations,
+            delta,
+            tgt_tok_idxs,
+            tgt_obj_vals,
+            is_corrupted,
+            self.tokenizer,
+            non_viable_idxs,
+        )
 
         print("\n")
         for lang_step in range(self.max_guidance_updates):
@@ -192,12 +205,14 @@ class LaMBO(object):
             )
 
             grad_norm = feature_grad.norm(dim=(-2, -1), keepdim=True)
-            print(
-                tgt_obj_vals.median().item(),
-                design_loss.item(),
-                obj_loss.item(),
-                kl_div.item(),
-                entropy.item(),
+            metrics.update(
+                {
+                    "masked_design_loss": design_loss.item(),
+                    "masked_design_loss_grad_norm": grad_norm.mean().item(),
+                    "masked_token_loss": kl_div.item(),
+                    "masked_obj_loss": obj_loss.item(),
+                    "token_entropy": entropy.item(),
+                }
             )
 
         self._step_count += 1
@@ -209,14 +224,6 @@ class LaMBO(object):
 
         self._buffer = pd.concat([self._buffer, df], ignore_index=True)
 
-        metrics = {
-            "step": self._step_count,
-            "masked_design_loss": design_loss.item(),
-            "masked_design_loss_grad_norm": grad_norm.mean().item(),
-            "masked_token_loss": kl_div.item(),
-            "masked_obj_loss": obj_loss.item(),
-            "token_entropy": entropy.item(),
-        }
         return metrics
 
     def _coordinate_selection(
