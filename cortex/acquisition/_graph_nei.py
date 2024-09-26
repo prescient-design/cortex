@@ -126,11 +126,15 @@ def tree_output_to_dict(
             )
 
     if constraints is not None:
-        for constraint in constraints:
-            constraint_values = tree_output.fetch_task_outputs(constraint)["logits"]
-            constraint_values = constraint_values.softmax(dim=-1)[..., 1]
+        for c_list in constraints.values():
+            for constraint in c_list:
+                if constraint in result:
+                    continue
 
-            result[constraint] = constraint_values
+                constraint_values = tree_output.fetch_task_outputs(constraint)["logits"]
+                constraint_values = constraint_values.softmax(dim=-1)[..., 1]
+
+                result[constraint] = constraint_values
 
     return result
 
