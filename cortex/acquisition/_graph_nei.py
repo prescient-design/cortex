@@ -167,6 +167,7 @@ def get_graph_nei_runtime_kwargs(
         "f_ref": f_ref,
         "f_baseline": f_baseline,
     }
+    print(f"[INFO][LaMBO-2] Baseline value: {f_baseline.mean(0).max().item():.4f}")
     return res
 
 
