@@ -1,4 +1,5 @@
 import math
+import pprint
 import warnings
 from typing import Callable, Optional
 
@@ -139,7 +140,7 @@ class LaMBO(object):
         activations, trunk_outputs = self._get_latent_variables(generation_inputs)
 
         delta = torch.nn.Parameter(torch.zeros_like(activations))
-        optimizer = torch.optim.Adam([delta], lr=self.guidance_step_size)
+        optimizer = torch.optim.Adam([delta], lr=self.guidance_step_size, betas=(0.09, 0.0999))
         metrics = {"step": self._step_count}
 
         # get initial solution before guidance
@@ -207,6 +208,7 @@ class LaMBO(object):
             grad_norm = feature_grad.norm(dim=(-2, -1), keepdim=True)
             metrics.update(
                 {
+                    "act_obj_val": tgt_obj_vals.mean().item(),
                     "masked_design_loss": design_loss.item(),
                     "masked_design_loss_grad_norm": grad_norm.mean().item(),
                     "masked_token_loss": kl_div.item(),
@@ -214,6 +216,7 @@ class LaMBO(object):
                     "token_entropy": entropy.item(),
                 }
             )
+            pprint.pp(metrics)
 
         self._step_count += 1
 
@@ -257,7 +260,24 @@ class LaMBO(object):
                 null_embedding,
                 is_excluded=~pos_is_feasible,
             )
-            position_probs = (position_scores * self.feature_attr_temp).softmax(-1)
+
+            num_eff_pos = pos_is_feasible.sum()
+            opt_temp = -1 / math.log(1 / (2 * num_eff_pos - 1))
+
+            base_probs = (position_scores).softmax(-1)
+            base_entropy = torch.distributions.Categorical(probs=base_probs).entropy().median()
+            print(f"[INFO][LaMBO-2]: Base entropy = {base_entropy}")
+
+            opt_probs = (position_scores / opt_temp).softmax(-1)
+            opt_entropy = torch.distributions.Categorical(probs=opt_probs).entropy().median()
+            print(f"[INFO][LaMBO-2]: Optimal entropy = {opt_entropy}")
+
+            position_probs = (position_scores / self.feature_attr_temp).softmax(-1)
+            hand_tuned_entropy = torch.distributions.Categorical(probs=position_probs).entropy().median()
+            print(f"[INFO][LaMBO-2]: Hand-tuned entropy = {hand_tuned_entropy}")
+
+            position_probs = opt_probs
+
             edit_idxs = torch.multinomial(position_probs, self.num_mutations_per_step, replacement=False)
             edit_idxs = edit_idxs.sort(dim=-1).values
 
