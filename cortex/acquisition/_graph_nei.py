@@ -126,11 +126,15 @@ def tree_output_to_dict(
             )
 
     if constraints is not None:
-        for constraint in constraints:
-            constraint_values = tree_output.fetch_task_outputs(constraint)["logits"]
-            constraint_values = constraint_values.softmax(dim=-1)[..., 1]
+        for c_list in constraints.values():
+            for constraint in c_list:
+                if constraint in result:
+                    continue
 
-            result[constraint] = constraint_values
+                constraint_values = tree_output.fetch_task_outputs(constraint)["logits"]
+                constraint_values = constraint_values.softmax(dim=-1)[..., 1]
+
+                result[constraint] = constraint_values
 
     return result
 
@@ -163,6 +167,7 @@ def get_graph_nei_runtime_kwargs(
         "f_ref": f_ref,
         "f_baseline": f_baseline,
     }
+    print(f"[INFO][LaMBO-2] Baseline value: {f_baseline.mean(0).max().item():.4f}")
     return res
 
 

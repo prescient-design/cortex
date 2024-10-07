@@ -22,7 +22,7 @@ def check_probs(probs: torch.Tensor, dim: int = -1) -> bool:
     if torch.any(probs < 0) or torch.any(probs > 1):
         raise ValueError("Probabilities must be between 0 and 1")
 
-    if not torch.allclose(probs.sum(dim=dim), torch.ones(probs.shape[:-1])):
+    if not torch.allclose(probs.sum(dim=dim), torch.ones(probs.shape[:-1], device=probs.device)):
         raise ValueError("Probabilities must sum to 1")
 
     return True
