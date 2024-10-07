@@ -1,0 +1,47 @@
+cortex.task._sequence_regression
+================================
+
+.. py:module:: cortex.task._sequence_regression
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.task._sequence_regression.SequenceRegressionTask
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.task._sequence_regression.pad_sequence_labels
+
+
+Module Contents
+---------------
+
+.. py:class:: SequenceRegressionTask
+
+   Bases: :py:obj:`cortex.task._regression.RegressionTask`
+
+
+   .. py:method:: format_inputs(batch: collections.OrderedDict, corrupt_frac: float = 0.0) -> dict
+
+
+   .. py:method:: format_targets(batch: collections.OrderedDict) -> dict
+
+
+   .. py:method:: create_leaf(in_dim: int, branch_key: str) -> cortex.model.leaf.SequenceRegressorLeaf
+
+      Create the leaf node for this task to be added to a `NeuralTree` object.
+
+
+
+   .. py:method:: compute_eval_metrics(ensemble_output: dict, targets: dict, task_key: str) -> dict
+
+
+.. py:function:: pad_sequence_labels(data: pandas.Series) -> numpy.ndarray
+

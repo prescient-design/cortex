@@ -1,0 +1,38 @@
+cortex.model.branch._abstract_branch
+====================================
+
+.. py:module:: cortex.model.branch._abstract_branch
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.branch._abstract_branch.BranchNodeOutput
+   cortex.model.branch._abstract_branch.BranchNode
+
+
+Module Contents
+---------------
+
+.. py:class:: BranchNodeOutput
+
+   .. py:attribute:: branch_features
+      :type:  torch.Tensor
+
+
+.. py:class:: BranchNode
+
+   Bases: :py:obj:`abc.ABC`, :py:obj:`torch.nn.Module`
+
+
+   Receives multi-modal features from a trunk, extracts task-specific features
+   and passes result to leaf nodes.
+
+
+   .. py:method:: forward(*args, **kwargs) -> BranchNodeOutput
+      :abstractmethod:
+
+
+

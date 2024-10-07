@@ -1,0 +1,123 @@
+cortex.corruption
+=================
+
+.. py:module:: cortex.corruption
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/corruption/_abstract_corruption/index
+   /autoapi/cortex/corruption/_diffusion_noise_schedule/index
+   /autoapi/cortex/corruption/_gaussian_corruption/index
+   /autoapi/cortex/corruption/_mask_corruption/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.corruption.CorruptionProcess
+   cortex.corruption.GaussianCorruptionProcess
+   cortex.corruption.MaskCorruptionProcess
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.corruption.get_named_beta_schedule
+
+
+Package Contents
+----------------
+
+.. py:class:: CorruptionProcess(schedule: str = 'cosine', max_steps: int = 1000, *args, **kwargs)
+
+   Bases: :py:obj:`abc.ABC`
+
+
+   Base class for corruption processes, must be subclassed and
+   the _corrupt method must be implemented.
+   Provides noise schedule and timestep sampling, and defines
+   the corruption interface.
+
+
+   .. py:attribute:: betas
+
+
+   .. py:attribute:: max_steps
+
+
+   .. py:attribute:: alphas
+
+
+   .. py:attribute:: alphas_cumprod
+
+
+   .. py:attribute:: sqrt_alphas_cumprod
+
+
+   .. py:method:: sample_timestep() -> int
+
+
+   .. py:method:: sample_corrupt_frac() -> float
+
+
+   .. py:method:: timestep_to_corrupt_frac(timestep: int) -> float
+
+
+   .. py:method:: __call__(x_start: torch.Tensor, timestep: Optional[int] = None, corrupt_frac: Optional[float] = None, corruption_allowed: Optional[torch.Tensor] = None, *args, **kwargs) -> tuple[torch.Tensor]
+
+
+   .. py:method:: _corrupt(x_start: torch.Tensor, corrupt_frac: float, *args, **kwargs)
+      :abstractmethod:
+
+
+
+.. py:function:: get_named_beta_schedule(schedule_name: str, num_diffusion_timesteps: int) -> numpy.ndarray
+
+   Get a pre-defined beta schedule for the given name.
+
+   The beta schedule library consists of beta schedules which remain similar
+   in the limit of num_diffusion_timesteps.
+   Beta schedules may be added, but should not be removed or changed once
+   they are committed to maintain backwards compatibility.
+
+
+.. py:class:: GaussianCorruptionProcess(noise_variance: float = 10.0, *args, **kwargs)
+
+   Bases: :py:obj:`cortex.corruption._abstract_corruption.CorruptionProcess`
+
+
+   Corrupt input tensor with additive Gaussian noise with
+   variance `noise_variance`. Each tensor element is corrupted
+   independently with probability `corrupt_frac`.
+
+
+   .. py:attribute:: noise_variance
+
+
+   .. py:method:: _corrupt(x_start: torch.Tensor, corrupt_frac: float, *args, **kwargs) -> tuple[torch.Tensor]
+
+
+.. py:class:: MaskCorruptionProcess
+
+   Bases: :py:obj:`cortex.corruption._abstract_corruption.CorruptionProcess`
+
+
+   Corrupt input tensor with mask values. Each tensor element is corrupted
+   independently with probability `corrupt_frac`.
+
+
+   .. py:method:: __call__(x_start: torch.Tensor, mask_val: int, timestep: Optional[int] = None, corrupt_frac: Optional[float] = None, corruption_allowed: Optional[torch.Tensor] = None, *args, **kwargs)
+
+
+   .. py:method:: _corrupt(x_start: torch.Tensor, corrupt_frac: float, mask_val: int, *args, **kwargs) -> tuple[torch.Tensor]
+
+
