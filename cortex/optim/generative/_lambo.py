@@ -260,7 +260,7 @@ class LaMBO(object):
                 null_embedding,
                 is_excluded=~pos_is_feasible,
             )
-            denom = torch.where(position_scores > float("-inf"), position_scores, 0.0).sum(-1, keepdim=True).abs()
+            denom = torch.where(position_scores > float("-inf"), position_scores, 0.0).abs().sum(-1, keepdim=True)
             position_scores = position_scores / (denom + 1e-6)
 
             position_probs = (position_scores / self.feature_attr_temp).softmax(-1)
