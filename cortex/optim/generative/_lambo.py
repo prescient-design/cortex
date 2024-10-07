@@ -260,26 +260,12 @@ class LaMBO(object):
                 null_embedding,
                 is_excluded=~pos_is_feasible,
             )
-            # import pdb; pdb.set_trace()
             denom = torch.where(position_scores > float("-inf"), position_scores, 0.0).sum(-1, keepdim=True).abs()
             position_scores = position_scores / (denom + 1e-6)
-
-            # num_eff_pos = pos_is_feasible.sum()
-            # opt_temp = -1 / math.log(1 / (2 * num_eff_pos - 1))
-
-            # base_probs = (position_scores).softmax(-1)
-            # base_entropy = torch.distributions.Categorical(probs=base_probs).entropy().median()
-            # print(f"[INFO][LaMBO-2]: Base entropy = {base_entropy}")
-
-            # opt_probs = (position_scores / opt_temp).softmax(-1)
-            # opt_entropy = torch.distributions.Categorical(probs=opt_probs).entropy().median()
-            # print(f"[INFO][LaMBO-2]: Optimal entropy = {opt_entropy}")
 
             position_probs = (position_scores / self.feature_attr_temp).softmax(-1)
             hand_tuned_entropy = torch.distributions.Categorical(probs=position_probs).entropy().median()
             print(f"[INFO][LaMBO-2]: Hand-tuned entropy = {hand_tuned_entropy}")
-
-            # position_probs = opt_probs
 
             edit_idxs = torch.multinomial(position_probs, self.num_mutations_per_step, replacement=False)
             edit_idxs = edit_idxs.sort(dim=-1).values
