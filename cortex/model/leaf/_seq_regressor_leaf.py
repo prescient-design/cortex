@@ -24,9 +24,9 @@ class SequenceRegressorLeaf(RegressorLeaf):
         **kwargs,
     ) -> torch.Tensor:
         if self.label_smoothing == "corrupt_frac" and hasattr(root_outputs, "corrupt_frac"):
-            label_smoothing = root_outputs.corrupt_frac
+            alpha = root_outputs.corrupt_frac
         else:
-            label_smoothing = self.label_smoothing
+            alpha = self.label_smoothing
         canon_param = leaf_outputs.canon_param
 
         if position_mask is None:
@@ -44,7 +44,7 @@ class SequenceRegressorLeaf(RegressorLeaf):
             dim=0,
         ).view(2, -1, self.out_dim)
         assert labeled_params.size(-2) == targets.shape[-2]
-        return self.loss_from_canon_param(labeled_params, targets, label_smoothing)
+        return self.loss_from_canon_param(labeled_params, targets, alpha)
 
 
 def adjust_sequence_mask(mask: torch.Tensor, tgt_tensor: torch.Tensor) -> torch.Tensor:

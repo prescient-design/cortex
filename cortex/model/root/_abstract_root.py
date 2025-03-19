@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from typing import Optional
 
 import torch
 from torch import nn
@@ -8,6 +9,7 @@ from torch import nn
 @dataclass
 class RootNodeOutput:
     root_features: torch.Tensor
+    corrupt_frac: Optional[torch.Tensor] = None
 
 
 class RootNode(ABC, nn.Module):
