@@ -10,18 +10,21 @@ from torch import LongTensor, nn
 from cortex.corruption import CorruptionProcess, GaussianCorruptionProcess, MaskCorruptionProcess
 from cortex.model.block import Conv1dResidBlock
 from cortex.model.elemental import Apply, Expression, SinePosEncoder, permute_spatial_channel_dims
-from cortex.model.root import RootNode, RootNodeOutput
+from cortex.model.root import RootNode
 from cortex.transforms import HuggingFaceTokenizerTransform, PadTransform, ToTensor
 
 
 @dataclass
-class Conv1dRootOutput(RootNodeOutput):
+class Conv1dRootOutput:
+    """Output of Conv1dRoot."""
+
+    root_features: torch.Tensor
     padding_mask: torch.Tensor
+    corrupt_frac: Optional[torch.Tensor] = None
     src_tok_idxs: Optional[torch.LongTensor] = None
     tgt_tok_idxs: Optional[torch.LongTensor] = None
     src_tok_embs: Optional[torch.Tensor] = None
     is_corrupted: Optional[torch.Tensor] = None
-    corrupt_frac: Optional[float] = None
 
 
 class Conv1dRoot(RootNode):
@@ -147,15 +150,33 @@ class Conv1dRoot(RootNode):
             msg = "inputs is deprecated, use a specific argument instead"
             warnings.warn(msg, PendingDeprecationWarning, stacklevel=2)
 
+        # Determine batch size from any available input
+        batch_size = None
+        if seq_array is not None:
+            batch_size = seq_array.shape[0]
+        elif tgt_tok_idxs is not None:
+            batch_size = tgt_tok_idxs.shape[0]
+        elif src_tok_embs is not None:
+            batch_size = src_tok_embs.shape[0]
+
+        # Fallback to default batch size of 1 if no inputs are provided
+        if batch_size is None:
+            batch_size = 1
+
         if "mask_frac" in kwargs:
             corrupt_frac = kwargs["mask_frac"]
             msg = "mask_frac is deprecated, use corrupt_frac instead."
             warnings.warn(msg, PendingDeprecationWarning, stacklevel=2)
 
         if self.corruption_process is not None and corrupt_frac is None:
-            corrupt_frac = self.corruption_process.sample_corrupt_frac()
+            corrupt_frac = self.corruption_process.sample_corrupt_frac(n=batch_size).to(self.device)
+        elif isinstance(corrupt_frac, float):
+            corrupt_frac = torch.full((batch_size,), corrupt_frac, device=self.device)
+        elif isinstance(corrupt_frac, torch.Tensor):
+            # Move tensor to the correct device
+            corrupt_frac = corrupt_frac.to(self.device)
         else:
-            corrupt_frac = 0.0
+            corrupt_frac = torch.full((batch_size,), 0.0, device=self.device)
 
         return seq_array, tgt_tok_idxs, src_tok_embs, corrupt_frac
 
@@ -165,7 +186,7 @@ class Conv1dRoot(RootNode):
         tgt_tok_idxs: Optional[LongTensor] = None,
         src_tok_embs: Optional[torch.Tensor] = None,
         padding_mask: Optional[torch.Tensor] = None,
-        corrupt_frac: float = 0.0,
+        corrupt_frac: Union[float, torch.Tensor] = 0.0,
         is_corrupted: Optional[torch.Tensor] = None,
         corruption_allowed: Optional[torch.Tensor] = None,
     ):
@@ -193,7 +214,10 @@ class Conv1dRoot(RootNode):
         # begin forward pass from tokenized sequence
         if tgt_tok_idxs is not None:
             # apply masking corruption
-            if isinstance(self.corruption_process, MaskCorruptionProcess) and corrupt_frac > 0.0:
+            if isinstance(self.corruption_process, MaskCorruptionProcess) and (
+                (isinstance(corrupt_frac, float) and corrupt_frac > 0.0)
+                or (isinstance(corrupt_frac, torch.Tensor) and torch.any(corrupt_frac > 0.0))
+            ):
                 src_tok_idxs, is_corrupted = self.corruption_process(
                     x_start=tgt_tok_idxs,
                     mask_val=self.tokenizer.masking_idx,
@@ -225,7 +249,7 @@ class Conv1dRoot(RootNode):
         self,
         src_tok_idxs: Optional[LongTensor] = None,
         src_tok_embs: Optional[torch.Tensor] = None,
-        corrupt_frac: float = 0.0,
+        corrupt_frac: Union[float, torch.Tensor] = 0.0,
         is_corrupted: Optional[torch.Tensor] = None,
         corruption_allowed: Optional[torch.Tensor] = None,
         normalize_embeds: bool = True,
@@ -238,7 +262,10 @@ class Conv1dRoot(RootNode):
                 src_tok_embs = src_tok_embs * math.sqrt(self.embed_dim)
 
         # apply gaussian embedding corruption
-        if isinstance(self.corruption_process, GaussianCorruptionProcess) and corrupt_frac > 0.0:
+        if isinstance(self.corruption_process, GaussianCorruptionProcess) and (
+            (isinstance(corrupt_frac, float) and corrupt_frac > 0.0)
+            or (isinstance(corrupt_frac, torch.Tensor) and torch.any(corrupt_frac > 0.0))
+        ):
             assert corruption_allowed is not None
             src_tok_embs, is_corrupted = self.corruption_process(
                 x_start=src_tok_embs,
@@ -275,7 +302,7 @@ class Conv1dRoot(RootNode):
         tgt_tok_idxs: Optional[LongTensor] = None,
         src_tok_embs: Optional[torch.Tensor] = None,
         padding_mask: Optional[torch.Tensor] = None,
-        corrupt_frac: float = 0.0,
+        corrupt_frac: Union[float, torch.Tensor] = 0.0,
         is_corrupted: Optional[torch.Tensor] = None,
         corruption_allowed: Optional[torch.Tensor] = None,
         **kwargs,
@@ -308,7 +335,9 @@ class Conv1dRoot(RootNode):
             src_tok_idxs, src_tok_embs, corrupt_frac, is_corrupted, corruption_allowed
         )
         src_features = self.process_seq(src_tok_embs, padding_mask)
-        corrupt_frac = torch.tensor((corrupt_frac,)).to(src_tok_embs)
+        # Make sure corrupt_frac is on the same device as other tensors
+        if isinstance(corrupt_frac, torch.Tensor):
+            corrupt_frac = corrupt_frac.to(src_tok_embs.device)
 
         outputs = Conv1dRootOutput(
             root_features=src_features.contiguous(),

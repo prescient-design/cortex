@@ -1,6 +1,6 @@
 import math
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Union
 
 import torch
 from botorch.models.transforms.outcome import OutcomeTransform
@@ -153,7 +153,7 @@ class RegressorLeaf(LeafNode):
         self,
         canon_param: torch.Tensor,
         targets: torch.Tensor,
-        label_smoothing: float = 0.0,
+        alpha: Union[float, torch.Tensor] = 0.0,
     ) -> torch.Tensor:
         device = canon_param.device
         dtype = canon_param.dtype
@@ -164,52 +164,62 @@ class RegressorLeaf(LeafNode):
             targets, _ = self.outcome_transform(targets)
             targets = targets.detach()
 
-        if label_smoothing > 0.0:
-            # moment average
-            # https://www.cs.toronto.edu/~cmaddis/pubs/aais.pdf
-            standard_stats = torch.stack(
-                [
-                    torch.zeros_like(canon_param[0]),
-                    torch.ones_like(canon_param[1]),
-                ]
-            )
-            standard_stats.requires_grad_(False)
-
-            label_stats = torch.stack(
-                [
-                    targets,
-                    torch.full_like(targets, self.nominal_label_var),
-                ]
-            )
-            label_stats = label_stats.detach()
-
-            smoothed_mean = label_smoothing * standard_stats[0] + (1.0 - label_smoothing) * label_stats[0]
-            mean_diff = standard_stats[0] - label_stats[0]
-            cross_var_term = label_smoothing * (1.0 - label_smoothing) * mean_diff.pow(2)
-            smoothed_var = (
-                label_smoothing * standard_stats[1] + (1.0 - label_smoothing) * label_stats[1] + cross_var_term
-            )
-
-            # convert to natural parameters
-            smoothed_params = torch.stack(
-                [
-                    smoothed_mean / smoothed_var,
-                    -1.0 / (2 * smoothed_var),
-                ]
-            )
-
-            return diag_natural_gaussian_kl_divergence(smoothed_params, canon_param).mean()
-        else:
+        # Convert scalar to tensor if needed
+        if isinstance(alpha, float):
+            if alpha <= 0.0:
+                return diag_natural_gaussian_nll(canon_param=canon_param, targets=targets)
+            # Convert scalar to tensor with batch size
+            alpha = torch.full_like(targets, alpha)
+        elif (alpha <= 0.0).all():
             return diag_natural_gaussian_nll(canon_param=canon_param, targets=targets)
+
+        # Make alpha broadcastable to match targets
+        if alpha.dim() < targets.dim():
+            # Add necessary dimensions for broadcasting
+            alpha = alpha.view(*alpha.shape, *([1] * (targets.dim() - alpha.dim())))
+
+        # moment average
+        # https://www.cs.toronto.edu/~cmaddis/pubs/aais.pdf
+        standard_stats = torch.stack(
+            [
+                torch.zeros_like(canon_param[0]),
+                torch.ones_like(canon_param[1]),
+            ]
+        )
+        standard_stats.requires_grad_(False)
+
+        label_stats = torch.stack(
+            [
+                targets,
+                torch.full_like(targets, self.nominal_label_var),
+            ]
+        )
+        label_stats = label_stats.detach()
+
+        # Apply smoothing element-wise
+        smoothed_mean = alpha * standard_stats[0] + (1.0 - alpha) * label_stats[0]
+        mean_diff = standard_stats[0] - label_stats[0]
+        cross_var_term = alpha * (1.0 - alpha) * mean_diff.pow(2)
+        smoothed_var = alpha * standard_stats[1] + (1.0 - alpha) * label_stats[1] + cross_var_term
+
+        # convert to natural parameters
+        smoothed_params = torch.stack(
+            [
+                smoothed_mean / smoothed_var,
+                -1.0 / (2 * smoothed_var),
+            ]
+        )
+
+        return diag_natural_gaussian_kl_divergence(smoothed_params, canon_param).mean()
 
     def loss(self, leaf_outputs: RegressorLeafOutput, root_outputs, targets, *args, **kwargs):
         if self.label_smoothing == "corrupt_frac" and hasattr(root_outputs, "corrupt_frac"):
-            label_smoothing = root_outputs.corrupt_frac
+            alpha = root_outputs.corrupt_frac
         else:
-            label_smoothing = self.label_smoothing
+            alpha = self.label_smoothing
 
         canon_param = leaf_outputs.canon_param
-        return self.loss_from_canon_param(canon_param, targets, label_smoothing)
+        return self.loss_from_canon_param(canon_param, targets, alpha)
 
     def evaluate(self, outputs: RegressorLeafOutput, targets):
         loc = outputs.loc.detach().cpu()

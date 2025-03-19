@@ -30,3 +30,37 @@ def test_mask_corruption():
     assert torch.any(torch.masked_select(is_corrupted, corruption_allowed))
     assert not torch.any(torch.masked_select(is_corrupted, ~corruption_allowed))
     assert not torch.any(torch.masked_select(x_corrupt, ~corruption_allowed) == 0)
+
+
+def test_sample_corrupt_frac_with_n():
+    """Test the sample_corrupt_frac method with n parameter."""
+    corruption_process = MaskCorruptionProcess()
+
+    # Test with n=None (default behavior)
+    scalar_corrupt_frac = corruption_process.sample_corrupt_frac()
+    assert isinstance(scalar_corrupt_frac, torch.Tensor)
+    assert scalar_corrupt_frac.ndim == 1
+    assert scalar_corrupt_frac.shape[0] == 1
+    assert 0.0 <= scalar_corrupt_frac.item() <= 1.0
+
+    # Test with n=1 (should return tensor with 1 value)
+    single_corrupt_frac = corruption_process.sample_corrupt_frac(n=1)
+    assert isinstance(single_corrupt_frac, torch.Tensor)
+    assert single_corrupt_frac.ndim == 1
+    assert single_corrupt_frac.shape[0] == 1
+    assert 0.0 <= single_corrupt_frac.item() <= 1.0
+
+    # Test with n=5 (should return tensor with 5 values)
+    batch_size = 5
+    batch_corrupt_frac = corruption_process.sample_corrupt_frac(n=batch_size)
+    assert isinstance(batch_corrupt_frac, torch.Tensor)
+    assert batch_corrupt_frac.ndim == 1
+    assert batch_corrupt_frac.shape[0] == batch_size
+    assert torch.all(batch_corrupt_frac >= 0.0)
+    assert torch.all(batch_corrupt_frac <= 1.0)
+
+    # Verify that different elements can have different values
+    # (This is probabilistic, but with high probability values should differ)
+    more_samples = corruption_process.sample_corrupt_frac(n=100)
+    assert more_samples.shape[0] == 100
+    assert more_samples.unique().shape[0] > 1, "Sample corrupt_frac values should vary"

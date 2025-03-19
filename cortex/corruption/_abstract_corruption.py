@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, Union
 
 import numpy as np
 import torch
@@ -30,12 +30,37 @@ class CorruptionProcess(ABC):
         self.alphas_cumprod = np.cumprod(alphas, axis=0)
         self.sqrt_alphas_cumprod = np.sqrt(self.alphas_cumprod)
 
-    def sample_timestep(self) -> int:
-        return np.random.randint(1, self.max_steps + 1)
+    def sample_timestep(self, n: Optional[int] = None):
+        """Sample timestep(s) from the noise schedule.
 
-    def sample_corrupt_frac(self) -> float:
-        timestep = self.sample_timestep()
-        return self.timestep_to_corrupt_frac(timestep)
+        Args:
+            n: Number of timesteps to sample. If None, returns a single int.
+               If an integer, returns an array of shape (n,).
+
+        Returns:
+            Int or array of timesteps.
+        """
+        if n is None:
+            return np.random.randint(1, self.max_steps + 1)
+
+        return np.random.randint(1, self.max_steps + 1, size=(n,))
+
+    def sample_corrupt_frac(self, n: Optional[int] = None) -> torch.Tensor:
+        """Sample corruption fraction(s).
+
+        Args:
+            n: Number of corruption fractions to sample. If None, returns a tensor with a single value.
+               If an integer, returns a tensor of shape (n,).
+
+        Returns:
+            Tensor of corruption fractions.
+        """
+        timesteps = self.sample_timestep(n)
+
+        if n is None:
+            return torch.tensor([self.timestep_to_corrupt_frac(timesteps)])
+
+        return torch.tensor([self.timestep_to_corrupt_frac(t) for t in timesteps])
 
     def timestep_to_corrupt_frac(self, timestep: int) -> float:
         assert timestep <= self.max_steps
@@ -47,7 +72,7 @@ class CorruptionProcess(ABC):
         self,
         x_start: torch.Tensor,
         timestep: Optional[int] = None,
-        corrupt_frac: Optional[float] = None,
+        corrupt_frac: Optional[Union[float, torch.Tensor]] = None,
         corruption_allowed: Optional[torch.Tensor] = None,
         *args,
         **kwargs,
@@ -60,11 +85,17 @@ class CorruptionProcess(ABC):
             corrupt_frac = self.timestep_to_corrupt_frac(timestep)
         # sample if both timestep and corrupt_frac are None
         elif corrupt_frac is None:
-            corrupt_frac = self.sample_corrupt_frac()
-        # return uncorrupted input if corrupt_frac is 0
-        if corrupt_frac == 0:
-            is_corrupted = torch.full_like(x_start, False, dtype=torch.bool)
-            return x_start, is_corrupted
+            batch_size = x_start.shape[0]
+            corrupt_frac = self.sample_corrupt_frac(n=batch_size).to(x_start.device)
+
+        # Handle scalar and tensor corrupt_frac values consistently
+        if isinstance(corrupt_frac, float):
+            # If it's 0, we can early-return without corruption
+            if corrupt_frac == 0:
+                is_corrupted = torch.full_like(x_start, False, dtype=torch.bool)
+                return x_start, is_corrupted
+            # Otherwise convert to tensor matching batch dimension
+            corrupt_frac = torch.full((x_start.shape[0],), corrupt_frac, device=x_start.device)
 
         x_corrupt, is_corrupted = self._corrupt(x_start, *args, corrupt_frac=corrupt_frac, **kwargs)
         # only change values where corruption_allowed is True
