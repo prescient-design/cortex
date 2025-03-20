@@ -17,6 +17,8 @@ Rather than tack on auxiliary abstractions to a single input --> single task mod
 
 Note: conda/mamba are no longer actively supported. We recommend using `uv` for package management.
 
+Note: Support for Python versions > 3.10 is blocked by the current dependency on `pytorch-lightning==1.9.5`.
+
 ```bash
 uv venv -n ~/.venv/cortex --python 3.10
 source ~/.venv/cortex/bin/activate
