@@ -1,18 +1,21 @@
-torch
-torchvision
-pytorch_warmup
 botorch >= 0.9.4
-wandb
-tabulate
-omegaconf
-hydra-core >= 1.2.0
-tqdm
-pandas
 cachetools
 edlib
-transformers
+fastapi==0.88.0
+hydra-core >= 1.2.0
 lightning == 1.9.5
-pytorch-lightning == 1.9.5
-universal-pathlib
+numpy<2
+omegaconf
+pandas
 pyarrow
+pydantic<1.8
+pytorch-lightning == 1.9.5
+pytorch_warmup
 s3fs
+tabulate
+torch
+torchvision
+transformers
+tqdm
+universal-pathlib
+wandb

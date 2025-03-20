@@ -15,9 +15,14 @@ Rather than tack on auxiliary abstractions to a single input --> single task mod
 
 ## Installation
 
+Note: conda/mamba are no longer actively supported. We recommend using `uv` for package management.
+
+Note: Support for Python versions > 3.10 is blocked by the current dependency on `pytorch-lightning==1.9.5`.
+
 ```bash
-conda create --name cortex-env python=3.10 -y && conda activate cortex-env
-python -m pip install pytorch-cortex
+uv venv -n ~/.venv/cortex --python 3.10
+source ~/.venv/cortex/bin/activate
+uv pip install pytorch-cortex
 ```
 
 
@@ -25,7 +30,7 @@ If you have a package version issue we provide pinned versions of all dependenci
 To update the frozen dependencies run
 
 ```bash
-pip-compile --resolver=backtracking requirements.in
+uv pip freeze > requirements.txt
 ```
 
 

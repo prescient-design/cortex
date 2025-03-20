@@ -10,6 +10,39 @@ from cortex.model.leaf import LeafNode, LeafNodeOutput
 from cortex.model.root import RootNodeOutput
 
 
+def cross_entropy_with_per_sample_smoothing(logits, targets, alpha=0.0):
+    """Custom cross entropy loss function that supports per-sample label smoothing.
+
+    Args:
+        logits: Predicted logits of shape [batch_size, num_classes]
+        targets: Ground truth labels of shape [batch_size]
+        alpha: Float or tensor of shape [batch_size] specifying smoothing value per sample
+
+    Returns:
+        Loss tensor averaged across the batch
+    """
+    num_classes = logits.size(-1)
+
+    # Convert scalar to tensor if needed
+    if not isinstance(alpha, torch.Tensor):
+        alpha = torch.full((logits.size(0),), alpha, device=logits.device, dtype=torch.float)
+
+    # Create one-hot encoded targets
+    targets_one_hot = F.one_hot(targets, num_classes).float()
+
+    # Apply label smoothing in a vectorized way
+    # Expand alpha to match targets_one_hot dimensions for proper broadcasting
+    alpha = alpha.view(-1, 1)
+    uniform_dist = torch.ones_like(targets_one_hot) / num_classes
+    smooth_targets = (1 - alpha) * targets_one_hot + alpha * uniform_dist
+
+    # Compute loss using standard cross entropy with the smoothed targets
+    log_probs = F.log_softmax(logits, dim=-1)
+    loss = -(smooth_targets * log_probs).sum(dim=-1)
+
+    return loss.mean()
+
+
 @dataclass
 class ClassifierLeafOutput(LeafNodeOutput):
     logits: torch.Tensor
@@ -60,7 +93,7 @@ class ClassifierLeaf(LeafNode):
                 )
         encoder_modules.append(nn.Linear(in_dim, num_classes, bias=last_layer_bias))
         self.encoder = nn.Sequential(*encoder_modules)
-        self.loss_fn = F.cross_entropy
+        self.loss_fn = cross_entropy_with_per_sample_smoothing
         self.label_smoothing = label_smoothing
 
     def forward(self, branch_outputs: BranchNodeOutput) -> ClassifierLeafOutput:
@@ -116,13 +149,12 @@ class ClassifierLeaf(LeafNode):
         logits = leaf_outputs.logits
 
         if self.label_smoothing == "corrupt_frac" and hasattr(root_outputs, "corrupt_frac"):
-            label_smoothing = root_outputs.corrupt_frac
+            alpha = root_outputs.corrupt_frac
         else:
-            label_smoothing = self.label_smoothing
-        if torch.is_tensor(label_smoothing):
-            label_smoothing = label_smoothing.item()
+            alpha = self.label_smoothing
+
         targets = self._preprocess_targets(targets, logits.device)
-        return self.loss_fn(logits, targets, label_smoothing=label_smoothing)
+        return self.loss_fn(logits, targets, alpha=alpha)
 
     def evaluate(self, outputs: ClassifierLeafOutput, targets: Tensor):
         logits = outputs.logits
@@ -131,7 +163,7 @@ class ClassifierLeaf(LeafNode):
         correct = pred_class.eq(targets)
 
         metrics = {
-            "nll": self.loss_fn(logits, targets).item(),
+            "nll": self.loss_fn(logits, targets, alpha=0.0).item(),  # No smoothing during evaluation
             "acc": correct.float().mean().item(),
         }
 
