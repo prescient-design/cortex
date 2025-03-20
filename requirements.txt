@@ -92,7 +92,6 @@ pytest==8.3.5
 pytest-cov==6.0.0
 python-dateutil==2.9.0.post0
 python-multipart==0.0.20
--e file:///Users/stantos5/code/prescient-public/cortex
 pytorch-lightning==1.9.5
 pytorch-warmup==0.2.0
 pytz==2025.1
