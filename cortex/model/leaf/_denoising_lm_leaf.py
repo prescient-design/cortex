@@ -37,7 +37,7 @@ class DenoisingLanguageModelLeaf(ClassifierLeaf):
         self,
         *args,
         corruption_process: Optional[CorruptionProcess] = None,
-        corruption_rate: float = 0.01,
+        corruption_rate: float = 0.1,
         **kwargs,
     ):
         """
@@ -45,7 +45,7 @@ class DenoisingLanguageModelLeaf(ClassifierLeaf):
 
         Args:
             corruption_process: Optional corruption process to apply to masked targets during training
-            corruption_rate: Fixed rate at which to apply corruption to masked targets (default: 0.01)
+            corruption_rate: Fixed rate at which to apply corruption to masked targets (default: 0.1)
             *args: Additional positional arguments to pass to the parent class
             **kwargs: Additional keyword arguments to pass to the parent class
         """

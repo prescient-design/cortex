@@ -19,7 +19,7 @@ class DenoisingLanguageModelTask(BaseTask):
         root_key: str,
         tokenizer: BertTokenizer,
         corruption_process: Optional[Any] = None,
-        corruption_rate: float = 0.01,
+        corruption_rate: float = 0.1,
         **kwargs,
     ) -> None:
         """
@@ -32,7 +32,7 @@ class DenoisingLanguageModelTask(BaseTask):
             root_key: Key for the root node in the neural tree
             tokenizer: Tokenizer used for tokenizing sequences
             corruption_process: Optional corruption process to apply to masked targets during training
-            corruption_rate: Fixed rate at which to apply corruption to masked targets (default: 0.01)
+            corruption_rate: Fixed rate at which to apply corruption to masked targets (default: 0.1)
         """
         super().__init__(
             data_module=data_module,

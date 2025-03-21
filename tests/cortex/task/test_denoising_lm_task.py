@@ -70,7 +70,7 @@ def test_denoising_lm_task_default_corruption_params():
     # Verify the leaf has the default parameters
     assert isinstance(leaf, DenoisingLanguageModelLeaf)
     assert leaf.corruption_process is None
-    assert leaf.corruption_rate == 0.01  # Default value
+    assert leaf.corruption_rate == 0.1  # Default value
     assert leaf.in_dim == 128
     assert leaf.num_classes == len(mock_tokenizer.vocab)
     assert leaf.branch_key == "test_branch"
