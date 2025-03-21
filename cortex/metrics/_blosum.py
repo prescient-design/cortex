@@ -1,3 +1,4 @@
+import importlib.resources
 from typing import Dict, List, Tuple
 
 import torch
@@ -337,6 +338,73 @@ def lookup_blosum62_score(seq1: str, seq2: str, blosum62: torch.Tensor, aa_to_id
     return scores
 
 
+def blosum62_distance(
+    seq1: str,
+    seq2: str,
+    blosum62: torch.Tensor,
+    aa_to_idx: Dict[str, int],
+    lambda_param: float = 0.267,
+    gap_token: str = "-",
+) -> torch.Tensor:
+    """
+    Compute a proper distance metric between two aligned protein sequences using BLOSUM62.
+
+    This function assumes the sequences are pre-aligned and of the same length.
+    Gap tokens are treated as neutral and don't contribute to the distance calculation.
+
+    Args:
+        seq1: First protein sequence (aligned)
+        seq2: Second protein sequence (aligned)
+        blosum62: BLOSUM62 matrix as torch.Tensor
+        aa_to_idx: Dictionary mapping amino acids to indices in the BLOSUM62 matrix
+        lambda_param: Karlin-Altschul parameter for the scoring system (default=0.267)
+        gap_token: Character representing gaps in the alignment (default="-")
+
+    Returns:
+        torch.Tensor: A distance value between 0 and 1
+    """
+    if len(seq1) != len(seq2):
+        raise ValueError(f"Sequences must be of the same length (pre-aligned): {len(seq1)} != {len(seq2)}")
+
+    # Filter positions where both sequences have valid amino acids (not gaps)
+    valid_positions = []
+    for i, (aa1, aa2) in enumerate(zip(seq1, seq2)):
+        if aa1 != gap_token and aa1 in aa_to_idx and aa2 != gap_token and aa2 in aa_to_idx:
+            valid_positions.append(i)
+
+    # If no valid positions, return maximum distance
+    if not valid_positions:
+        return torch.tensor(1.0, dtype=torch.float32)
+
+    # Extract the valid characters
+    seq1_valid = [seq1[i] for i in valid_positions]
+    seq2_valid = [seq2[i] for i in valid_positions]
+
+    # Convert to tensors
+    seq1_indices = torch.tensor([aa_to_idx[aa] for aa in seq1_valid], dtype=torch.long)
+    seq2_indices = torch.tensor([aa_to_idx[aa] for aa in seq2_valid], dtype=torch.long)
+
+    # Calculate alignment score (sum of BLOSUM scores for aligned positions)
+    alignment_score = blosum62[seq1_indices, seq2_indices].sum()
+
+    # Get diagonal (self-substitution) scores for maximum possible
+    diag_indices = torch.arange(blosum62.size(0))
+    self_scores = blosum62[diag_indices, diag_indices]
+
+    # Maximum possible score is the sum of self-substitution scores for each amino acid
+    max_score1 = torch.sum(self_scores[seq1_indices])
+    max_score2 = torch.sum(self_scores[seq2_indices])
+    max_possible = torch.min(max_score1, max_score2)
+
+    # Convert similarity to distance
+    raw_distance = max_possible - alignment_score
+
+    # Transform to ensure triangle inequality using PyTorch exp
+    proper_distance = 1.0 - torch.exp(torch.tensor(-float(raw_distance) / lambda_param))
+
+    return proper_distance
+
+
 def batch_lookup_blosum62(
     batch_seq1: List[str], batch_seq2: List[str], blosum62: torch.Tensor, aa_to_idx: Dict[str, int]
 ) -> List[torch.Tensor]:
@@ -353,3 +421,112 @@ def batch_lookup_blosum62(
         List[torch.Tensor]: List of score tensors, each with shape (len(seq1_i), len(seq2_i))
     """
     return [lookup_blosum62_score(seq1, seq2, blosum62, aa_to_idx) for seq1, seq2 in zip(batch_seq1, batch_seq2)]
+
+
+def batch_blosum62_distance(
+    batch_seq1: List[str],
+    batch_seq2: List[str],
+    blosum62: torch.Tensor,
+    aa_to_idx: Dict[str, int],
+    lambda_param: float = 0.267,
+    gap_token: str = "-",
+) -> torch.Tensor:
+    """
+    Compute BLOSUM62 distances for batches of aligned protein sequence pairs.
+
+    This function assumes the sequences in each pair are pre-aligned and of the same length.
+    Gap tokens are treated as neutral and don't contribute to the distance calculation.
+
+    Args:
+        batch_seq1: List of first protein sequences (aligned)
+        batch_seq2: List of second protein sequences (aligned)
+        blosum62: BLOSUM62 substitution matrix
+        aa_to_idx: Dictionary mapping amino acids to indices in the BLOSUM62 matrix
+        lambda_param: Karlin-Altschul parameter for the scoring system (default=0.267)
+        gap_token: Character representing gaps in the alignment (default="-")
+
+    Returns:
+        torch.Tensor: A tensor of distances with shape (len(batch_seq1),)
+    """
+    # Check batch sizes match
+    if len(batch_seq1) != len(batch_seq2):
+        raise ValueError("Batch sizes must match: len(batch_seq1) != len(batch_seq2)")
+
+    # Handle empty batch
+    if len(batch_seq1) == 0:
+        return torch.tensor([], dtype=torch.float32)
+
+    # Compute distances for each pair
+    distances = torch.zeros(len(batch_seq1), dtype=torch.float32)
+    for i, (seq1, seq2) in enumerate(zip(batch_seq1, batch_seq2)):
+        distances[i] = blosum62_distance(seq1, seq2, blosum62, aa_to_idx, lambda_param, gap_token)
+
+    return distances
+
+
+def create_tokenizer_compatible_transition_matrix(vocab_file_path=None) -> torch.Tensor:
+    """
+    Create a transition probability matrix compatible with a protein sequence tokenizer.
+
+    This function creates a transition probability matrix where:
+    1. Rows and columns are ordered according to vocabulary indices from the vocab file
+    2. Non-canonical amino acid tokens have identity transitions (1.0 on diagonal)
+    3. Canonical amino acid transitions follow BLOSUM62 probabilities
+
+    Args:
+        vocab_file_path: Path to the vocabulary file. If None, uses the default path:
+                       cortex/assets/protein_seq_tokenizer_32/vocab.txt
+
+    Returns:
+        torch.Tensor: A vocab_size x vocab_size transition probability matrix
+    """
+
+    # Get the transition matrix based on BLOSUM62
+    transition_probs, aa_to_idx = create_blosum62_transition_matrix()
+
+    # Use default path if none provided
+    if vocab_file_path is None:
+        vocab_file_path = (
+            importlib.resources.files("cortex") / "assets" / "protein_seq_tokenizer_32" / "vocab.txt"
+        ).as_posix()
+
+    # Load vocabulary from file
+    vocab = {}
+    with open(vocab_file_path, "r") as f:
+        for i, line in enumerate(f):
+            token = line.strip()
+            vocab[token] = i
+
+    # Get vocabulary size and initialize full matrix with identity matrix
+    # (defaulting to no substitution for non-amino acid tokens)
+    vocab_size = len(vocab)
+    full_matrix = torch.eye(vocab_size, dtype=torch.float32)
+
+    # Create mapping from amino acid to token ID in vocabulary
+    amino_to_token_id = {}
+    for aa in CANON_AMINO_ACIDS:
+        if aa in vocab:
+            amino_to_token_id[aa] = vocab[aa]
+
+    # Map BLOSUM transition probabilities to token IDs in the vocabulary
+    for aa_i, i in aa_to_idx.items():
+        if aa_i in amino_to_token_id:
+            token_i = amino_to_token_id[aa_i]
+            # Zero out diagonal for amino acids (no self-substitution)
+            full_matrix[token_i, token_i] = 0.0
+
+            for aa_j, j in aa_to_idx.items():
+                if aa_j in amino_to_token_id:
+                    token_j = amino_to_token_id[aa_j]
+                    if token_i != token_j:
+                        full_matrix[token_i, token_j] = transition_probs[i, j]
+
+    # Normalize rows to get proper probability distributions
+    for i in range(vocab_size):
+        # Only normalize rows for amino acids that we want to substitute
+        if i in amino_to_token_id.values():
+            row_sum = full_matrix[i].sum()
+            if row_sum > 0:
+                full_matrix[i] = full_matrix[i] / row_sum
+
+    return full_matrix

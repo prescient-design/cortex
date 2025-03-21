@@ -18,6 +18,29 @@ CANON_AMINO_ACIDS = []
 for group in AMINO_ACID_GROUPS.values():
     CANON_AMINO_ACIDS.extend(group)
 
+STANDARD_AA_FREQS = {
+    "A": 0.0825,
+    "R": 0.0553,
+    "N": 0.0406,
+    "D": 0.0545,
+    "C": 0.0137,
+    "Q": 0.0393,
+    "E": 0.0675,
+    "G": 0.0707,
+    "H": 0.0227,
+    "I": 0.0595,
+    "L": 0.0966,
+    "K": 0.0584,
+    "M": 0.0242,
+    "F": 0.0386,
+    "P": 0.0470,
+    "S": 0.0657,
+    "T": 0.0534,
+    "W": 0.0108,
+    "Y": 0.0292,
+    "V": 0.0687,
+}
+
 VARIABLE_HEAVY_CHAIN_TOKEN = "<vh>"  # Variable heavy chain start token
 VARIABLE_HEAVY_COL = "fv_heavy_aho"  # Aligned VH sequence column in dataframes
 VARIABLE_LIGHT_CHAIN_TOKEN = "<vl>"  # Variable light chain start token
