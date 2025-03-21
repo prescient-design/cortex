@@ -3,6 +3,7 @@ from typing import Optional, Union
 
 import numpy as np
 import torch
+import torch.distributions as torch_dist
 
 from cortex.corruption._diffusion_noise_schedule import get_named_beta_schedule
 
@@ -15,7 +16,14 @@ class CorruptionProcess(ABC):
     the corruption interface.
     """
 
-    def __init__(self, schedule: str = "cosine", max_steps: int = 1000, *args, **kwargs):
+    def __init__(
+            self,
+            schedule: str = "cosine",
+            max_steps: int = 1000,
+            t_base_dist: Optional[torch_dist.Distribution] = None,
+            *args,
+            **kwargs,
+        ):        
         betas = get_named_beta_schedule(schedule, max_steps)
 
         # Use float64 for accuracy.
@@ -30,7 +38,14 @@ class CorruptionProcess(ABC):
         self.alphas_cumprod = np.cumprod(alphas, axis=0)
         self.sqrt_alphas_cumprod = np.sqrt(self.alphas_cumprod)
 
-    def sample_timestep(self, n: Optional[int] = None):
+        # Set up timestep sampling distribution
+        if t_base_dist is None:
+            # use Beta(5, 1) as default to preferentially sample lower noise levels
+            self.t_base_dist = torch_dist.Beta(3, 1)
+        else:
+            self.t_base_dist = t_base_dist
+
+    def sample_timestep(self, n: Optional[int] = 1):
         """Sample timestep(s) from the noise schedule.
 
         Args:
@@ -40,10 +55,8 @@ class CorruptionProcess(ABC):
         Returns:
             Int or array of timesteps.
         """
-        if n is None:
-            return np.random.randint(1, self.max_steps + 1)
-
-        return np.random.randint(1, self.max_steps + 1, size=(n,))
+        base_samples = self.t_base_dist.sample((n,))
+        return torch.round(self.max_steps * base_samples).int()
 
     def sample_corrupt_frac(self, n: Optional[int] = None) -> torch.Tensor:
         """Sample corruption fraction(s).
