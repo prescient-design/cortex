@@ -2,7 +2,7 @@ from typing import Dict, List, Tuple
 
 import torch
 
-from cortex.constants import CANON_AMINO_ACIDS
+from cortex.constants import CANON_AMINO_ACIDS, STANDARD_AA_FREQS
 
 
 def create_blosum62_matrix() -> Tuple[torch.Tensor, Dict[str, int]]:
@@ -269,6 +269,47 @@ def create_blosum62_matrix() -> Tuple[torch.Tensor, Dict[str, int]]:
             blosum62[j, i] = value
 
     return blosum62, aa_to_idx
+
+
+def create_blosum62_transition_matrix() -> Tuple[torch.Tensor, Dict[str, int]]:
+    """
+    Convert BLOSUM matrix to transition probability matrix.
+
+    The transition matrix follows discrete Markov process conventions:
+    - Row index i represents the current state (amino acid)
+    - Column index j represents the next state (amino acid)
+    - Each entry [i,j] is the probability of transitioning from amino acid i to j
+
+    BLOSUM scores are log-odds scores: 2 * log2(p(a,b)/(p(a)*p(b)))
+    To convert back to substitution probabilities:
+    1. Convert score to odds ratio: 2^(score/2)
+    2. Multiply by background frequency: odds_ratio * p(b)
+
+    The resulting substitution probabilities reflect the underlying evolutionary
+    model captured by the BLOSUM matrix.
+
+    Returns:
+        Tuple[torch.Tensor, Dict[str, int]]:
+            - A transition probability matrix based on BLOSUM substitution rates
+            - Dictionary mapping amino acids to indices
+    """
+    blosum62, aa_to_idx = create_blosum62_matrix()
+    marginal_freqs = torch.tensor([STANDARD_AA_FREQS[aa] for aa in CANON_AMINO_ACIDS], dtype=torch.float32)
+
+    # We use 2^(score/2) as per standard BLOSUM interpretation
+    odds_ratios = torch.exp2(blosum62.to(torch.float32) / 2)
+    # Zero out the diagonal to ensure we don't self-substitute
+    odds_ratios.fill_diagonal_(0.0)
+
+    # Calculate transition probabilities
+    # For each row i, multiply odds_ratios[i,j] by background frequency of j
+    unnormalized_probs = odds_ratios * marginal_freqs.unsqueeze(0)
+
+    # Normalize rows to get proper transition probabilities
+    row_sums = unnormalized_probs.sum(dim=1, keepdim=True)
+    transition_probs = unnormalized_probs / row_sums
+
+    return transition_probs, aa_to_idx
 
 
 def lookup_blosum62_score(seq1: str, seq2: str, blosum62: torch.Tensor, aa_to_idx: Dict[str, int]) -> torch.Tensor:
