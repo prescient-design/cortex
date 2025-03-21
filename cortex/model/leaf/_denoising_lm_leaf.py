@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Optional
 import torch
 from torch.nn import functional as F
 
+from cortex.corruption._abstract_corruption import CorruptionProcess
 from cortex.model.branch import BranchNodeOutput
 from cortex.model.leaf import ClassifierLeaf, LeafNodeOutput
 from cortex.model.root import RootNodeOutput
@@ -23,8 +24,34 @@ class DenoisingLanguageModelLeafOutput(LeafNodeOutput):
 
 class DenoisingLanguageModelLeaf(ClassifierLeaf):
     """
-    Leaf node which transforms branch sequence features to discrete sequence logits
+    Leaf node which transforms branch sequence features to discrete sequence logits.
+
+    Can optionally apply a corruption process to the masked tokens during training,
+    which serves as a form of data augmentation to increase sample diversity and
+    potentially improve embedding quality. This is particularly useful with
+    biologically-informed corruption processes like BLOSUM62-based substitutions
+    for protein sequences.
     """
+
+    def __init__(
+        self,
+        *args,
+        corruption_process: Optional[CorruptionProcess] = None,
+        corruption_rate: float = 0.1,
+        **kwargs,
+    ):
+        """
+        Initialize the DenoisingLanguageModelLeaf.
+
+        Args:
+            corruption_process: Optional corruption process to apply to masked targets during training
+            corruption_rate: Fixed rate at which to apply corruption to masked targets (default: 0.1)
+            *args: Additional positional arguments to pass to the parent class
+            **kwargs: Additional keyword arguments to pass to the parent class
+        """
+        super().__init__(*args, **kwargs)
+        self.corruption_process = corruption_process
+        self.corruption_rate = corruption_rate
 
     def forward(self, branch_outputs: BranchNodeOutput, *args, **kwargs) -> DenoisingLanguageModelLeafOutput:
         """
@@ -58,6 +85,20 @@ class DenoisingLanguageModelLeaf(ClassifierLeaf):
         masked_logits = torch.masked_select(logits, is_corrupted[..., None]).view(-1, logits.shape[-1])
         masked_tok_idxs = torch.masked_select(tgt_tok_idxs, is_corrupted).to(masked_logits.device)
 
+        # Apply data augmentation if corruption_process is provided and we're in training mode
+        if self.corruption_process is not None and self.training:
+            # Reshape to match expected input format for corruption process
+            # The corruption process expects a batch of sequences
+            batch_size = masked_tok_idxs.size(0)
+
+            # Apply the corruption with fixed rate
+            corrupted_tok_idxs, _ = self.corruption_process(
+                masked_tok_idxs.view(batch_size, 1), corrupt_frac=self.corruption_rate
+            )
+
+            # Reshape back to the original shape
+            masked_tok_idxs = corrupted_tok_idxs.view(-1)
+
         return masked_logits, masked_tok_idxs
 
     def evaluate(
@@ -67,6 +108,7 @@ class DenoisingLanguageModelLeaf(ClassifierLeaf):
         *args,
         **kwargs,
     ) -> dict:
+        # The model is already in eval mode during evaluation, so no corruption will be applied
         logits, targets = self.format_outputs(leaf_outputs, root_outputs)
         pred_class = logits.argmax(-1)
         correct = pred_class.eq(targets)
