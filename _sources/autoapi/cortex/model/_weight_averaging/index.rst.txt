@@ -1,0 +1,19 @@
+cortex.model._weight_averaging
+==============================
+
+.. py:module:: cortex.model._weight_averaging
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.model._weight_averaging.online_weight_update_
+
+
+Module Contents
+---------------
+
+.. py:function:: online_weight_update_(src_state_dict: dict[str, torch.Tensor], tgt_state_dict: dict[str, torch.Tensor], decay_rate: float, param_prefixes: Optional[Iterable[str]] = None)
+

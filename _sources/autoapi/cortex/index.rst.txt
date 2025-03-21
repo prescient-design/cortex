@@ -1,0 +1,43 @@
+cortex
+======
+
+.. py:module:: cortex
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/acquisition/index
+   /autoapi/cortex/assets/index
+   /autoapi/cortex/attribution/index
+   /autoapi/cortex/cmdline/index
+   /autoapi/cortex/config/index
+   /autoapi/cortex/constants/index
+   /autoapi/cortex/corruption/index
+   /autoapi/cortex/data/index
+   /autoapi/cortex/io/index
+   /autoapi/cortex/logging/index
+   /autoapi/cortex/metrics/index
+   /autoapi/cortex/model/index
+   /autoapi/cortex/optim/index
+   /autoapi/cortex/task/index
+   /autoapi/cortex/tokenization/index
+   /autoapi/cortex/transforms/index
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   cortex.__version__
+
+
+Package Contents
+----------------
+
+.. py:data:: __version__
+

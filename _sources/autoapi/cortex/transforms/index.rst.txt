@@ -1,0 +1,146 @@
+cortex.transforms
+=================
+
+.. py:module:: cortex.transforms
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/transforms/_hf_tokenizer_transform/index
+   /autoapi/cortex/transforms/_pad_transform/index
+   /autoapi/cortex/transforms/_to_tensor/index
+   /autoapi/cortex/transforms/_tokenize_igg_ag_df/index
+   /autoapi/cortex/transforms/_transform/index
+   /autoapi/cortex/transforms/functional/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.transforms.HuggingFaceTokenizerTransform
+   cortex.transforms.PadTransform
+   cortex.transforms.ToTensor
+   cortex.transforms.Transform
+
+
+Package Contents
+----------------
+
+.. py:class:: HuggingFaceTokenizerTransform(tokenizer: cortex.tokenization.CachedBertTokenizerFast)
+
+   Bases: :py:obj:`cortex.transforms._transform.Transform`
+
+
+   Wraps a CachedBertTokenizerFast object in a pytorch transform module for use in
+   a sequence of transforms.
+
+
+   .. py:attribute:: tokenizer
+
+
+   .. py:method:: validate(flat_inputs: list[Any]) -> None
+
+
+   .. py:method:: transform(data: numpy.ndarray) -> list[list[int]]
+
+      :param data: a numpy array of strings.
+
+      :returns: A list of lists of integers, where each integer is the index of a token in the tokenizer's
+                vocabulary.
+
+
+
+   .. py:method:: forward(data: Any) -> list[list[int]]
+
+
+.. py:class:: PadTransform(max_length: int, pad_value: int)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   Pad tensor to a fixed length with given padding value.
+
+   :param max_length: Maximum length to pad to
+   :type max_length: int
+   :param pad_value: Value to pad the tensor with
+   :type pad_value: bool
+
+
+   .. py:attribute:: max_length
+
+
+   .. py:attribute:: pad_value
+
+
+   .. py:method:: forward(x: torch.Tensor) -> torch.Tensor
+
+      :param x: The tensor to pad
+      :type x: Tensor
+      :return: Tensor padded up to max_length with pad_value
+      :rtype: Tensor
+
+
+
+.. py:class:: ToTensor(padding_value: Optional[int] = None, dtype: torch.dtype = torch.long)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   Convert input to torch tensor
+
+   :param padding_value: Pad value to make each input in the batch of length equal to the longest sequence in the batch.
+   :type padding_value: Optional[int]
+   :param dtype: :class:`torch.dtype` of output tensor
+   :type dtype: :class:`torch.dtype`
+
+
+   .. py:attribute:: padding_value
+      :value: None
+
+
+
+   .. py:attribute:: dtype
+
+
+   .. py:method:: forward(input: Any) -> torch.Tensor
+
+      :param input: Sequence or batch of token ids
+      :type input: Union[List[int], List[List[int]]]
+      :rtype: Tensor
+
+
+
+.. py:class:: Transform
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:attribute:: _transformed_types
+      :type:  tuple[Union[type, Callable[[Any], bool]], Ellipsis]
+
+
+   .. py:method:: extra_repr() -> str
+
+
+   .. py:method:: forward(*data: Any) -> Any
+
+
+   .. py:method:: parameters_dict(flattened_data: list[Any]) -> dict[str, Any]
+
+
+   .. py:method:: transform(data: Any, parameters: dict[str, Any]) -> Any
+      :abstractmethod:
+
+
+
+   .. py:method:: validate(flat_inputs: list[Any]) -> None
+      :abstractmethod:
+
+
+

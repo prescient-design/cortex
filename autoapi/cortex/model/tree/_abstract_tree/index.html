@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cortex.model.tree._abstract_tree &#8212; cortex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
+    <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="cortex.model.tree._seq_model_tree" href="../_seq_model_tree/index.html" />
+    <link rel="prev" title="cortex.model.tree" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-cortex.model.tree._abstract_tree">
+<span id="cortex-model-tree-abstract-tree"></span><h1>cortex.model.tree._abstract_tree<a class="headerlink" href="#module-cortex.model.tree._abstract_tree" title="Link to this heading">¶</a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.model.tree._abstract_tree.NeuralTreeOutput" title="cortex.model.tree._abstract_tree.NeuralTreeOutput"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NeuralTreeOutput</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cortex.model.tree._abstract_tree.NeuralTree" title="cortex.model.tree._abstract_tree.NeuralTree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NeuralTree</span></code></a></p></td>
+<td><p>Compute tree graph composed of root, trunk, branch, and leaf neural network nodes</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTreeOutput">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.model.tree._abstract_tree.</span></span><span class="sig-name descname"><span class="pre">NeuralTreeOutput</span></span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTreeOutput" title="Link to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTreeOutput.root_outputs">
+<span class="sig-name descname"><span class="pre">root_outputs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../root/index.html#cortex.model.root.RootNodeOutput" title="cortex.model.root.RootNodeOutput"><span class="pre">cortex.model.root.RootNodeOutput</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTreeOutput.root_outputs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTreeOutput.trunk_outputs">
+<span class="sig-name descname"><span class="pre">trunk_outputs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../trunk/index.html#cortex.model.trunk.TrunkNodeOutput" title="cortex.model.trunk.TrunkNodeOutput"><span class="pre">cortex.model.trunk.TrunkNodeOutput</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTreeOutput.trunk_outputs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTreeOutput.branch_outputs">
+<span class="sig-name descname"><span class="pre">branch_outputs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../branch/index.html#cortex.model.branch.BranchNodeOutput" title="cortex.model.branch.BranchNodeOutput"><span class="pre">cortex.model.branch.BranchNodeOutput</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTreeOutput.branch_outputs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTreeOutput.leaf_outputs">
+<span class="sig-name descname"><span class="pre">leaf_outputs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../leaf/_abstract_leaf/index.html#cortex.model.leaf._abstract_leaf.LeafNodeOutput" title="cortex.model.leaf._abstract_leaf.LeafNodeOutput"><span class="pre">cortex.model.leaf._abstract_leaf.LeafNodeOutput</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTreeOutput.leaf_outputs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTreeOutput.fetch_task_outputs">
+<span class="sig-name descname"><span class="pre">fetch_task_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTreeOutput.fetch_task_outputs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.model.tree._abstract_tree.</span></span><span class="sig-name descname"><span class="pre">NeuralTree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.nn.ModuleDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trunk_node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.nn.Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.nn.ModuleDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.nn.ModuleDict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
+<p>Compute tree graph composed of root, trunk, branch, and leaf neural network nodes</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.root_nodes">
+<span class="sig-name descname"><span class="pre">root_nodes</span></span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.root_nodes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.trunk_node">
+<span class="sig-name descname"><span class="pre">trunk_node</span></span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.trunk_node" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.branch_nodes">
+<span class="sig-name descname"><span class="pre">branch_nodes</span></span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.branch_nodes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.leaf_nodes">
+<span class="sig-name descname"><span class="pre">leaf_nodes</span></span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.leaf_nodes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.build_tree">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.build_tree" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trunk_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../trunk/index.html#cortex.model.trunk.TrunkNodeOutput" title="cortex.model.trunk.TrunkNodeOutput"><span class="pre">cortex.model.trunk.TrunkNodeOutput</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cortex.model.tree._abstract_tree.NeuralTreeOutput" title="cortex.model.tree._abstract_tree.NeuralTreeOutput"><span class="pre">NeuralTreeOutput</span></a></span></span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.forward" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.predict">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.predict" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree._predict_batch">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_predict_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree._predict_batch" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.evaluate">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.evaluate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.prediction_metrics">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prediction_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.prediction_metrics" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.get_trainable_params">
+<span class="sig-name descname"><span class="pre">get_trainable_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.get_trainable_params" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.freeze_roots">
+<span class="sig-name descname"><span class="pre">freeze_roots</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.freeze_roots" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.freeze_trunk">
+<span class="sig-name descname"><span class="pre">freeze_trunk</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.freeze_trunk" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.freeze_branches">
+<span class="sig-name descname"><span class="pre">freeze_branches</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.freeze_branches" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.add_branch">
+<span class="sig-name descname"><span class="pre">add_branch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">branch_cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">omegaconf.DictConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.add_branch" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.add_leaf">
+<span class="sig-name descname"><span class="pre">add_leaf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leaf_node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../leaf/_abstract_leaf/index.html#cortex.model.leaf._abstract_leaf.LeafNode" title="cortex.model.leaf._abstract_leaf.LeafNode"><span class="pre">cortex.model.leaf._abstract_leaf.LeafNode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.add_leaf" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.tree._abstract_tree.NeuralTree.call_from_trunk_output">
+<span class="sig-name descname"><span class="pre">call_from_trunk_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trunk_output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.tree._abstract_tree.NeuralTree.call_from_trunk_output" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">cortex</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html">cortex</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">API Reference</a><ul>
+  <li><a href="../../../index.html">cortex</a><ul>
+  <li><a href="../../index.html">cortex.model</a><ul>
+  <li><a href="../index.html">cortex.model.tree</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">cortex.model.tree</a></li>
+      <li>Next: <a href="../_seq_model_tree/index.html" title="next chapter">cortex.model.tree._seq_model_tree</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Sam Stanton.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../../../../_sources/autoapi/cortex/model/tree/_abstract_tree/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

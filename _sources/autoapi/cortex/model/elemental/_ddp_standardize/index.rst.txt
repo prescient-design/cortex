@@ -1,0 +1,70 @@
+cortex.model.elemental._ddp_standardize
+=======================================
+
+.. py:module:: cortex.model.elemental._ddp_standardize
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.elemental._ddp_standardize.DDPStandardize
+
+
+Module Contents
+---------------
+
+.. py:class:: DDPStandardize(m: int, outputs: Optional[list[int]] = None, batch_shape: torch.Size = torch.Size(), min_stdv: float = 1e-08)
+
+   Bases: :py:obj:`botorch.models.transforms.outcome.Standardize`
+
+
+   Standardize outcomes (zero mean, unit variance).
+
+   This module is stateful: If in train mode, calling forward updates the
+   module state (i.e. the mean/std normalizing constants). If in eval mode,
+   calling forward simply applies the standardization using the current module
+   state.
+
+
+   .. py:attribute:: _outputs
+
+
+   .. py:attribute:: _m
+
+
+   .. py:attribute:: _batch_shape
+
+
+   .. py:attribute:: _min_stdv
+      :value: 1e-08
+
+
+
+   .. py:method:: load_state_dict(state_dict: Mapping[str, Any], strict: bool = True) -> None
+
+      Custom logic for loading the state dict.
+
+
+
+   .. py:method:: forward(Y: torch.Tensor, Yvar: Optional[torch.Tensor] = None) -> tuple[torch.Tensor, Optional[torch.Tensor]]
+
+      Standardize outcomes.
+
+      If the module is in train mode, this updates the module state (i.e. the
+      mean/std normalizing constants). If the module is in eval mode, simply
+      applies the normalization using the module state.
+
+      :param Y: A `batch_shape x n x m`-dim tensor of training targets.
+      :param Yvar: A `batch_shape x n x m`-dim tensor of observation noises
+                   associated with the training targets (if applicable).
+
+      :returns:
+
+                - The transformed outcome observations.
+                - The transformed observation noise (if applicable).
+      :rtype: A two-tuple with the transformed outcomes
+
+
+

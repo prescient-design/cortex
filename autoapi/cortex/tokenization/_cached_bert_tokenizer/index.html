@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cortex.tokenization._cached_bert_tokenizer &#8212; cortex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+    <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="cortex.tokenization._protein_seq_tokenizer" href="../_protein_seq_tokenizer/index.html" />
+    <link rel="prev" title="cortex.tokenization" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-cortex.tokenization._cached_bert_tokenizer">
+<span id="cortex-tokenization-cached-bert-tokenizer"></span><h1>cortex.tokenization._cached_bert_tokenizer<a class="headerlink" href="#module-cortex.tokenization._cached_bert_tokenizer" title="Link to this heading">¶</a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast" title="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CachedBertTokenizerFast</span></code></a></p></td>
+<td><p>This class is a wrapper around the BertTokenizerFast class from the transformers library.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.tokenization._cached_bert_tokenizer.</span></span><span class="sig-name descname"><span class="pre">CachedBertTokenizerFast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vocab_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_lower_case</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unk_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'[UNK]'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'[SEP]'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'[PAD]'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'[CLS]'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'[MASK]'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_unk_exception</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_cls_and_sep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">transformers.BertTokenizerFast</span></code></p>
+<p>This class is a wrapper around the BertTokenizerFast class from the transformers library.
+It adds an additional cached encoding method for faster runtimes on smaller datasets.
+It also provides attributes indicating which tokens can be corrupted and sampled by denoising models,
+and a convenience method for getting a mask of corruptible tokens from a sequence of token ids.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.padding_idx">
+<span class="sig-name descname"><span class="pre">padding_idx</span></span><a class="headerlink" href="#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.padding_idx" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.masking_idx">
+<span class="sig-name descname"><span class="pre">masking_idx</span></span><a class="headerlink" href="#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.masking_idx" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.corruption_vocab_excluded">
+<span class="sig-name descname"><span class="pre">corruption_vocab_excluded</span></span><a class="headerlink" href="#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.corruption_vocab_excluded" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.sampling_vocab_excluded">
+<span class="sig-name descname"><span class="pre">sampling_vocab_excluded</span></span><a class="headerlink" href="#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.sampling_vocab_excluded" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast._raise_unk_exception">
+<span class="sig-name descname"><span class="pre">_raise_unk_exception</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast._raise_unk_exception" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast._add_cls_and_sep">
+<span class="sig-name descname"><span class="pre">_add_cls_and_sep</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast._add_cls_and_sep" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.corruption_vocab_included">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">corruption_vocab_included</span></span><a class="headerlink" href="#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.corruption_vocab_included" title="Link to this definition">¶</a></dt>
+<dd><p>Tokens that can be corrupted by denoising models.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.sampling_vocab_included">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sampling_vocab_included</span></span><a class="headerlink" href="#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.sampling_vocab_included" title="Link to this definition">¶</a></dt>
+<dd><p>Tokens that can be sampled by denoising models.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.decode">
+<span class="sig-name descname"><span class="pre">decode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.LongTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_special_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.decode" title="Link to this definition">¶</a></dt>
+<dd><p>Decode a sequence of token ids into a string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.cached_encode">
+<span class="sig-name descname"><span class="pre">cached_encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.cached_encode" title="Link to this definition">¶</a></dt>
+<dd><p>Cached tokenizer call, for faster runtimes on smaller datasets.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.get_corruptible_mask">
+<span class="sig-name descname"><span class="pre">get_corruptible_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.LongTensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast.get_corruptible_mask" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>token_batch</strong> – a batch of token ids (LongTensor).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a boolean mask tensor of corruptible tokens (corrupt if True).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">cortex</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">cortex</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">API Reference</a><ul>
+  <li><a href="../../index.html">cortex</a><ul>
+  <li><a href="../index.html">cortex.tokenization</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">cortex.tokenization</a></li>
+      <li>Next: <a href="../_protein_seq_tokenizer/index.html" title="next chapter">cortex.tokenization._protein_seq_tokenizer</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Sam Stanton.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../../../_sources/autoapi/cortex/tokenization/_cached_bert_tokenizer/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

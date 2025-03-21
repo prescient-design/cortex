@@ -1,0 +1,44 @@
+cortex.transforms._hf_tokenizer_transform
+=========================================
+
+.. py:module:: cortex.transforms._hf_tokenizer_transform
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.transforms._hf_tokenizer_transform.HuggingFaceTokenizerTransform
+
+
+Module Contents
+---------------
+
+.. py:class:: HuggingFaceTokenizerTransform(tokenizer: cortex.tokenization.CachedBertTokenizerFast)
+
+   Bases: :py:obj:`cortex.transforms._transform.Transform`
+
+
+   Wraps a CachedBertTokenizerFast object in a pytorch transform module for use in
+   a sequence of transforms.
+
+
+   .. py:attribute:: tokenizer
+
+
+   .. py:method:: validate(flat_inputs: list[Any]) -> None
+
+
+   .. py:method:: transform(data: numpy.ndarray) -> list[list[int]]
+
+      :param data: a numpy array of strings.
+
+      :returns: A list of lists of integers, where each integer is the index of a token in the tokenizer's
+                vocabulary.
+
+
+
+   .. py:method:: forward(data: Any) -> list[list[int]]
+
+

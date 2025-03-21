@@ -1,0 +1,159 @@
+cortex.optim.generative
+=======================
+
+.. py:module:: cortex.optim.generative
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/optim/generative/_lambo/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.optim.generative.LaMBO
+
+
+Package Contents
+----------------
+
+.. py:class:: LaMBO(params: torch.LongTensor, is_mutable: torch.BoolTensor, model, objective, max_num_solutions: int, num_mutations_per_step: Optional[int] = 2, max_guidance_updates: int = 16, guidance_step_size: float = 1.0, guidance_layer: str = 'trunk', kl_weight: float = 0.5, feature_attr_temp: float = 0.125, constraint_fn: Optional[Callable[[str], bool]] = None, domain_name: Optional[str] = None, exclude_initial_solution: bool = False, resample_edit_positions: bool = False)
+
+   Bases: :py:obj:`object`
+
+
+   This class implements the LaMBO-2 algorithm for optimization of discrete sequences.
+
+   https://arxiv.org/abs/2305.20009
+
+
+   .. py:attribute:: model
+
+
+   .. py:attribute:: objective
+
+
+   .. py:attribute:: max_num_solutions
+
+
+   .. py:attribute:: num_mutations_per_step
+      :value: 2
+
+
+
+   .. py:attribute:: max_guidance_updates
+      :value: 16
+
+
+
+   .. py:attribute:: guidance_step_size
+      :value: 1.0
+
+
+
+   .. py:attribute:: guidance_layer
+      :value: 'trunk'
+
+
+
+   .. py:attribute:: kl_weight
+      :value: 0.5
+
+
+
+   .. py:attribute:: feature_attr_temp
+      :value: 0.125
+
+
+
+   .. py:attribute:: constraint_fn
+      :value: None
+
+
+
+   .. py:attribute:: domain_name
+      :value: 'iterate'
+
+
+
+   .. py:attribute:: resample_edit_positions
+      :value: False
+
+
+
+   .. py:attribute:: initial_solution
+
+
+   .. py:attribute:: initial_obj_val
+
+
+   .. py:attribute:: is_mutable
+
+
+   .. py:attribute:: _step_count
+      :value: 0
+
+
+
+   .. py:attribute:: _buffer
+
+
+   .. py:attribute:: exclude_initial_solution
+      :value: False
+
+
+
+   .. py:property:: tokenizer
+
+
+   .. py:property:: tokens_to_long_tensor
+
+
+   .. py:method:: step() -> None
+
+      Each call of LaMBO.step() corresponds to one guided diffusion step
+
+
+
+   .. py:method:: _coordinate_selection(tok_idxs: torch.LongTensor, tok_embeddings: torch.FloatTensor, padding_mask: torch.BoolTensor, is_corruptible: torch.BoolTensor)
+
+      Choose edit positions (i.e. the infilling region) for diffusion.
+      If `resample_edit_positions` is True, the infilling region can change between steps.
+
+
+
+   .. py:method:: _get_latent_variables(generation_inputs: dict)
+
+
+   .. py:method:: _update_solution(trunk_outputs, activations, delta, tgt_tok_idxs, tgt_obj_vals, is_corrupted, tokenizer, non_viable_idxs)
+
+      Update the guided activations, decode out to sequence and check for improvement.
+
+
+
+   .. py:method:: _set_up_root_inputs(tgt_tok_idxs, tgt_tok_embs, tgt_padding_mask)
+
+      Set up inputs for the forward pass of each guidance update.
+      Corrupt a random subset of the positions selected previously as the infilling region.
+
+
+
+   .. py:method:: check_constraints(sample_tok_idxs)
+
+
+   .. py:method:: score_sequences(sequences)
+
+
+   .. py:method:: get_best_solutions() -> pandas.DataFrame
+
+
+   .. py:method:: decode(trunk_outputs, non_viable_idxs)
+
+

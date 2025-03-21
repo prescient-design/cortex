@@ -1,0 +1,39 @@
+cortex.model.elemental._sine_pos_encoder
+========================================
+
+.. py:module:: cortex.model.elemental._sine_pos_encoder
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.elemental._sine_pos_encoder.SinePosEncoder
+
+
+Module Contents
+---------------
+
+.. py:class:: SinePosEncoder(embed_dim: int, dropout: float = 0.0, max_len: int = 5000, batch_first: bool = False)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   Sinusoidal positional encoding for Transformer models
+
+
+   .. py:attribute:: dropout
+
+
+   .. py:attribute:: batch_first
+      :value: False
+
+
+
+   .. py:method:: forward(x: torch.Tensor) -> torch.Tensor
+
+      :param x: Tensor, shape [seq_len, batch_size, embedding_dim] or [batch_size, seq_len, embedding_dim]
+
+
+

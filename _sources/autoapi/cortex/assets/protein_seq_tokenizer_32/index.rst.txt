@@ -1,0 +1,6 @@
+cortex.assets.protein_seq_tokenizer_32
+======================================
+
+.. py:module:: cortex.assets.protein_seq_tokenizer_32
+
+
