@@ -41,7 +41,7 @@ class CorruptionProcess(ABC):
         # Set up timestep sampling distribution
         if t_base_dist is None:
             # self.t_base_dist = torch_dist.Uniform(0, 1)
-            self.t_base_dist = torch_dist.Beta(1, 3)
+            self.t_base_dist = torch_dist.Beta(3, 1)
         else:
             self.t_base_dist = t_base_dist
 
@@ -77,7 +77,7 @@ class CorruptionProcess(ABC):
 
     def timestep_to_corrupt_frac(self, timestep: int) -> float:
         assert timestep <= self.max_steps
-        if timestep == 0:
+        if timestep == self.max_steps:
             return 0.0
         return self.sqrt_alphas_cumprod[timestep - 1]
 
