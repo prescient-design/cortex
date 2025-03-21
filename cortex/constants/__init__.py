@@ -1,5 +1,6 @@
 from ._protein_constants import (
     AB_AG_COMPLEX_COL,
+    AMINO_ACID_GROUPS,
     ANTIGEN_COL,
     ANTIGEN_COMPLEX_TOKEN,
     CANON_AMINO_ACIDS,
@@ -17,6 +18,7 @@ NULL_TOKENS = ["<null_1>"]
 __all__ = [
     "AB_AG_COMPLEX_COL",
     "ALIGNMENT_GAP_TOKEN",
+    "AMINO_ACID_GROUPS",
     "ANTIGEN_COL",
     "ANTIGEN_COMPLEX_TOKEN",
     "CANON_AMINO_ACIDS",
