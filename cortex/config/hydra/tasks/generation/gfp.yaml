@@ -5,6 +5,10 @@ gfp:
   input_map:
     protein_seq: ['tokenized_seq']
   root_key: protein_seq
+  # Add BLOSUM62-based substitution corruption for data augmentation
+  corruption_process:
+    _target_: cortex.corruption.SubstitutionCorruptionProcess.from_blosum62
+  corruption_rate: 0.01  # Apply corruption to 1% of masked tokens
   data_module:
     _target_: cortex.data.data_module.TaskDataModule
     _recursive_: false
