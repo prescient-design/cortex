@@ -22,7 +22,7 @@ trainer:
   devices: 1
   # devices: 8
   # strategy: ddp
-  num_sanity_val_steps: 1
+  num_sanity_val_steps: 0
 
 
 tree:

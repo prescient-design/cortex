@@ -120,7 +120,8 @@ class SubstitutionCorruptionProcess(CorruptionProcess):
 
             # Generate substitutions based on the substitution matrix
             # For each token to corrupt, sample from its row in the substitution matrix
-            substitution_probs = self.substitution_matrix[original_tokens]
+            sub_matrix = self.substitution_matrix.to(original_tokens.device)
+            substitution_probs = sub_matrix[original_tokens]
 
             # Sample new tokens according to substitution probabilities
             new_tokens = torch.multinomial(substitution_probs, num_samples=1).squeeze(1)
