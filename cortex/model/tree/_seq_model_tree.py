@@ -140,19 +140,19 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
         if w_avg_enabled:
             self._w_avg_step_count = self._weight_average_update(self._w_avg_step_count)
 
-        # step_metrics = pd.DataFrame.from_records(step_metrics)
-        # step_metrics = step_metrics.mean().to_dict()
+        step_metrics = pd.DataFrame.from_records(step_metrics)
+        step_metrics = step_metrics.mean().to_dict()
 
-        # task_keys = set()
-        # for key in step_metrics.keys():
-        #     task_key = key.split("/")[0]
-        #     task_keys.add(task_key)
+        task_keys = set()
+        for key in step_metrics.keys():
+            task_key = key.split("/")[0]
+            task_keys.add(task_key)
 
-        # for t_key in task_keys:
-        #     task_metrics = {key: val for key, val in step_metrics.items() if key.startswith(t_key)}
-        #     batch_size = task_metrics[f"{t_key}/train_batch_size"]
-        #     del task_metrics[f"{t_key}/train_batch_size"]
-        #     self.log_dict(task_metrics, logger=True, prog_bar=True, batch_size=batch_size)
+        for t_key in task_keys:
+            task_metrics = {key: val for key, val in step_metrics.items() if key.startswith(t_key)}
+            batch_size = task_metrics[f"{t_key}/train_batch_size"]
+            del task_metrics[f"{t_key}/train_batch_size"]
+            self.log_dict(task_metrics, logger=True, prog_bar=True, batch_size=batch_size)
 
         return step_metrics
 
@@ -271,7 +271,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             task_metrics = {key: val for key, val in step_metrics.items() if key.startswith(t_key)}
             batch_size = task_metrics[f"{t_key}/val_batch_size"]
             del task_metrics[f"{t_key}/val_batch_size"]
-            self.log_dict(task_metrics, prog_bar=False, batch_size=batch_size)
+            self.log_dict(task_metrics, prog_bar=True, logger=True, batch_size=batch_size)
 
         # step_metrics = {key: sum(val) / len(val) for key, val in step_metrics.items()}
         # self.log_dict(step_metrics, prog_bar=True, batch_size=len(task_batch))
