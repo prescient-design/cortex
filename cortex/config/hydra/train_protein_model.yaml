@@ -54,6 +54,8 @@ tasks:
   generation:
     gfp:
       ensemble_size: 1
+    stable_proteins:
+      ensemble_size: 1
 
 train_on_everything: false
 linear_probing: false
