@@ -10,6 +10,7 @@ defaults:
     - protein_property/log_fluorescence
     - protein_property/stability
     - generation/gfp
+    - generation/stable_proteins
   - _self_
 
 fit:
