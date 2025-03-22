@@ -140,7 +140,8 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
         if w_avg_enabled:
             self._w_avg_step_count = self._weight_average_update(self._w_avg_step_count)
 
-        step_metrics = pd.DataFrame.from_records(step_metrics)
+        df_idx = list(range(len(step_metrics)))
+        step_metrics = pd.DataFrame.from_records(step_metrics, index=df_idx)
         step_metrics = step_metrics.mean().to_dict()
 
         task_keys = set()
@@ -155,11 +156,6 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             self.log_dict(task_metrics, logger=True, prog_bar=True, batch_size=batch_size)
 
         return step_metrics
-
-        # log metrics
-        # step_metrics = {key: sum(val) / len(val) for key, val in step_metrics.items()}
-
-        # self.log_dict(step_metrics, prog_bar=True)
 
     def training_epoch_end(self, step_metrics):
         step_metrics = pd.DataFrame.from_records(step_metrics)
@@ -272,10 +268,6 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             batch_size = task_metrics[f"{t_key}/val_batch_size"]
             del task_metrics[f"{t_key}/val_batch_size"]
             self.log_dict(task_metrics, prog_bar=True, logger=True, batch_size=batch_size)
-
-        # step_metrics = {key: sum(val) / len(val) for key, val in step_metrics.items()}
-        # self.log_dict(step_metrics, prog_bar=True, batch_size=len(task_batch))
-        # self.log_dict(step_metrics, prog_bar=True)
 
     def finetune(
         self,
