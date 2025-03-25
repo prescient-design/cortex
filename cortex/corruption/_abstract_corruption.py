@@ -45,7 +45,7 @@ class CorruptionProcess(ABC):
         else:
             self.t_base_dist = t_base_dist
 
-    def sample_timestep(self, n: Optional[int] = 1):
+    def sample_timestep(self, n: Optional[int] = 1) -> torch.Tensor:
         """Sample timestep(s) from the noise schedule.
 
         Args:
@@ -55,6 +55,8 @@ class CorruptionProcess(ABC):
         Returns:
             Int or array of timesteps.
         """
+        if n is None:
+            n = 1
         base_samples = self.t_base_dist.sample((n,))
         return torch.round(self.max_steps * base_samples).int()
 
@@ -70,16 +72,27 @@ class CorruptionProcess(ABC):
         """
         timesteps = self.sample_timestep(n)
 
-        if n is None:
+        if n is None or n == 1:
             return torch.tensor([self.timestep_to_corrupt_frac(timesteps)])
+        
+        return torch.tensor(self.timestep_to_corrupt_frac(timesteps))
 
-        return torch.tensor([self.timestep_to_corrupt_frac(t) for t in timesteps])
-
-    def timestep_to_corrupt_frac(self, timestep: int) -> float:
-        assert timestep <= self.max_steps
-        if timestep == 0:
-            return 0.0
-        return self.sqrt_alphas_cumprod[timestep - 1]
+    def timestep_to_corrupt_frac(self, timestep: Union[int, torch.Tensor]) -> float:
+        if isinstance(timestep, int) or timestep.numel() == 1:
+            assert timestep <= self.max_steps
+            if timestep == 0:
+                return 0.0
+            return self.sqrt_alphas_cumprod[timestep - 1]
+        else:
+            assert all(timestep <= self.max_steps)
+            timesteps_array = np.array(timestep)
+            # Handle zero timesteps (if any)
+            mask = timesteps_array > 0
+            result = np.zeros(len(timestep))
+            # Apply the conversion only on non-zero timesteps
+            if np.any(mask):
+                result[mask] = self.sqrt_alphas_cumprod[timesteps_array[mask] - 1]
+            return result
 
     def __call__(
         self,
