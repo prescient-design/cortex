@@ -1,14 +1,13 @@
+boto3
 botorch >= 0.9.4
 cachetools
 edlib
-fastapi==0.88.0
 hydra-core >= 1.2.0
-lightning>=2.5.1,<2.6
-numpy<2
+lightning>=2.0
+numpy
 omegaconf
 pandas
 pyarrow
-pydantic<1.8
 pytorch_warmup
 s3fs
 tabulate

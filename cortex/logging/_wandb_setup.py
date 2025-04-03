@@ -1,4 +1,5 @@
 from typing import MutableMapping
+import uuid
 
 import wandb
 from omegaconf import DictConfig, OmegaConf
@@ -30,7 +31,12 @@ def wandb_setup(cfg: DictConfig):
         mode=cfg.wandb_mode,
         group=cfg.exp_name,
     )
-    cfg["job_name"] = wandb.run.name
+
+    if cfg["wandb_mode"] == "online":
+        cfg["job_name"] = wandb.run.name
+    else:
+        cfg["job_name"] = uuid.uuid4().hex[:8]
+
     cfg["__version__"] = cortex.__version__
     log_cfg = flatten_config(OmegaConf.to_container(cfg, resolve=True))
     wandb.config.update(log_cfg)

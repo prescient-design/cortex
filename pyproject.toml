@@ -60,3 +60,6 @@ ignore = [
 "__init__.py" = [
     "F401", # MODULE IMPORTED BUT UNUSED
 ]
+
+[tool.uv]
+cache-keys = [{file = "requirements.in"}, {file = "requirements-dev.in"}]
