@@ -1,7 +1,7 @@
 [project]
 name = "pytorch-cortex"
 dynamic = ["version"]
-readme = "README.rst"
+readme = "README.md"
 description = "A modular architecture for deep learning systems."
 authors = [{name = "Samuel Stanton", email = "stanton.samuel@gene.com"}]
 classifiers=[
