@@ -17,22 +17,10 @@ Rather than tack on auxiliary abstractions to a single input --> single task mod
 
 Note: conda/mamba are no longer actively supported. We recommend using `uv` for package management.
 
-Note: Support for Python versions > 3.10 is blocked by the current dependency on `pytorch-lightning==1.9.5`.
-
 ```bash
-uv venv -n ~/.venv/cortex --python 3.10
+uv sync
 source ~/.venv/cortex/bin/activate
-uv pip install pytorch-cortex
 ```
-
-
-If you have a package version issue we provide pinned versions of all dependencies in `requirements.txt`.
-To update the frozen dependencies run
-
-```bash
-uv pip freeze > requirements.txt
-```
-
 
 ## Running
 
@@ -57,14 +45,14 @@ Contributions are welcome!
 ### Install dev requirements and pre-commit hooks
 
 ```bash
-python -m pip install -r requirements-dev.in
-pre-commit install
+uv sync --dev
+uv run pre-commit install
 ```
 
 ### Testing
 
 ```bash
-python -m pytest -v --cov-report term-missing --cov=./cortex ./tests
+uv run pytest -v --cov-report term-missing --cov=./cortex ./tests
 ```
 
 ### Build and browse docs locally
