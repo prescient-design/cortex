@@ -64,3 +64,17 @@ def test_sample_corrupt_frac_with_n():
     more_samples = corruption_process.sample_corrupt_frac(n=100)
     assert more_samples.shape[0] == 100
     assert more_samples.unique().shape[0] > 1, "Sample corrupt_frac values should vary"
+
+
+def test_tdist_sampling():
+    """Test that MaskCorruptionProcess accepts and uses a provided timestep distribution."""
+    corruption_process = MaskCorruptionProcess(t_base_dist=torch.distributions.Beta(7, 1))
+
+    # Verify that different elements can have different values
+    # (This is probabilistic, but with high probability values should differ)
+    more_samples = corruption_process.sample_corrupt_frac(n=100)
+    assert more_samples.shape[0] == 100
+    assert more_samples.unique().shape[0] > 1, "Sample corrupt_frac values should vary"
+
+    # Verify that the distribution is correct
+    assert more_samples.mean() < 0.5, "Expected mean corruption to be less than 0.5"
