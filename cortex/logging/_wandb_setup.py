@@ -1,5 +1,5 @@
-from typing import MutableMapping
 import uuid
+from typing import MutableMapping
 
 import wandb
 from omegaconf import DictConfig, OmegaConf
