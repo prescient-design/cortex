@@ -89,7 +89,6 @@ pyro-ppl==1.9.1
 pytest==8.3.5
 pytest-cov==6.1.0
 python-dateutil==2.9.0.post0
--e file:///homefs/home/stantos5/code/cortex
 pytorch-lightning==2.5.1
 pytorch-warmup==0.2.0
 pytz==2025.2
