@@ -17,13 +17,13 @@ class CorruptionProcess(ABC):
     """
 
     def __init__(
-            self,
-            schedule: str = "cosine",
-            max_steps: int = 1000,
-            t_base_dist: Optional[torch_dist.Distribution] = None,
-            *args,
-            **kwargs,
-        ):        
+        self,
+        schedule: str = "cosine",
+        max_steps: int = 1000,
+        t_base_dist: Optional[torch_dist.Distribution] = None,
+        *args,
+        **kwargs,
+    ):
         betas = get_named_beta_schedule(schedule, max_steps)
 
         # Use float64 for accuracy.
@@ -74,7 +74,7 @@ class CorruptionProcess(ABC):
 
         if n is None or n == 1:
             return torch.tensor([self.timestep_to_corrupt_frac(timesteps)])
-        
+
         return torch.tensor(self.timestep_to_corrupt_frac(timesteps))
 
     def timestep_to_corrupt_frac(self, timestep: Union[int, torch.Tensor]) -> float:
