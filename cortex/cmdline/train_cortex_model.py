@@ -76,6 +76,7 @@ def execute(cfg):
         model,
         train_dataloaders=model.get_dataloader(split="train"),
         val_dataloaders=model.get_dataloader(split="val"),
+        ckpt_path=ckpt_file,
     )
 
     # save model

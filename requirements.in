@@ -3,13 +3,12 @@ cachetools
 edlib
 fastapi==0.88.0
 hydra-core >= 1.2.0
-lightning == 1.9.5
+lightning>=2.5.1,<2.6
 numpy<2
 omegaconf
 pandas
 pyarrow
 pydantic<1.8
-pytorch-lightning == 1.9.5
 pytorch_warmup
 s3fs
 tabulate

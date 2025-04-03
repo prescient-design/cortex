@@ -8,8 +8,8 @@ import numpy as np
 import pandas as pd
 import torch
 from botorch.models.transforms.outcome import OutcomeTransform
+from lightning.pytorch.utilities.combined_loader import CombinedLoader
 from omegaconf import DictConfig, OmegaConf
-from pytorch_lightning.trainer.supporters import CombinedLoader
 from torch import nn
 
 from cortex.model import online_weight_update_
@@ -47,6 +47,10 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
         self._eval_state_dict = None
         self._w_avg_step_count = 1
 
+        # for accumulating step outputs in Lightning 2.x
+        self.training_step_outputs = []
+        self.validation_step_outputs = []
+
         # decoupled multi-task training requires manual optimization
         self.automatic_optimization = False
         self.save_hyperparameters(
@@ -82,7 +86,6 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             else:
                 raise ValueError(f"Invalid split {split}")
 
-        # change val to max_size when lightning upgraded to >1.9.5
         mode = "min_size" if split == "train" else "max_size_cycle"
         return CombinedLoader(loaders, mode=mode)
 
@@ -132,6 +135,10 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
         step_metrics.update(
             {f"{task_key}/train_batch_size": np.mean(batch_sizes) for task_key, batch_sizes in batch_size.items()}
         )
+
+        # Append metrics to accumulate across steps (for Lightning 2.x)
+        self.training_step_outputs.append(step_metrics)
+
         return step_metrics
 
     def training_step_end(self, step_metrics):
@@ -157,8 +164,9 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
 
         return step_metrics
 
-    def training_epoch_end(self, step_metrics):
-        step_metrics = pd.DataFrame.from_records(step_metrics)
+    def on_train_epoch_end(self):
+        # In Lightning 2.x, we need to process the accumulated outputs manually
+        step_metrics = pd.DataFrame.from_records(self.training_step_outputs)
         step_metrics = step_metrics.mean().to_dict()
 
         task_keys = set()
@@ -171,6 +179,9 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             batch_size = task_metrics[f"{t_key}/train_batch_size"]
             del task_metrics[f"{t_key}/train_batch_size"]
             self.log_dict(task_metrics, prog_bar=True, batch_size=batch_size)
+
+        # Clear the outputs list
+        self.training_step_outputs.clear()
 
     def _weight_average_update(
         self,
@@ -252,10 +263,14 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             )
             step_metrics[f"{task_key}/val_batch_size"] = len(task_batch)
 
+        # Append metrics to accumulate across steps (for Lightning 2.x)
+        self.validation_step_outputs.append(step_metrics)
+
         return step_metrics
 
-    def validation_epoch_end(self, step_metrics):
-        step_metrics = pd.DataFrame.from_records(step_metrics)
+    def on_validation_epoch_end(self):
+        # In Lightning 2.x, we need to process the accumulated outputs manually
+        step_metrics = pd.DataFrame.from_records(self.validation_step_outputs)
         step_metrics = step_metrics.mean().to_dict()
 
         task_keys = set()
@@ -268,6 +283,9 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             batch_size = task_metrics[f"{t_key}/val_batch_size"]
             del task_metrics[f"{t_key}/val_batch_size"]
             self.log_dict(task_metrics, prog_bar=True, logger=True, batch_size=batch_size)
+
+        # Clear the outputs list
+        self.validation_step_outputs.clear()
 
     def finetune(
         self,
