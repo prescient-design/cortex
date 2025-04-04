@@ -64,7 +64,9 @@ def execute(cfg):
         ckpt_file = None
         ckpt_cfg = None
 
-    if os.path.exists(ckpt_file) and cfg.save_ckpt:
+    ckpt_exists = os.path.exists(ckpt_file)
+
+    if ckpt_exists and cfg.save_ckpt:
         msg = f"checkpoint already exists at {ckpt_file} and will be overwritten!"
         warnings.warn(msg, UserWarning, stacklevel=2)
 
@@ -76,6 +78,7 @@ def execute(cfg):
         model,
         train_dataloaders=model.get_dataloader(split="train"),
         val_dataloaders=model.get_dataloader(split="val"),
+        ckpt_path=ckpt_file if ckpt_exists else None,
     )
 
     # save model

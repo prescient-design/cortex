@@ -81,7 +81,7 @@ class DDPStandardize(Standardize):
                     f"Y.shape[:-2]={Y.shape[:-2]}."
                 )
             if Y.size(-1) != self._m:
-                raise RuntimeError(f"Wrong output dimension. Y.size(-1) is {Y.size(-1)}; expected " f"{self._m}.")
+                raise RuntimeError(f"Wrong output dimension. Y.size(-1) is {Y.size(-1)}; expected {self._m}.")
             stdvs = Y.std(dim=-2, keepdim=True)
             stdvs = stdvs.where(stdvs >= self._min_stdv, torch.full_like(stdvs, 1.0))
             means = Y.mean(dim=-2, keepdim=True)
