@@ -135,7 +135,7 @@ def test_create_blosum62_transition_matrix():
 
     # Bins with higher BLOSUM scores should have higher average probabilities
     for i in range(1, len(binned_probs)):
-        assert binned_probs[i] >= binned_probs[i - 1], f"Bin {i} avg prob not >= bin {i-1}"
+        assert binned_probs[i] >= binned_probs[i - 1], f"Bin {i} avg prob not >= bin {i - 1}"
 
     # Check that similar amino acids have higher transition probabilities
     # using Dayhoff's classification

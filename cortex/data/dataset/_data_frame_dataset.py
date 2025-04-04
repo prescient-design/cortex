@@ -53,9 +53,7 @@ class DataFrameDataset(Dataset):
                 remove_archive=True,
             )
         else:
-            raise ValueError(
-                f"Dataset not found at {path}. " "If `download` is `True`, the dataset will be downloaded."
-            )
+            raise ValueError(f"Dataset not found at {path}. If `download` is `True`, the dataset will be downloaded.")
         self._data = self._read_data(path, dedup=dedup, train=train, random_seed=random_seed, **kwargs)
 
     def _read_data(self, path: str, dedup: bool, train: bool, random_seed: int, **kwargs: Any) -> DataFrame:
