@@ -1,0 +1,147 @@
+cortex.model.leaf._regressor_leaf
+=================================
+
+.. py:module:: cortex.model.leaf._regressor_leaf
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.leaf._regressor_leaf.RegressorLeafOutput
+   cortex.model.leaf._regressor_leaf.RegressorLeaf
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.model.leaf._regressor_leaf.check_scale
+   cortex.model.leaf._regressor_leaf.diag_gaussian_nll
+   cortex.model.leaf._regressor_leaf.diag_gaussian_cumulant
+   cortex.model.leaf._regressor_leaf.diag_natural_gaussian_nll
+   cortex.model.leaf._regressor_leaf.diag_natural_gaussian_kl_divergence
+   cortex.model.leaf._regressor_leaf.inv_softplus
+   cortex.model.leaf._regressor_leaf.format_regressor_ensemble_output
+
+
+Module Contents
+---------------
+
+.. py:function:: check_scale(scales: torch.Tensor) -> bool
+
+   Check that scale factors are positive.
+
+
+.. py:function:: diag_gaussian_nll(loc, scale, targets)
+
+.. py:function:: diag_gaussian_cumulant(canon_param)
+
+.. py:function:: diag_natural_gaussian_nll(canon_param, targets)
+
+.. py:function:: diag_natural_gaussian_kl_divergence(canon_param_p, canon_param_q)
+
+.. py:function:: inv_softplus(x)
+
+.. py:class:: RegressorLeafOutput
+
+   Bases: :py:obj:`cortex.model.leaf.LeafNodeOutput`
+
+
+   .. py:attribute:: loc
+      :type:  torch.Tensor
+
+
+   .. py:attribute:: scale
+      :type:  torch.Tensor
+
+
+   .. py:attribute:: canon_param
+      :type:  Optional[torch.Tensor]
+      :value: None
+
+
+
+.. py:class:: RegressorLeaf(in_dim: int, out_dim: int, branch_key: str, num_layers: int = 0, outcome_transform: Optional[botorch.models.transforms.outcome.OutcomeTransform] = None, label_smoothing: float = 0.0, nominal_label_var: float = 0.25**2, var_lb: float = 0.0001, root_key: Optional[str] = None)
+
+   Bases: :py:obj:`cortex.model.leaf.LeafNode`
+
+
+   .. py:attribute:: in_dim
+
+
+   .. py:attribute:: out_dim
+
+
+   .. py:attribute:: branch_key
+
+
+   .. py:attribute:: encoder
+
+
+   .. py:attribute:: loss_fn
+
+
+   .. py:attribute:: outcome_transform
+      :value: None
+
+
+
+   .. py:attribute:: label_smoothing
+      :value: 0.0
+
+
+
+   .. py:attribute:: root_key
+      :value: None
+
+
+
+   .. py:attribute:: nominal_label_var
+      :value: 0.0625
+
+
+
+   .. py:attribute:: var_lb
+      :value: 0.0001
+
+
+
+   .. py:method:: forward(branch_outputs: cortex.model.branch.BranchNodeOutput) -> RegressorLeafOutput
+
+
+   .. py:method:: sample(pooled_features, num_samples)
+
+
+   .. py:method:: _preprocess_targets(targets, device, dtype)
+
+
+   .. py:method:: transform_output(nn_out: torch.Tensor) -> RegressorLeafOutput
+
+      Return mean and std. dev. of diagonal Gaussian distribution
+      :param nn_out: torch.Tensor
+
+      :returns: {'loc': torch.Tensor, 'scale': torch.Tensor}
+      :rtype: outputs
+
+
+
+   .. py:method:: loss_from_canon_param(canon_param: torch.Tensor, targets: torch.Tensor, alpha: Union[float, torch.Tensor] = 0.0) -> torch.Tensor
+
+
+   .. py:method:: loss(leaf_outputs: RegressorLeafOutput, root_outputs, targets, *args, **kwargs)
+
+
+   .. py:method:: evaluate(outputs: RegressorLeafOutput, targets)
+
+
+   .. py:method:: initialize() -> None
+
+      initialize leaf weights
+
+
+
+.. py:function:: format_regressor_ensemble_output(leaf_outputs: list[RegressorLeafOutput], task_key: str) -> dict
+

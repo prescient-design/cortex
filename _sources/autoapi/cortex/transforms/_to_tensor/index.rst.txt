@@ -1,0 +1,46 @@
+cortex.transforms._to_tensor
+============================
+
+.. py:module:: cortex.transforms._to_tensor
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.transforms._to_tensor.ToTensor
+
+
+Module Contents
+---------------
+
+.. py:class:: ToTensor(padding_value: Optional[int] = None, dtype: torch.dtype = torch.long)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   Convert input to torch tensor
+
+   :param padding_value: Pad value to make each input in the batch of length equal to the longest sequence in the batch.
+   :type padding_value: Optional[int]
+   :param dtype: :class:`torch.dtype` of output tensor
+   :type dtype: :class:`torch.dtype`
+
+
+   .. py:attribute:: padding_value
+      :value: None
+
+
+
+   .. py:attribute:: dtype
+
+
+   .. py:method:: forward(input: Any) -> torch.Tensor
+
+      :param input: Sequence or batch of token ids
+      :type input: Union[List[int], List[List[int]]]
+      :rtype: Tensor
+
+
+
