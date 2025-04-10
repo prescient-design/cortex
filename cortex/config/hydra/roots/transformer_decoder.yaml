@@ -1,0 +1,12 @@
+# Transformer Decoder Root configuration
+
+_target_: cortex.model.root.TransformerDecoderRoot
+tokenizer_transform: ???  # Must be provided, instance of HuggingFaceTokenizerTransform
+model_name_or_path: ???  # Must be provided, Hugging Face model identifier or path
+max_len: 512  # Maximum sequence length for padding/truncation
+use_pretrained: true  # Whether to use pre-trained weights from HF
+attn_implementation: "sdpa"  # Attention implementation ("sdpa", "flash_attention_2", "eager")
+config_overrides: null  # Optional overrides if use_pretrained=false
+corruption_process: null  # Optional corruption process for masked language modeling
+train_transforms: null  # Optional transforms applied only during training
+eval_transforms: null  # Optional transforms applied only during evaluation

@@ -1,0 +1,13 @@
+# Transformer Encoder Branch configuration
+
+_target_: cortex.model.branch.TransformerEncoderBranch
+in_dim: ???  # Must be provided, should match trunk output dimension
+out_dim: ???  # Must be provided, output dimension of the branch
+num_layers: 2  # Number of transformer encoder layers
+nhead: 8  # Number of attention heads
+dim_feedforward: null  # Optional, if null will be set to 4 * in_dim
+dropout: 0.1  # Dropout probability
+activation: "relu"  # Activation function for the transformer
+layer_norm_eps: 1.0e-5  # Epsilon value for layer normalization
+batch_first: true  # Input tensors have batch dimension first (batch, seq, features)
+pooling_type: "mean"  # Pooling strategy for sequence features ("mean" or "weighted_mean")
