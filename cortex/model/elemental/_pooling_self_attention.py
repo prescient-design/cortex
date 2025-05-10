@@ -13,8 +13,7 @@ class PoolingSelfAttention(nn.Module):
         self.head_dim = embed_dim // num_heads
         self.num_heads = num_heads
 
-    def forward(self, inputs: tuple[Tensor, Tensor]) -> tuple[Tensor, Tensor]:
-        x, padding_mask = inputs
+    def forward(self, x: Tensor, padding_mask: Tensor) -> tuple[Tensor, Tensor]:
         seq_len = x.size(-2)
         queries, keys, values = self.c_attn(x).chunk(3, dim=-1)
 
@@ -27,7 +26,7 @@ class PoolingSelfAttention(nn.Module):
         queries = queries.sum(-2, keepdim=True) / attn_mask.sum(-2, keepdim=True)
 
         # attn_mask (*batch_shape, 1, 1, num_keys)
-        attn_mask = padding_mask[..., None, None, :]
+        attn_mask = padding_mask[..., None, None, :].contiguous()
 
         res = nn.functional.scaled_dot_product_attention(
             queries,
@@ -38,6 +37,6 @@ class PoolingSelfAttention(nn.Module):
             is_causal=False,
         )
 
-        res = res.transpose(-2, -3).flatten(start_dim=-2)
+        res = res.transpose(-2, -3).contiguous().flatten(start_dim=-2)
         res = self.dropout(res)[..., 0, :]  # drop 1D query dim
         return res

@@ -6,3 +6,4 @@ protein_property:
   num_heads: 4
   dropout_prob: ${dropout_prob}
   is_causal: false
+  pooling_type: attention

@@ -2,9 +2,9 @@ defaults:
   - general_settings: default
   - logging: default
   - model_globals: default
-  - roots: [protein_seq]
+  - roots: [protein_seq_transformer]
   - trunk: default
-  - branches: [protein_property, generation]
+  - branches: [protein_property_transformer, generation]
   - tree: protein_model
   - tasks:
     - protein_property/log_fluorescence
@@ -34,7 +34,7 @@ tree:
     weight_averaging: null
     optimizer:
       _target_: torch.optim.Adam
-      lr: 5e-3
+      lr: 6e-4
       weight_decay: 0.
       betas: [0.99, 0.999]
       fused: false

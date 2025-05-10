@@ -15,14 +15,15 @@ class BidirectionalSelfAttention(nn.Module):
 
     def forward(self, inputs: tuple[Tensor, Tensor]) -> tuple[Tensor, Tensor]:
         x, padding_mask = inputs
-        seq_len = x.size(-2)
-        queries, keys, values = self.c_attn(x).chunk(3, dim=-1)
+        batch_size, seq_len, embed_dim = x.shape
+        queries, keys, values = self.c_attn(x).split(embed_dim, dim=-1)
 
         queries = queries.view(-1, seq_len, self.num_heads, self.head_dim).transpose(-2, -3)
         keys = keys.view(-1, seq_len, self.num_heads, self.head_dim).transpose(-2, -3)
         values = values.view(-1, seq_len, self.num_heads, self.head_dim).transpose(-2, -3)
 
         attn_mask = padding_mask[..., None, :, None]
+        attn_mask = attn_mask.expand(-1, -1, -1, seq_len).contiguous()
 
         res = nn.functional.scaled_dot_product_attention(
             queries,
@@ -33,5 +34,5 @@ class BidirectionalSelfAttention(nn.Module):
             is_causal=False,
         )
 
-        res = res.transpose(-2, -3).flatten(start_dim=-2)
+        res = res.transpose(-2, -3).contiguous().flatten(start_dim=-2)
         return self.dropout(res), padding_mask
