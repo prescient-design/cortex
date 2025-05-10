@@ -1,5 +1,5 @@
 protein_property:
-  _target_: cortex.model.branch.TransformerEncoderBranch
+  _target_: cortex.model.branch.TransformerBranch
   out_dim: 8
   channel_dim: ${feature_dim}
   num_blocks: 1
