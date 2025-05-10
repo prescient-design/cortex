@@ -1,7 +1,6 @@
 from torch import Tensor, nn
 
-from cortex.model.elemental import BidirectionalSelfAttention
-from cortex.model.elemental import MLP
+from cortex.model.elemental import MLP, BidirectionalSelfAttention
 
 
 class TransformerEncoderBlock(nn.Module):
@@ -15,7 +14,9 @@ class TransformerEncoderBlock(nn.Module):
     ):
         super().__init__()
         self.ln_1 = nn.LayerNorm(in_channels, bias=bias)
-        self.attn = BidirectionalSelfAttention(num_heads=num_heads, embed_dim=in_channels, dropout_p=dropout_p, bias=bias)
+        self.attn = BidirectionalSelfAttention(
+            num_heads=num_heads, embed_dim=in_channels, dropout_p=dropout_p, bias=bias
+        )
         self.ln_2 = nn.LayerNorm(in_channels, bias=bias)
         self.mlp = MLP(in_channels, out_channels, bias=bias, dropout_p=dropout_p)
 
