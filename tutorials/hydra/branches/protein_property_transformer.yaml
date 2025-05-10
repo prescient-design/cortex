@@ -4,3 +4,4 @@ protein_property:
   channel_dim: ${feature_dim}
   num_blocks: 1
   num_heads: 4
+  is_causal: false

@@ -1,9 +1,9 @@
 from torch import Tensor, nn
 
-from cortex.model.elemental import MLP, BidirectionalSelfAttention
+from cortex.model.elemental import MLP, BidirectionalSelfAttention, CausalSelfAttention
 
 
-class TransformerEncoderBlock(nn.Module):
+class TransformerBlock(nn.Module):
     def __init__(
         self,
         in_channels: int,
@@ -11,12 +11,18 @@ class TransformerEncoderBlock(nn.Module):
         num_heads: int = 4,
         bias: bool = False,
         dropout_p: float = 0.0,
+        is_causal: bool = False,
     ):
         super().__init__()
         self.ln_1 = nn.LayerNorm(in_channels, bias=bias)
-        self.attn = BidirectionalSelfAttention(
-            num_heads=num_heads, embed_dim=in_channels, dropout_p=dropout_p, bias=bias
-        )
+
+        if is_causal:
+            self.attn = CausalSelfAttention(num_heads=num_heads, embed_dim=in_channels, dropout_p=dropout_p, bias=bias)
+        else:
+            self.attn = BidirectionalSelfAttention(
+                num_heads=num_heads, embed_dim=in_channels, dropout_p=dropout_p, bias=bias
+            )
+
         self.ln_2 = nn.LayerNorm(in_channels, bias=bias)
         self.mlp = MLP(in_channels, out_channels, bias=bias, dropout_p=dropout_p)
 

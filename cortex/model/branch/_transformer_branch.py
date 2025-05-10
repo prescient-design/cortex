@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import torch
 from torch import nn
 
-from cortex.model.block import TransformerEncoderBlock
+from cortex.model.block import TransformerBlock
 from cortex.model.branch import BranchNode, BranchNodeOutput
 from cortex.model.elemental import (
     Apply,
@@ -16,12 +16,12 @@ from cortex.model.trunk import PaddedTrunkOutput
 
 
 @dataclass
-class TransformerEncoderBranchOutput(BranchNodeOutput):
+class TransformerBranchOutput(BranchNodeOutput):
     branch_mask: torch.Tensor
     pooled_features: torch.Tensor
 
 
-class TransformerEncoderBranch(BranchNode):
+class TransformerBranch(BranchNode):
     """
     Branch node which transforms aggregated trunk features to task branch specific features
     """
@@ -33,6 +33,7 @@ class TransformerEncoderBranch(BranchNode):
         channel_dim: int = 64,
         num_blocks: int = 2,
         num_heads: int = 5,
+        is_causal: bool = False,
         dropout_prob: float = 0.0,
         pooling_type: str = "mean",
         **kwargs,
@@ -53,17 +54,20 @@ class TransformerEncoderBranch(BranchNode):
             # conv layers expect inputs with shape (batch_size, input_dim, num_tokens)
             encoder_modules = []
 
+        block_kwargs = {
+            "num_heads": num_heads,
+            "is_causal": is_causal,
+            "dropout_p": dropout_prob,
+        }
+
         if num_blocks == 1:
-            encoder_modules.append(TransformerEncoderBlock(in_dim, out_dim, num_heads, dropout_p=dropout_prob))
+            encoder_modules.append(TransformerBlock(in_dim, out_dim, **block_kwargs))
         elif num_blocks > 1:
-            encoder_modules.append(TransformerEncoderBlock(in_dim, channel_dim, num_heads, dropout_p=dropout_prob))
+            encoder_modules.append(TransformerBlock(in_dim, channel_dim, **block_kwargs))
             encoder_modules.extend(
-                [
-                    TransformerEncoderBlock(channel_dim, channel_dim, num_heads, dropout_p=dropout_prob)
-                    for _ in range(num_blocks - 2)
-                ]
+                [TransformerBlock(channel_dim, channel_dim, **block_kwargs) for _ in range(num_blocks - 2)]
             )
-            encoder_modules.append(TransformerEncoderBlock(channel_dim, out_dim, num_heads, dropout_p=dropout_prob))
+            encoder_modules.append(TransformerBlock(channel_dim, out_dim, **block_kwargs))
 
         self.encoder = nn.Sequential(*encoder_modules)
         if pooling_type == "mean":
@@ -76,7 +80,7 @@ class TransformerEncoderBranch(BranchNode):
     def forward(
         self,
         trunk_outputs: PaddedTrunkOutput,
-    ) -> TransformerEncoderBranchOutput:
+    ) -> TransformerBranchOutput:
         """
         Args:
             trunk_outputs: {'trunk_features': torch.Tensor, 'padding_mask': torch.Tensor}
@@ -89,7 +93,7 @@ class TransformerEncoderBranch(BranchNode):
         branch_features, branch_mask = self.encoder((trunk_features, padding_mask.to(trunk_features)))
         pooled_features = self.pooling_op(branch_features, branch_mask)
 
-        branch_outputs = TransformerEncoderBranchOutput(
+        branch_outputs = TransformerBranchOutput(
             branch_features=branch_features.contiguous(),
             branch_mask=branch_mask,
             pooled_features=pooled_features,

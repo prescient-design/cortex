@@ -1,5 +1,5 @@
 protein_seq:
-  _target_: cortex.model.root.TransformerEncoderRoot
+  _target_: cortex.model.root.TransformerRoot
   corruption_process:
     _target_: cortex.corruption.MaskCorruptionProcess
   tokenizer_transform:
@@ -12,6 +12,7 @@ protein_seq:
   channel_dim: ${channel_dim}
   num_blocks: 2
   num_heads: 4
+  is_causal: false
   dropout_prob: ${dropout_prob}
   pos_encoding: true
   train_transforms: null

@@ -3,7 +3,7 @@ import torch
 
 from cortex.constants import COMPLEX_SEP_TOKEN
 from cortex.corruption import MaskCorruptionProcess
-from cortex.model.root import TransformerEncoderRoot, TransformerEncoderRootOutput
+from cortex.model.root import TransformerRoot, TransformerRootOutput
 from cortex.tokenization import ProteinSequenceTokenizerFast
 from cortex.transforms import HuggingFaceTokenizerTransform
 
@@ -14,6 +14,7 @@ def test_transformer_encoder_root():
     embed_dim = 12
     channel_dim = 12
     num_heads = 3
+    is_causal = False
     num_blocks = 7
 
     max_seq_len = 13
@@ -21,7 +22,7 @@ def test_transformer_encoder_root():
     pos_encoding = True
     tokenizer = ProteinSequenceTokenizerFast()
 
-    root_node = TransformerEncoderRoot(
+    root_node = TransformerRoot(
         tokenizer_transform=HuggingFaceTokenizerTransform(tokenizer),
         max_len=max_seq_len,
         out_dim=out_dim,
@@ -29,6 +30,7 @@ def test_transformer_encoder_root():
         channel_dim=channel_dim,
         num_blocks=num_blocks,
         num_heads=num_heads,
+        is_causal=is_causal,
         dropout_prob=dropout_prob,
         pos_encoding=pos_encoding,
     )
@@ -41,7 +43,7 @@ def test_transformer_encoder_root():
         ]
     )
     root_output = root_node(seq_array)
-    assert isinstance(root_output, TransformerEncoderRootOutput)
+    assert isinstance(root_output, TransformerRootOutput)
     root_features = root_output.root_features
     padding_mask = root_output.padding_mask
 
@@ -59,18 +61,20 @@ def test_transformer_encoder_root_with_per_element_corrupt_frac():
     embed_dim = 12
     channel_dim = 12
     num_heads = 3
+    is_causal = False
     max_seq_len = 13
     tokenizer = ProteinSequenceTokenizerFast()
 
     # Create a root node with corruption process
     corruption_process = MaskCorruptionProcess()
-    root_node = TransformerEncoderRoot(
+    root_node = TransformerRoot(
         tokenizer_transform=HuggingFaceTokenizerTransform(tokenizer),
         max_len=max_seq_len,
         out_dim=out_dim,
         embed_dim=embed_dim,
         channel_dim=channel_dim,
         num_heads=num_heads,
+        is_causal=is_causal,
         corruption_process=corruption_process,
     )
 
@@ -120,3 +124,49 @@ def test_transformer_encoder_root_with_per_element_corrupt_frac():
     # Values should be between 0 and 1
     assert torch.all(root_output3.corrupt_frac >= 0.0)
     assert torch.all(root_output3.corrupt_frac <= 1.0)
+
+
+def test_transformer_decoder_root():
+    batch_size = 2
+    out_dim = 12
+    embed_dim = 12
+    channel_dim = 12
+    num_heads = 3
+    is_causal = True
+    num_blocks = 7
+
+    max_seq_len = 13
+    dropout_prob = 0.125
+    pos_encoding = True
+    tokenizer = ProteinSequenceTokenizerFast()
+
+    root_node = TransformerRoot(
+        tokenizer_transform=HuggingFaceTokenizerTransform(tokenizer),
+        max_len=max_seq_len,
+        out_dim=out_dim,
+        embed_dim=embed_dim,
+        channel_dim=channel_dim,
+        num_blocks=num_blocks,
+        num_heads=num_heads,
+        is_causal=is_causal,
+        dropout_prob=dropout_prob,
+        pos_encoding=pos_encoding,
+    )
+
+    # src_tok_idxs = torch.randint(0, vocab_size, (batch_size, max_seq_len))
+    seq_array = np.array(
+        [
+            f"{COMPLEX_SEP_TOKEN} A V {COMPLEX_SEP_TOKEN} A V {COMPLEX_SEP_TOKEN} A V C C",
+            f"{COMPLEX_SEP_TOKEN} A V {COMPLEX_SEP_TOKEN} A V {COMPLEX_SEP_TOKEN} A V C C",
+        ]
+    )
+    root_output = root_node(seq_array)
+    assert isinstance(root_output, TransformerRootOutput)
+    root_features = root_output.root_features
+    padding_mask = root_output.padding_mask
+
+    assert torch.is_tensor(root_features)
+    assert torch.is_tensor(padding_mask)
+
+    assert root_features.size() == torch.Size((batch_size, max_seq_len, out_dim))
+    assert padding_mask.size() == torch.Size((batch_size, max_seq_len))

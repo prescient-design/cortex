@@ -8,14 +8,14 @@ import torch
 from torch import LongTensor, nn
 
 from cortex.corruption import CorruptionProcess, GaussianCorruptionProcess, MaskCorruptionProcess
-from cortex.model.block import TransformerEncoderBlock
+from cortex.model.block import TransformerBlock
 from cortex.model.elemental import SinePosEncoder
 from cortex.model.root import RootNode
 from cortex.transforms import HuggingFaceTokenizerTransform, PadTransform, ToTensor
 
 
 @dataclass
-class TransformerEncoderRootOutput:
+class TransformerRootOutput:
     """Output of TransforerEncoderRoot."""
 
     root_features: torch.Tensor
@@ -27,7 +27,7 @@ class TransformerEncoderRootOutput:
     is_corrupted: Optional[torch.Tensor] = None
 
 
-class TransformerEncoderRoot(RootNode):
+class TransformerRoot(RootNode):
     """
     A root node transforming an array of discrete sequences to an array of continuous sequence embeddings
     """
@@ -41,6 +41,7 @@ class TransformerEncoderRoot(RootNode):
         channel_dim: int = 256,
         num_blocks: int = 2,
         num_heads: int = 4,
+        is_causal: bool = False,
         dropout_prob: float = 0.0,
         pos_encoding: bool = True,
         train_transforms=None,
@@ -69,17 +70,17 @@ class TransformerEncoderRoot(RootNode):
             encoder_modules = []
             resid_block_kwargs = {
                 "num_heads": num_heads,
+                "dropout_p": dropout_prob,
+                "is_causal": is_causal,
             }
             if num_blocks == 1:
-                encoder_modules.append(
-                    TransformerEncoderBlock(embed_dim, out_dim, dropout_p=dropout_prob, **resid_block_kwargs)
-                )
+                encoder_modules.append(TransformerBlock(embed_dim, out_dim, **resid_block_kwargs))
             else:
-                encoder_modules.append(TransformerEncoderBlock(embed_dim, channel_dim, **resid_block_kwargs))
+                encoder_modules.append(TransformerBlock(embed_dim, channel_dim, **resid_block_kwargs))
 
                 encoder_modules.extend(
                     [
-                        TransformerEncoderBlock(
+                        TransformerBlock(
                             channel_dim,
                             channel_dim,
                             **resid_block_kwargs,
@@ -89,10 +90,9 @@ class TransformerEncoderRoot(RootNode):
                 )
 
                 encoder_modules.append(
-                    TransformerEncoderBlock(
+                    TransformerBlock(
                         channel_dim,
                         out_dim,
-                        dropout_p=dropout_prob,
                         **resid_block_kwargs,
                     )
                 )
@@ -296,7 +296,7 @@ class TransformerEncoderRoot(RootNode):
         is_corrupted: Optional[torch.Tensor] = None,
         corruption_allowed: Optional[torch.Tensor] = None,
         **kwargs,
-    ) -> TransformerEncoderRootOutput:
+    ) -> TransformerRootOutput:
         """
         Args:
             seq_array: (batch_size,) array of discrete sequences (e.g. text strings)
@@ -329,7 +329,7 @@ class TransformerEncoderRoot(RootNode):
         if isinstance(corrupt_frac, torch.Tensor):
             corrupt_frac = corrupt_frac.to(src_tok_embs.device)
 
-        outputs = TransformerEncoderRootOutput(
+        outputs = TransformerRootOutput(
             root_features=src_features.contiguous(),
             padding_mask=padding_mask,
             src_tok_embs=src_tok_embs,

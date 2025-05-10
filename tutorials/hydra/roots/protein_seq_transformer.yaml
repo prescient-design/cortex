@@ -12,3 +12,4 @@ protein_seq:
   out_dim: ${feature_dim}
   num_blocks: 2
   num_heads: 4
+  is_causal: false

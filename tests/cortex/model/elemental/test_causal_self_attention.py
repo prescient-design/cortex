@@ -1,6 +1,6 @@
 import torch
 
-from cortex.model.block import TransformerEncoderBlock
+from cortex.model.elemental import CausalSelfAttention
 
 BATCH_SIZE = 2
 NUM_HEADS = 3
@@ -8,12 +8,8 @@ EMBED_DIM = 12
 SEQ_LEN = 5
 
 
-def test_transformer_encoder_block():
-    module = TransformerEncoderBlock(
-        in_channels=EMBED_DIM,
-        out_channels=EMBED_DIM,
-        num_heads=NUM_HEADS,
-    )
+def test_causal_self_attention():
+    module = CausalSelfAttention(num_heads=NUM_HEADS, embed_dim=EMBED_DIM, dropout_p=0.0, bias=False)
 
     x = torch.randn(BATCH_SIZE, SEQ_LEN, EMBED_DIM)
     padding_mask = torch.ones(BATCH_SIZE, SEQ_LEN, dtype=torch.bool)
