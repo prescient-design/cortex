@@ -9,6 +9,7 @@ from cortex.model.elemental import (
     Apply,
     Expression,
     MeanPooling,
+    PoolingSelfAttention,
     WeightedMeanPooling,
     identity,
 )
@@ -32,7 +33,7 @@ class TransformerBranch(BranchNode):
         out_dim: int = 64,
         channel_dim: int = 64,
         num_blocks: int = 2,
-        num_heads: int = 5,
+        num_heads: int = 4,
         is_causal: bool = False,
         dropout_prob: float = 0.0,
         pooling_type: str = "mean",
@@ -74,6 +75,8 @@ class TransformerBranch(BranchNode):
             self.pooling_op = MeanPooling()
         elif pooling_type == "weighted_mean":
             self.pooling_op = WeightedMeanPooling(out_dim)
+        elif pooling_type == "attention":
+            self.pooling_op = PoolingSelfAttention(num_heads=num_heads, embed_dim=out_dim, dropout_p=dropout_prob)
         else:
             raise NotImplementedError
 
