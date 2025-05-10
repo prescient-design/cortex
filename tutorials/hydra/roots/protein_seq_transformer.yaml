@@ -1,0 +1,15 @@
+protein_seq:
+  _target_: cortex.model.root.TransformerEncoderRoot
+  corruption_process:
+    _target_: cortex.corruption.MaskCorruptionProcess
+  tokenizer_transform:
+    _target_: cortex.transforms.HuggingFaceTokenizerTransform
+    tokenizer:
+      _target_: cortex.tokenization.ProteinSequenceTokenizerFast
+  max_len: 256
+  embed_dim: ${feature_dim}
+  channel_dim: ${feature_dim}
+  out_dim: ${feature_dim}
+  num_blocks: 2
+  num_heads: 4
+  is_causal: false
