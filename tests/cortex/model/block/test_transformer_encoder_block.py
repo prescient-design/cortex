@@ -2,7 +2,6 @@ import torch
 
 from cortex.model.block import TransformerEncoderBlock
 
-
 BATCH_SIZE = 2
 NUM_HEADS = 3
 EMBED_DIM = 12
@@ -10,7 +9,6 @@ SEQ_LEN = 5
 
 
 def test_transformer_encoder_block():
-
     module = TransformerEncoderBlock(
         in_channels=EMBED_DIM,
         out_channels=EMBED_DIM,

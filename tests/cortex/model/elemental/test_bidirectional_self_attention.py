@@ -1,4 +1,5 @@
 import torch
+
 from cortex.model.elemental import BidirectionalSelfAttention
 
 BATCH_SIZE = 2
