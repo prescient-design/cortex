@@ -13,6 +13,10 @@ from omegaconf import DictConfig, OmegaConf
 from torch import nn
 
 from cortex.model import online_weight_update_
+from cortex.model.leaf import (
+    AutoregressiveLanguageModelLeaf,
+    format_autoregressive_lm_ensemble_output,
+)
 from cortex.model.leaf._classifier_leaf import ClassifierLeaf, format_classifier_ensemble_output
 from cortex.model.leaf._denoising_lm_leaf import (
     DenoisingLanguageModelLeaf,
@@ -532,6 +536,21 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
                 root_outputs = [task_out[r_key] for r_key in root_keys]
                 predict_out.update(
                     format_denoising_lm_ensemble_output(leaf_outputs=values, root_outputs=root_outputs, task_key=t_key)
+                )
+
+            # autoregressive language model leaves
+            values = [
+                l_out
+                for l_key, l_out in task_out.items()
+                if l_key in task_leaves[t_key] and isinstance(self.leaf_nodes[l_key], AutoregressiveLanguageModelLeaf)
+            ]
+            if len(values) > 0:
+                root_keys = [self.leaf_nodes[l_key].root_key for l_key in task_leaves[t_key]]
+                root_outputs = [task_out[r_key] for r_key in root_keys]
+                predict_out.update(
+                    format_autoregressive_lm_ensemble_output(
+                        leaf_outputs=values, root_outputs=root_outputs, task_key=t_key
+                    )
                 )
 
         return predict_out

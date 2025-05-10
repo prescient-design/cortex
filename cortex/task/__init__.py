@@ -1,4 +1,5 @@
 from ._abstract_task import BaseTask
+from ._autoregressive_lm_task import AutoregressiveLanguageModelTask
 from ._classification import ClassificationTask
 from ._denoising_lm_task import DenoisingLanguageModelTask
 from ._regression import RegressionTask
