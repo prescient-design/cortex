@@ -1,10 +1,10 @@
 import uuid
 from typing import MutableMapping
 
-import wandb
 from omegaconf import DictConfig, OmegaConf
 
 import cortex
+import wandb
 
 
 def wandb_setup(cfg: DictConfig):

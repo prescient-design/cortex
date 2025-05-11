@@ -1,4 +1,4 @@
-protein_property:
+folding:
   _target_: cortex.model.branch.TransformerBranch
   out_dim: 8
   channel_dim: ${channel_dim}

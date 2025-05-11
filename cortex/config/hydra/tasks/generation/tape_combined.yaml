@@ -1,5 +1,5 @@
-stable_proteins_autoregressive:
-  _target_: cortex.task.AutoregressiveLanguageModelTask
+tape_combined:
+  _target_: cortex.task.DenoisingLanguageModelTask
   tokenizer:
     _target_: cortex.tokenization.ProteinSequenceTokenizerFast
   input_map:
@@ -13,13 +13,13 @@ stable_proteins_autoregressive:
     _target_: cortex.data.data_module.TaskDataModule
     _recursive_: false
     batch_size: ${fit.batch_size}
-    balance_train_partition: null
+    balance_train_partition: partition
     drop_last: true
     lengths: [1.0, 0.0]
     train_on_everything: false
     num_workers: ${num_workers}
     dataset_config:
-      _target_: cortex.data.dataset.TAPEStabilityDataset
+      _target_: cortex.data.dataset.TAPECombinedDataset
       root: ${dataset_root_dir}
       download: ${download_datasets}
       train: ???

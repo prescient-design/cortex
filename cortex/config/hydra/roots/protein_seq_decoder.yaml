@@ -7,12 +7,12 @@ protein_seq:
     tokenizer:
       _target_: cortex.tokenization.ProteinSequenceTokenizerFast
   max_len: 256
-  out_dim: ${channel_dim}
+  out_dim: ${embed_dim}
   embed_dim: ${embed_dim}
   channel_dim: ${channel_dim}
-  num_blocks: 10
-  num_heads: 8
-  is_causal: false
+  num_blocks: 2
+  num_heads: 4
+  is_causal: true
   dropout_prob: ${dropout_prob}
   pos_encoding: true
   train_transforms: null

@@ -1,6 +1,7 @@
 import copy
 import math
-from typing import Dict, Optional
+from collections import OrderedDict
+from typing import Any, Dict, Optional
 
 import hydra
 import lightning as L
@@ -9,7 +10,7 @@ import pandas as pd
 import torch
 from botorch.models.transforms.outcome import OutcomeTransform
 from lightning.pytorch.utilities.combined_loader import CombinedLoader
-from omegaconf import DictConfig, OmegaConf
+from omegaconf import DictConfig
 from torch import nn
 
 from cortex.model import online_weight_update_
@@ -90,7 +91,8 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             else:
                 raise ValueError(f"Invalid split {split}")
 
-        mode = "min_size" if split == "train" else "max_size_cycle"
+        # mode = "min_size" if split == "train" else "max_size_cycle"
+        mode = "min_size"
         return CombinedLoader(loaders, mode=mode)
 
     def training_step(self, batch: dict, batch_idx: int, dataloader_idx: Optional[int] = None):
@@ -209,6 +211,12 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
 
     def on_train_epoch_start(self):
         self.lr_schedulers().step()
+        fit_cfg = self.hparams.fit_cfg
+        self.train()
+        self.requires_grad_(True)
+        if fit_cfg.linear_probing:
+            self.freeze_roots()
+            self.freeze_trunk()
 
     def on_fit_start(self) -> None:
         # Initialize root node weights with pretrained weights or random initialization if training from scratch
@@ -255,7 +263,8 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             else:
                 predict_targets[task_key] = None
 
-            predict_out = self.predict(data=task_batch, batch_limit=len(task_batch), predict_tasks=[task_key])
+            with torch.no_grad():
+                predict_out = self.predict(data=task_batch, batch_limit=128, predict_tasks=[task_key])
 
             step_metrics.update(
                 self.prediction_metrics(
@@ -271,6 +280,10 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
         self.validation_step_outputs.append(step_metrics)
 
         return step_metrics
+
+    def on_validation_epoch_start(self):
+        self.eval()
+        self.requires_grad_(False)
 
     def on_validation_epoch_end(self):
         # In Lightning 2.x, we need to process the accumulated outputs manually
@@ -322,8 +335,8 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
         self,
         branch_key: str,
         task_key: str,
-        task_cfg: OmegaConf,
-        branch_cfg: Optional[OmegaConf] = None,
+        task_cfg: DictConfig,
+        branch_cfg: Optional[DictConfig] = None,
         data_dir: str = "./data",
     ) -> None:
         task = hydra.utils.instantiate(task_cfg, leaf_key=task_key, data_dir=data_dir)
@@ -347,7 +360,7 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             if task_key in task_dict:
                 l_node.initialize()
 
-    def build_tree(self, cfg: OmegaConf, skip_task_setup: bool = False) -> dict:
+    def build_tree(self, cfg: DictConfig, skip_task_setup: bool = False) -> dict:
         # create root nodes
         for root_key, root_cfg in cfg.roots.items():
             self.root_nodes[root_key] = hydra.utils.instantiate(root_cfg, device=self.device, dtype=self.dtype)
@@ -389,11 +402,11 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
 
     def predict(
         self,
-        data: pd.DataFrame,
+        data: OrderedDict,
         batch_limit: Optional[int] = None,
         predict_tasks: Optional[list[str]] = None,
         format_outputs: bool = True,
-        cpu_offload: bool = False,
+        cpu_offload: bool = True,
     ) -> dict[str, torch.Tensor]:
         """
         Args:
@@ -402,10 +415,13 @@ class SequenceModelTree(NeuralTree, L.LightningModule):
             predict_out: dict[str, torch.Tensor] of task prediction outputs for `predict_inputs`.
         """
         self.eval()
-        batch_limit = len(data) if batch_limit is None else batch_limit
-        num_chunks = math.ceil(len(data) / batch_limit)
+
+        keys = [k for k in data.keys() if k != "batch_size"]
+        batch_limit = len(data[keys[0]]) if batch_limit is None else batch_limit
+        num_chunks = math.ceil(len(data[keys[0]]) / batch_limit)
+
         if num_chunks > 1:
-            batches = np.array_split(data, num_chunks)
+            batches = split_data(data, batch_limit)
         else:
             batches = [data]
 
@@ -615,3 +631,44 @@ def get_param_prefixes(tree_outputs):
         param_prefixes.append(f"leaf_nodes.{leaf_key}")
 
     return param_prefixes
+
+
+def split_data(data: OrderedDict[str, int | list[Any]], batch_size: int):
+    """
+    Split a dictionary into n chunks with size at most batch_size.
+    If batch_size is not a divisor of the dictionary element length, the last chunk will be smaller.
+    Args:
+        data: dict to split
+        batch_size: max size of each chunk
+    Returns:
+        list of dict chunks
+    """
+    chunked_vals = {}
+    num_chunks = float("inf")
+    for k, v in data.items():
+        if isinstance(v, int):
+            continue
+        chunked_vals[k] = split_list(v, batch_size)
+        num_chunks = min(num_chunks, len(chunked_vals[k]))
+
+    res = [{k: chunked_vals[k][i] for k in chunked_vals} for i in range(num_chunks)]
+    return res
+
+
+def split_list(lst: list[Any], batch_size: int) -> list[list[Any]]:
+    """
+    Split a list into chunks with size at most batch_size.
+    If batch_size is not a divisor of the list length, the last chunk will be smaller.
+    Args:
+        lst: list to split
+        batch_size: max size of each chunk
+    Returns:
+        list of list chunks
+    """
+    res = []
+    num_chunks = math.ceil(len(lst) / batch_size)
+    for i in range(num_chunks):
+        start = i * batch_size
+        end = min((i + 1) * batch_size, len(lst))
+        res.append(lst[start:end])
+    return res

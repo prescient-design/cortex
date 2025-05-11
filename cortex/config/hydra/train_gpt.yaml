@@ -2,16 +2,12 @@ defaults:
   - general_settings: default
   - logging: default
   - model_globals: default
-  - roots: [protein_seq_transformer]
+  - roots: [protein_seq_decoder]
   - trunk: default
-  - branches: [folding, protein_property_transformer, generation]
+  - branches: [generation]
   - tree: protein_model
   - tasks:
-    - protein_property/log_fluorescence
-    - folding/stability
-    # - generation/gfp
-    # - generation/stable_proteins
-    - generation/tape_combined
+    - generation/stable_proteins_autoregressive
   - _self_
 
 fit:
@@ -22,10 +18,8 @@ trainer:
   accelerator: gpu
   max_epochs: 64
   devices: 1
-  # devices: 8
-  # strategy: ddp
-  num_sanity_val_steps: 1
-  # precision: 16
+  num_sanity_val_steps: 0
+
 
 tree:
   _recursive_: false
@@ -45,18 +39,8 @@ tree:
       num_training_steps: ${trainer.max_epochs}
 
 tasks:
-  folding:
-    stability:
-      ensemble_size: ${ensemble_size}
-  protein_property:
-    log_fluorescence:
-      ensemble_size: ${ensemble_size}
   generation:
-    # gfp:
-    #   ensemble_size: 1
-    # stable_proteins:
-    #   ensemble_size: 1
-    tape_combined:
+    stable_proteins_autoregressive:
       ensemble_size: 1
 
 train_on_everything: false

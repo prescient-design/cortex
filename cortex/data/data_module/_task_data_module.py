@@ -122,9 +122,9 @@ class TaskDataModule(LightningDataModule):
         else:
             # Full batch for evaluation on the test set
             if split == "test":
-                # self._dataloader_kwargs["batch_size"] = len(self.datasets[split])
-                self._dataloader_kwargs["batch_size"] = 2 * self._batch_size
-            dataloader = DataLoader(self.datasets[split], shuffle=True, drop_last=True, **self._dataloader_kwargs)
+                self._dataloader_kwargs["batch_size"] = len(self.datasets[split])
+                # self._dataloader_kwargs["batch_size"] = 2 * self._batch_size
+            dataloader = DataLoader(self.datasets[split], shuffle=False, drop_last=False, **self._dataloader_kwargs)
             if split == "test":
                 self._dataloader_kwargs["batch_size"] = self._batch_size
             return dataloader
