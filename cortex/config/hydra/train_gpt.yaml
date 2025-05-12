@@ -2,14 +2,12 @@ defaults:
   - general_settings: default
   - logging: default
   - model_globals: default
-  - roots: [protein_seq_encoder]
+  - roots: [protein_seq_decoder]
   - trunk: default
-  - branches: [folding_encoder, protein_property_encoder, generation]
+  - branches: [generation]
   - tree: protein_model
   - tasks:
-    - protein_property/log_fluorescence
-    - folding/stability
-    - generation/tape_combined
+    - generation/stable_proteins_autoregressive
   - _self_
 
 fit:
@@ -18,12 +16,10 @@ fit:
 trainer:
   _target_: lightning.Trainer
   accelerator: gpu
-  max_epochs: 128
+  max_epochs: 64
   devices: 1
-  # devices: 8
-  # strategy: ddp
   num_sanity_val_steps: 0
-  # precision: 16
+
 
 tree:
   _recursive_: false
@@ -33,7 +29,7 @@ tree:
     weight_averaging: null
     optimizer:
       _target_: torch.optim.Adam
-      lr: 3e-4
+      lr: 6e-4
       weight_decay: 0.
       betas: [0.99, 0.999]
       fused: false
@@ -43,14 +39,8 @@ tree:
       num_training_steps: ${trainer.max_epochs}
 
 tasks:
-  folding:
-    stability:
-      ensemble_size: ${ensemble_size}
-  protein_property:
-    log_fluorescence:
-      ensemble_size: ${ensemble_size}
   generation:
-    tape_combined:
+    stable_proteins_autoregressive:
       ensemble_size: 1
 
 train_on_everything: false

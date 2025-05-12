@@ -82,7 +82,8 @@ class ClassifierLeaf(LeafNode):
         self.branch_key = branch_key
         self.root_key = root_key
 
-        encoder_modules = []
+        # testing out normalizing the penultimate activations
+        encoder_modules = [nn.LayerNorm(in_dim, bias=False)]
         if num_layers >= 1:
             for _ in range(num_layers):
                 encoder_modules.extend(

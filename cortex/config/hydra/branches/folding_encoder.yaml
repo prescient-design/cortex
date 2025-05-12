@@ -1,0 +1,9 @@
+folding:
+  _target_: cortex.model.branch.TransformerBranch
+  out_dim: 8
+  channel_dim: ${channel_dim}
+  num_blocks: 2
+  num_heads: 8
+  dropout_prob: ${dropout_prob}
+  is_causal: false
+  pooling_type: attention

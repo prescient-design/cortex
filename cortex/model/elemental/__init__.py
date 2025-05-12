@@ -7,6 +7,7 @@ from ._functional import identity, permute_spatial_channel_dims, swish
 from ._layernorm import MaskLayerNorm1d
 from ._mean_pooling import MeanPooling, WeightedMeanPooling
 from ._mlp import MLP
+from ._pooling_self_attention import PoolingSelfAttention
 from ._sine_pos_encoder import SinePosEncoder
 
 __all__ = [
@@ -20,6 +21,7 @@ __all__ = [
     "swish",
     "MaskLayerNorm1d",
     "MeanPooling",
+    "PoolingSelfAttention",
     "WeightedMeanPooling",
     "SinePosEncoder",
 ]

@@ -6,8 +6,10 @@ import warnings
 import hydra
 import lightning as L
 import torch
-import wandb
 from omegaconf import DictConfig, OmegaConf
+
+# ruff: noqa: I001
+import wandb
 
 from cortex.logging import wandb_setup
 
@@ -35,6 +37,7 @@ def execute(cfg):
     """
     instantiate and train a multitask neural tree
     """
+    torch.set_float32_matmul_precision("medium")
 
     trainer = hydra.utils.instantiate(cfg.trainer)
 

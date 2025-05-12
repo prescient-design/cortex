@@ -12,7 +12,7 @@ protein_seq:
   channel_dim: ${channel_dim}
   num_blocks: 2
   num_heads: 4
-  is_causal: false
+  is_causal: true
   dropout_prob: ${dropout_prob}
   pos_encoding: true
   train_transforms: null

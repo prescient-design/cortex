@@ -3,6 +3,9 @@ from ._numpy_dataset import NumpyDataset
 from ._rfp_dataset import RedFluorescentProteinDataset
 from ._tape_fluorescence import TAPEFluorescenceDataset
 from ._tape_stability import TAPEStabilityDataset
+
+# ruff: noqa: I001
+from ._tape_combined import TAPECombinedDataset
 from ._transformed_dataset import TransformedDataset
 
 __all__ = [
@@ -12,5 +15,6 @@ __all__ = [
     "RedFluorescentProteinDataset",
     "TAPEFluorescenceDataset",
     "TAPEStabilityDataset",
+    "TAPECombinedDataset",
     "TransformedDataset",
 ]

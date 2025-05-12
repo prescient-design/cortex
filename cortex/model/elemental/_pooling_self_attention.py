@@ -1,7 +1,7 @@
 from torch import Tensor, nn
 
 
-class BidirectionalSelfAttention(nn.Module):
+class PoolingSelfAttention(nn.Module):
     def __init__(self, num_heads: int = 4, embed_dim: int = 32, dropout_p: float = 0.0, bias: bool = False):
         super().__init__()
         if embed_dim % num_heads != 0:
@@ -13,17 +13,20 @@ class BidirectionalSelfAttention(nn.Module):
         self.head_dim = embed_dim // num_heads
         self.num_heads = num_heads
 
-    def forward(self, inputs: tuple[Tensor, Tensor]) -> tuple[Tensor, Tensor]:
-        x, padding_mask = inputs
-        batch_size, seq_len, embed_dim = x.shape
-        queries, keys, values = self.c_attn(x).split(embed_dim, dim=-1)
+    def forward(self, x: Tensor, padding_mask: Tensor) -> tuple[Tensor, Tensor]:
+        seq_len = x.size(-2)
+        queries, keys, values = self.c_attn(x).chunk(3, dim=-1)
 
         queries = queries.view(-1, seq_len, self.num_heads, self.head_dim).transpose(-2, -3)
         keys = keys.view(-1, seq_len, self.num_heads, self.head_dim).transpose(-2, -3)
         values = values.view(-1, seq_len, self.num_heads, self.head_dim).transpose(-2, -3)
 
+        # attn_mask: (*batch_shape, 1, num_queries, 1)
         attn_mask = padding_mask[..., None, :, None]
-        attn_mask = attn_mask.expand(-1, -1, -1, seq_len).contiguous()
+        queries = queries.sum(-2, keepdim=True) / attn_mask.sum(-2, keepdim=True)
+
+        # attn_mask (*batch_shape, 1, 1, num_keys)
+        attn_mask = padding_mask[..., None, None, :].contiguous()
 
         res = nn.functional.scaled_dot_product_attention(
             queries,
@@ -35,4 +38,5 @@ class BidirectionalSelfAttention(nn.Module):
         )
 
         res = res.transpose(-2, -3).contiguous().flatten(start_dim=-2)
-        return self.dropout(res), padding_mask
+        res = self.dropout(res)[..., 0, :]  # drop 1D query dim
+        return res

@@ -1,8 +1,10 @@
 import uuid
 from typing import MutableMapping
 
-import wandb
 from omegaconf import DictConfig, OmegaConf
+
+# ruff: noqa: I001
+import wandb
 
 import cortex
 
