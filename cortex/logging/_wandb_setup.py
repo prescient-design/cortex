@@ -3,8 +3,10 @@ from typing import MutableMapping
 
 from omegaconf import DictConfig, OmegaConf
 
-import cortex
+# ruff: noqa: I001
 import wandb
+
+import cortex
 
 
 def wandb_setup(cfg: DictConfig):
