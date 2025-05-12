@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cortex.tokenization._protein_seq_tokenizer &#8212; cortex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+    <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="cortex.transforms" href="../../transforms/index.html" />
+    <link rel="prev" title="cortex.tokenization._cached_bert_tokenizer" href="../_cached_bert_tokenizer/index.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-cortex.tokenization._protein_seq_tokenizer">
+<span id="cortex-tokenization-protein-seq-tokenizer"></span><h1>cortex.tokenization._protein_seq_tokenizer<a class="headerlink" href="#module-cortex.tokenization._protein_seq_tokenizer" title="Link to this heading">¶</a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.tokenization._protein_seq_tokenizer.ProteinComplex" title="cortex.tokenization._protein_seq_tokenizer.ProteinComplex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProteinComplex</span></code></a></p></td>
+<td><p>Dataclass for protein complex.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cortex.tokenization._protein_seq_tokenizer.ProteinSequenceTokenizerFast" title="cortex.tokenization._protein_seq_tokenizer.ProteinSequenceTokenizerFast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProteinSequenceTokenizerFast</span></code></a></p></td>
+<td><p>Subclass of CachedBertTokenizerFast with vocabulary for protein complexes.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.tokenization._protein_seq_tokenizer.tokenize_protein_complex" title="cortex.tokenization._protein_seq_tokenizer.tokenize_protein_complex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tokenize_protein_complex</span></code></a>(complex[, ...])</p></td>
+<td><p>Tokenize a protein complex.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.tokenization._protein_seq_tokenizer.ProteinComplex">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.tokenization._protein_seq_tokenizer.</span></span><span class="sig-name descname"><span class="pre">ProteinComplex</span></span><a class="headerlink" href="#cortex.tokenization._protein_seq_tokenizer.ProteinComplex" title="Link to this definition">¶</a></dt>
+<dd><p>Dataclass for protein complex.
+:param chains: dict[str, str]: an ordered dict of chain_id: chain_sequence pairs (e.g. {“VH”: “AVAVAV”, “VL”: “ACVACA”})
+:param species: Optional[str]: species of the complex (e.g. &lt;human&gt;, &lt;mouse&gt;, etc.)
+:param format: Optional[str]: format of the complex  (e.g. &lt;igg&gt;, &lt;igm&gt;, etc.)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.tokenization._protein_seq_tokenizer.ProteinComplex.chains">
+<span class="sig-name descname"><span class="pre">chains</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">collections.OrderedDict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#cortex.tokenization._protein_seq_tokenizer.ProteinComplex.chains" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.tokenization._protein_seq_tokenizer.ProteinComplex.species">
+<span class="sig-name descname"><span class="pre">species</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cortex.tokenization._protein_seq_tokenizer.ProteinComplex.species" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.tokenization._protein_seq_tokenizer.ProteinComplex.format">
+<span class="sig-name descname"><span class="pre">format</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cortex.tokenization._protein_seq_tokenizer.ProteinComplex.format" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.tokenization._protein_seq_tokenizer.tokenize_protein_complex">
+<span class="sig-prename descclassname"><span class="pre">cortex.tokenization._protein_seq_tokenizer.</span></span><span class="sig-name descname"><span class="pre">tokenize_protein_complex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">complex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cortex.tokenization._protein_seq_tokenizer.ProteinComplex" title="cortex.tokenization._protein_seq_tokenizer.ProteinComplex"><span class="pre">ProteinComplex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep_with_chain_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_species</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.tokenization._protein_seq_tokenizer.tokenize_protein_complex" title="Link to this definition">¶</a></dt>
+<dd><p>Tokenize a protein complex.
+:param complex: ProteinComplex: a protein complex dataclass
+:param seq_with_chain_ids: bool: whether to include chain ids in the tokenized sequence</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tokenized protein complex</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+<p>Example:
+&gt;&gt;&gt; complex = ProteinComplex(
+…     chains={
+…         “VH”: “A V A V A V”,
+…         “VL”: “A C V A C A”,
+…     },
+… )
+&gt;&gt;&gt; tokens = tokenize_protein_complex(complex)
+&gt;&gt;&gt; tokens
+“A V A V A V . A C V A C A”</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.tokenization._protein_seq_tokenizer.ProteinSequenceTokenizerFast">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.tokenization._protein_seq_tokenizer.</span></span><span class="sig-name descname"><span class="pre">ProteinSequenceTokenizerFast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vocab_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ambiguous_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_lower_case</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unk_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'&lt;unk&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'&lt;eos&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'&lt;pad&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'&lt;cls&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'&lt;mask&gt;'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.tokenization._protein_seq_tokenizer.ProteinSequenceTokenizerFast" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../_cached_bert_tokenizer/index.html#cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast" title="cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast</span></code></a></p>
+<p>Subclass of CachedBertTokenizerFast with vocabulary for protein complexes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.tokenization._protein_seq_tokenizer.ProteinSequenceTokenizerFast.sampling_vocab_excluded">
+<span class="sig-name descname"><span class="pre">sampling_vocab_excluded</span></span><a class="headerlink" href="#cortex.tokenization._protein_seq_tokenizer.ProteinSequenceTokenizerFast.sampling_vocab_excluded" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.tokenization._protein_seq_tokenizer.ProteinSequenceTokenizerFast.corruption_vocab_excluded">
+<span class="sig-name descname"><span class="pre">corruption_vocab_excluded</span></span><a class="headerlink" href="#cortex.tokenization._protein_seq_tokenizer.ProteinSequenceTokenizerFast.corruption_vocab_excluded" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.tokenization._protein_seq_tokenizer.ProteinSequenceTokenizerFast.chain_tokens">
+<span class="sig-name descname"><span class="pre">chain_tokens</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['-']</span></em><a class="headerlink" href="#cortex.tokenization._protein_seq_tokenizer.ProteinSequenceTokenizerFast.chain_tokens" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">cortex</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">cortex</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">API Reference</a><ul>
+  <li><a href="../../index.html">cortex</a><ul>
+  <li><a href="../index.html">cortex.tokenization</a><ul>
+      <li>Previous: <a href="../_cached_bert_tokenizer/index.html" title="previous chapter">cortex.tokenization._cached_bert_tokenizer</a></li>
+      <li>Next: <a href="../../transforms/index.html" title="next chapter">cortex.transforms</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Sam Stanton.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../../../_sources/autoapi/cortex/tokenization/_protein_seq_tokenizer/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

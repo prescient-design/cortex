@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cortex.data.dataset &#8212; cortex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+    <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="cortex.data.dataset._data_frame_dataset" href="_data_frame_dataset/index.html" />
+    <link rel="prev" title="cortex.data.data_module._task_data_module" href="../data_module/_task_data_module/index.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-cortex.data.dataset">
+<span id="cortex-data-dataset"></span><h1>cortex.data.dataset<a class="headerlink" href="#module-cortex.data.dataset" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_data_frame_dataset/index.html">cortex.data.dataset._data_frame_dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_numpy_dataset/index.html">cortex.data.dataset._numpy_dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_rfp_dataset/index.html">cortex.data.dataset._rfp_dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_tape_combined/index.html">cortex.data.dataset._tape_combined</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_tape_fluorescence/index.html">cortex.data.dataset._tape_fluorescence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_tape_stability/index.html">cortex.data.dataset._tape_stability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_transformed_dataset/index.html">cortex.data.dataset._transformed_dataset</a></li>
+</ul>
+</div>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.data.dataset.DataFrameDataset" title="cortex.data.dataset.DataFrameDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataFrameDataset</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cortex.data.dataset.NumpyDataset" title="cortex.data.dataset.NumpyDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NumpyDataset</span></code></a></p></td>
+<td><p>Create a DataFrameDataset from a dictionary of numpy arrays stored in memory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.data.dataset.RedFluorescentProteinDataset" title="cortex.data.dataset.RedFluorescentProteinDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RedFluorescentProteinDataset</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cortex.data.dataset.TAPEFluorescenceDataset" title="cortex.data.dataset.TAPEFluorescenceDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TAPEFluorescenceDataset</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.data.dataset.TAPEStabilityDataset" title="cortex.data.dataset.TAPEStabilityDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TAPEStabilityDataset</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cortex.data.dataset.TAPECombinedDataset" title="cortex.data.dataset.TAPECombinedDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TAPECombinedDataset</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.data.dataset.TransformedDataset" title="cortex.data.dataset.TransformedDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TransformedDataset</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.data.dataset.ordered_dict_collator" title="cortex.data.dataset.ordered_dict_collator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ordered_dict_collator</span></code></a>(→ collections.OrderedDict[str, Any])</p></td>
+<td><p>Collates a batch of OrderedDicts into a single OrderedDict.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.data.dataset.DataFrameDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.data.dataset.</span></span><span class="sig-name descname"><span class="pre">DataFrameDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dedup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3735928559</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.data.dataset.DataFrameDataset" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.DataFrameDataset._data">
+<span class="sig-name descname"><span class="pre">_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="headerlink" href="#cortex.data.dataset.DataFrameDataset._data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.DataFrameDataset._name">
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'temp'</span></em><a class="headerlink" href="#cortex.data.dataset.DataFrameDataset._name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.DataFrameDataset._target">
+<span class="sig-name descname"><span class="pre">_target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'data.csv'</span></em><a class="headerlink" href="#cortex.data.dataset.DataFrameDataset._target" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.DataFrameDataset.columns">
+<span class="sig-name descname"><span class="pre">columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cortex.data.dataset.DataFrameDataset.columns" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.DataFrameDataset._root">
+<span class="sig-name descname"><span class="pre">_root</span></span><a class="headerlink" href="#cortex.data.dataset.DataFrameDataset._root" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.data.dataset.DataFrameDataset._read_data">
+<span class="sig-name descname"><span class="pre">_read_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dedup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#cortex.data.dataset.DataFrameDataset._read_data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.data.dataset.DataFrameDataset.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#cortex.data.dataset.DataFrameDataset.__len__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.data.dataset.DataFrameDataset._fetch_item">
+<span class="sig-name descname"><span class="pre">_fetch_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#cortex.data.dataset.DataFrameDataset._fetch_item" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.data.dataset.DataFrameDataset._format_item">
+<span class="sig-name descname"><span class="pre">_format_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">collections.OrderedDict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cortex.data.dataset.DataFrameDataset._format_item" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.data.dataset.DataFrameDataset.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">collections.OrderedDict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cortex.data.dataset.DataFrameDataset.__getitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.data.dataset.ordered_dict_collator">
+<span class="sig-prename descclassname"><span class="pre">cortex.data.dataset.</span></span><span class="sig-name descname"><span class="pre">ordered_dict_collator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.OrderedDict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">collections.OrderedDict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cortex.data.dataset.ordered_dict_collator" title="Link to this definition">¶</a></dt>
+<dd><p>Collates a batch of OrderedDicts into a single OrderedDict.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.data.dataset.NumpyDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.data.dataset.</span></span><span class="sig-name descname"><span class="pre">NumpyDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3735928559</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.data.dataset.NumpyDataset" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="_data_frame_dataset/index.html#cortex.data.dataset._data_frame_dataset.DataFrameDataset" title="cortex.data.dataset._data_frame_dataset.DataFrameDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cortex.data.dataset._data_frame_dataset.DataFrameDataset</span></code></a></p>
+<p>Create a DataFrameDataset from a dictionary of numpy arrays stored in memory.
+Useful if not reading data from disk.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.NumpyDataset._data">
+<span class="sig-name descname"><span class="pre">_data</span></span><a class="headerlink" href="#cortex.data.dataset.NumpyDataset._data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.NumpyDataset.columns">
+<span class="sig-name descname"><span class="pre">columns</span></span><a class="headerlink" href="#cortex.data.dataset.NumpyDataset.columns" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.data.dataset.RedFluorescentProteinDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.data.dataset.</span></span><span class="sig-name descname"><span class="pre">RedFluorescentProteinDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">_DOWNLOAD_URL</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.data.dataset.RedFluorescentProteinDataset" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="_data_frame_dataset/index.html#cortex.data.dataset._data_frame_dataset.DataFrameDataset" title="cortex.data.dataset._data_frame_dataset.DataFrameDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cortex.data.dataset._data_frame_dataset.DataFrameDataset</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.RedFluorescentProteinDataset._name">
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'rfp'</span></em><a class="headerlink" href="#cortex.data.dataset.RedFluorescentProteinDataset._name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.RedFluorescentProteinDataset._target">
+<span class="sig-name descname"><span class="pre">_target</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'rfp_known_structures.csv'</span></em><a class="headerlink" href="#cortex.data.dataset.RedFluorescentProteinDataset._target" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.RedFluorescentProteinDataset.columns">
+<span class="sig-name descname"><span class="pre">columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['tokenized_seq',</span> <span class="pre">'foldx_total_energy',</span> <span class="pre">'SASA']</span></em><a class="headerlink" href="#cortex.data.dataset.RedFluorescentProteinDataset.columns" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.RedFluorescentProteinDataset._data">
+<span class="sig-name descname"><span class="pre">_data</span></span><a class="headerlink" href="#cortex.data.dataset.RedFluorescentProteinDataset._data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.data.dataset.TAPEFluorescenceDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.data.dataset.</span></span><span class="sig-name descname"><span class="pre">TAPEFluorescenceDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">_DOWNLOAD_URL</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.data.dataset.TAPEFluorescenceDataset" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="_data_frame_dataset/index.html#cortex.data.dataset._data_frame_dataset.DataFrameDataset" title="cortex.data.dataset._data_frame_dataset.DataFrameDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cortex.data.dataset._data_frame_dataset.DataFrameDataset</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.TAPEFluorescenceDataset._name">
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tape_fluorescence'</span></em><a class="headerlink" href="#cortex.data.dataset.TAPEFluorescenceDataset._name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.TAPEFluorescenceDataset._target">
+<span class="sig-name descname"><span class="pre">_target</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'fluorescence'</span></em><a class="headerlink" href="#cortex.data.dataset.TAPEFluorescenceDataset._target" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.TAPEFluorescenceDataset.columns">
+<span class="sig-name descname"><span class="pre">columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['tokenized_seq',</span> <span class="pre">'log_fluorescence']</span></em><a class="headerlink" href="#cortex.data.dataset.TAPEFluorescenceDataset.columns" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.data.dataset.TAPEFluorescenceDataset._read_data">
+<span class="sig-name descname"><span class="pre">_read_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dedup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#cortex.data.dataset.TAPEFluorescenceDataset._read_data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.data.dataset.TAPEStabilityDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.data.dataset.</span></span><span class="sig-name descname"><span class="pre">TAPEStabilityDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">_DOWNLOAD_URL</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.data.dataset.TAPEStabilityDataset" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="_data_frame_dataset/index.html#cortex.data.dataset._data_frame_dataset.DataFrameDataset" title="cortex.data.dataset._data_frame_dataset.DataFrameDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cortex.data.dataset._data_frame_dataset.DataFrameDataset</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.TAPEStabilityDataset._name">
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tape_stability'</span></em><a class="headerlink" href="#cortex.data.dataset.TAPEStabilityDataset._name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.TAPEStabilityDataset._target">
+<span class="sig-name descname"><span class="pre">_target</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'stability'</span></em><a class="headerlink" href="#cortex.data.dataset.TAPEStabilityDataset._target" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.TAPEStabilityDataset.columns">
+<span class="sig-name descname"><span class="pre">columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['tokenized_seq',</span> <span class="pre">'stability_score']</span></em><a class="headerlink" href="#cortex.data.dataset.TAPEStabilityDataset.columns" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.data.dataset.TAPEStabilityDataset._read_data">
+<span class="sig-name descname"><span class="pre">_read_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dedup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#cortex.data.dataset.TAPEStabilityDataset._read_data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.data.dataset.TAPECombinedDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.data.dataset.</span></span><span class="sig-name descname"><span class="pre">TAPECombinedDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.data.dataset.TAPECombinedDataset" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="_data_frame_dataset/index.html#cortex.data.dataset._data_frame_dataset.DataFrameDataset" title="cortex.data.dataset._data_frame_dataset.DataFrameDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cortex.data.dataset._data_frame_dataset.DataFrameDataset</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.TAPECombinedDataset.columns">
+<span class="sig-name descname"><span class="pre">columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['tokenized_seq',</span> <span class="pre">'partition']</span></em><a class="headerlink" href="#cortex.data.dataset.TAPECombinedDataset.columns" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.TAPECombinedDataset._data">
+<span class="sig-name descname"><span class="pre">_data</span></span><a class="headerlink" href="#cortex.data.dataset.TAPECombinedDataset._data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.data.dataset.TransformedDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.data.dataset.</span></span><span class="sig-name descname"><span class="pre">TransformedDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preprocessing_transforms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime_transforms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.data.dataset.TransformedDataset" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cortex.data.dataset.DataFrameDataset" title="cortex.data.dataset.DataFrameDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cortex.data.dataset.DataFrameDataset</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.data.dataset.TransformedDataset._data">
+<span class="sig-name descname"><span class="pre">_data</span></span><a class="headerlink" href="#cortex.data.dataset.TransformedDataset._data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.data.dataset.TransformedDataset._preprocess">
+<span class="sig-name descname"><span class="pre">_preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#cortex.data.dataset.TransformedDataset._preprocess" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.data.dataset.TransformedDataset.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">collections.OrderedDict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cortex.data.dataset.TransformedDataset.__getitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">cortex</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">cortex</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">API Reference</a><ul>
+  <li><a href="../../index.html">cortex</a><ul>
+  <li><a href="../index.html">cortex.data</a><ul>
+      <li>Previous: <a href="../data_module/_task_data_module/index.html" title="previous chapter">cortex.data.data_module._task_data_module</a></li>
+      <li>Next: <a href="_data_frame_dataset/index.html" title="next chapter">cortex.data.dataset._data_frame_dataset</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Sam Stanton.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../../../_sources/autoapi/cortex/data/dataset/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,22 @@
+cortex.model.elemental._mlp
+===========================
+
+.. py:module:: cortex.model.elemental._mlp
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.elemental._mlp.MLP
+
+
+Module Contents
+---------------
+
+.. py:class:: MLP(in_channels: int, out_channels: int | None = None, bias: bool = False, dropout_p: float = 0.0)
+
+   Bases: :py:obj:`torch.nn.Sequential`
+
+

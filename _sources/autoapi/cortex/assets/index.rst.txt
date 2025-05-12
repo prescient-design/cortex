@@ -1,0 +1,15 @@
+cortex.assets
+=============
+
+.. py:module:: cortex.assets
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/assets/protein_seq_tokenizer_32/index
+
+

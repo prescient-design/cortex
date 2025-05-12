@@ -1,0 +1,73 @@
+cortex.corruption._abstract_corruption
+======================================
+
+.. py:module:: cortex.corruption._abstract_corruption
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.corruption._abstract_corruption.CorruptionProcess
+
+
+Module Contents
+---------------
+
+.. py:class:: CorruptionProcess(schedule: str = 'cosine', max_steps: int = 1000, t_base_dist: Optional[torch.distributions.Distribution] = None, *args, **kwargs)
+
+   Bases: :py:obj:`abc.ABC`
+
+
+   Base class for corruption processes, must be subclassed and
+   the _corrupt method must be implemented.
+   Provides noise schedule and timestep sampling, and defines
+   the corruption interface.
+
+
+   .. py:attribute:: betas
+
+
+   .. py:attribute:: max_steps
+
+
+   .. py:attribute:: alphas_cumprod
+
+
+   .. py:attribute:: sqrt_alphas_cumprod
+
+
+   .. py:method:: sample_timestep(n: Optional[int] = 1) -> torch.Tensor
+
+      Sample timestep(s) from the noise schedule.
+
+      :param n: Number of timesteps to sample. If None, returns a single int.
+                If an integer, returns an array of shape (n,).
+
+      :returns: Int or array of timesteps.
+
+
+
+   .. py:method:: sample_corrupt_frac(n: Optional[int] = None) -> torch.Tensor
+
+      Sample corruption fraction(s).
+
+      :param n: Number of corruption fractions to sample. If None, returns a tensor with a single value.
+                If an integer, returns a tensor of shape (n,).
+
+      :returns: Tensor of corruption fractions.
+
+
+
+   .. py:method:: timestep_to_corrupt_frac(timestep: Union[int, torch.Tensor]) -> float
+
+
+   .. py:method:: __call__(x_start: torch.Tensor, timestep: Optional[int] = None, corrupt_frac: Optional[Union[float, torch.Tensor]] = None, corruption_allowed: Optional[torch.Tensor] = None, *args, **kwargs) -> tuple[torch.Tensor]
+
+
+   .. py:method:: _corrupt(x_start: torch.Tensor, corrupt_frac: float, *args, **kwargs)
+      :abstractmethod:
+
+
+

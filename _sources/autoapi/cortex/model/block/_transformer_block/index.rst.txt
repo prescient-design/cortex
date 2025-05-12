@@ -1,0 +1,34 @@
+cortex.model.block._transformer_block
+=====================================
+
+.. py:module:: cortex.model.block._transformer_block
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.block._transformer_block.TransformerBlock
+
+
+Module Contents
+---------------
+
+.. py:class:: TransformerBlock(in_channels: int, out_channels: int, num_heads: int = 4, bias: bool = False, dropout_p: float = 0.0, is_causal: bool = False)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:attribute:: ln_1
+
+
+   .. py:attribute:: ln_2
+
+
+   .. py:attribute:: mlp
+
+
+   .. py:method:: forward(inputs: tuple[torch.Tensor, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor]
+
+

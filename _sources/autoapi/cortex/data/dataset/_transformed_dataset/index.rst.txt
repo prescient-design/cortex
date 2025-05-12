@@ -1,0 +1,31 @@
+cortex.data.dataset._transformed_dataset
+========================================
+
+.. py:module:: cortex.data.dataset._transformed_dataset
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.data.dataset._transformed_dataset.TransformedDataset
+
+
+Module Contents
+---------------
+
+.. py:class:: TransformedDataset(preprocessing_transforms: Optional[list] = None, runtime_transforms: Optional[list] = None, *args, **kwargs)
+
+   Bases: :py:obj:`cortex.data.dataset.DataFrameDataset`
+
+
+   .. py:attribute:: _data
+
+
+   .. py:method:: _preprocess(data) -> pandas.DataFrame
+
+
+   .. py:method:: __getitem__(index) -> collections.OrderedDict[str, Any]
+
+

@@ -1,0 +1,33 @@
+cortex.io._load_model_checkpoint
+================================
+
+.. py:module:: cortex.io._load_model_checkpoint
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.io._load_model_checkpoint.get_state_dict
+   cortex.io._load_model_checkpoint.load_model_checkpoint
+
+
+Module Contents
+---------------
+
+.. py:function:: get_state_dict(weight_fpath: str, device: torch.device)
+
+.. py:function:: load_model_checkpoint(cfg: omegaconf.DictConfig, weight_fpath: str, device: torch.device, dtype: torch.dtype, skip_task_setup: bool = True)
+
+   Load cortex neural tree checkpoint from S3 or local file.
+   :param cfg: DictConfig object containing model config
+   :param weight_fpath: path to model checkpoint. Must point to local file or S3 object.
+   :param device: torch.device
+   :param dtype: torch.dtype
+
+   :returns: cortex.tree.NeuralTree object
+             task_dict: dict mapping task keys to cortex.task.BaseTask objects
+   :rtype: surrogate_model
+
+

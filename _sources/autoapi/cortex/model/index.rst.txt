@@ -1,0 +1,75 @@
+cortex.model
+============
+
+.. py:module:: cortex.model
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/model/_infer_with_model/index
+   /autoapi/cortex/model/_weight_averaging/index
+   /autoapi/cortex/model/block/index
+   /autoapi/cortex/model/branch/index
+   /autoapi/cortex/model/elemental/index
+   /autoapi/cortex/model/leaf/index
+   /autoapi/cortex/model/root/index
+   /autoapi/cortex/model/tree/index
+   /autoapi/cortex/model/trunk/index
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.model.infer_with_model
+   cortex.model.online_weight_update_
+
+
+Package Contents
+----------------
+
+.. py:function:: infer_with_model(data: pandas.DataFrame, model: Optional[torch.nn.Module] = None, cfg_fpath: Optional[str] = None, weight_fpath: Optional[str] = None, batch_limit: int = 32, cpu_offload: bool = True, device: Optional[torch.device] = None, dtype: Optional[torch.dtype] = None) -> dict[str, numpy.ndarray]
+
+   A functional interface for inference with a cortex model.
+
+   Usage:
+
+   ```python title="Example of inference with a cortex model checkpoint."
+   from cortex.model import infer_with_model
+
+   ckpt_dir = <TODO>
+   ckpt_name = <TODO>
+   predictions = infer_with_model(
+       data=df,
+       cfg_fpath=f"{ckpt_dir}/{ckpt_name}.yaml",
+       weight_fpath=f"{ckpt_dir}/{ckpt_name}.pt",
+   )
+   ```
+
+   :param data: A dataframe containing the sequences to predict on.
+   :type data: pd.DataFrame
+   :param cfg_fpath: The path to the Hydra config file on S3.
+   :type cfg_fpath: str
+   :param weight_fpath: The path to the PyTorch model weights on S3.
+   :type weight_fpath: str
+   :param batch_limit: The maximum number of sequences to predict on at once. Defaults to 32.
+   :type batch_limit: int, optional
+   :param cpu_offload: Whether to use cpu offload.
+                       If true, will run prediction with cpu offload. Defaults to True
+   :type cpu_offload: bool, optional
+   :param device: The device to run the model on. Defaults to None.
+   :type device: torch.device, optional
+   :param dtype: The dtype to run the model on. Defaults to None.
+   :type dtype: torch.dtype, optional
+
+   :returns: A dict of NumPy arrays of the predictions.
+   :rtype: dict[str, np.ndarray]
+
+
+.. py:function:: online_weight_update_(src_state_dict: dict[str, torch.Tensor], tgt_state_dict: dict[str, torch.Tensor], decay_rate: float, param_prefixes: Optional[Iterable[str]] = None)
+

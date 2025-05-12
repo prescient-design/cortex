@@ -1,0 +1,107 @@
+cortex.data.data_module._task_data_module
+=========================================
+
+.. py:module:: cortex.data.data_module._task_data_module
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   cortex.data.data_module._task_data_module.T
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.data.data_module._task_data_module.TaskDataModule
+
+
+Module Contents
+---------------
+
+.. py:data:: T
+
+.. py:class:: TaskDataModule(dataset_config: omegaconf.DictConfig, train_on_everything: bool = False, lengths: Union[Sequence[float], None] = None, seed: int = 3735928559, batch_size: int = 1, shuffle: Optional[bool] = None, balance_train_partition: Optional[Union[str, list[str]]] = None, sampler: Union[Iterable, torch.utils.data.Sampler, None] = None, batch_sampler: Union[Iterable[Sequence], torch.utils.data.Sampler[Sequence], None] = None, num_workers: int = 0, collate_fn: Union[Callable[[T], Any], None] = None, pin_memory: bool = True, drop_last: bool = False, skip_task_setup: bool = False)
+
+   Bases: :py:obj:`lightning.LightningDataModule`
+
+
+   .. py:attribute:: _train_on_everything
+      :value: False
+
+
+
+   .. py:attribute:: _lengths
+      :value: [0.8, 0.2]
+
+
+
+   .. py:attribute:: _seed
+      :value: 3735928559
+
+
+
+   .. py:attribute:: _dataset_config
+
+
+   .. py:attribute:: _shuffle
+      :value: None
+
+
+
+   .. py:attribute:: _balance_train_partition
+      :value: None
+
+
+
+   .. py:attribute:: _sampler
+      :value: None
+
+
+
+   .. py:attribute:: _batch_size
+      :value: 1
+
+
+
+   .. py:attribute:: _batch_sampler
+      :value: None
+
+
+
+   .. py:attribute:: _collate_fn
+
+
+   .. py:attribute:: _drop_last
+      :value: False
+
+
+
+   .. py:attribute:: datasets
+
+
+   .. py:attribute:: _dataloader_kwargs
+
+
+   .. py:method:: setup(stage=None, dataset_kwargs=None)
+
+
+   .. py:method:: train_dataloader()
+
+
+   .. py:method:: val_dataloader()
+
+
+   .. py:method:: test_dataloader()
+
+
+   .. py:method:: get_dataloader(split: str = 'train')
+
+
+   .. py:method:: _partition_train_indices()
+
+

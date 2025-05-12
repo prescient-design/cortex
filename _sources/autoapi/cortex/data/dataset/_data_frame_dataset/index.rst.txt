@@ -1,0 +1,84 @@
+cortex.data.dataset._data_frame_dataset
+=======================================
+
+.. py:module:: cortex.data.dataset._data_frame_dataset
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   cortex.data.dataset._data_frame_dataset.T
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.data.dataset._data_frame_dataset.DataFrameDataset
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.data.dataset._data_frame_dataset.ordered_dict_collator
+
+
+Module Contents
+---------------
+
+.. py:data:: T
+
+.. py:class:: DataFrameDataset(root: Union[str, pathlib.Path], *, download: bool = False, download_source: Optional[str] = None, dedup: bool = True, train: bool = True, random_seed: int = 3735928559, **kwargs: Any)
+
+   Bases: :py:obj:`torch.utils.data.Dataset`
+
+
+   .. py:attribute:: _data
+      :type:  pandas.DataFrame
+
+
+   .. py:attribute:: _name
+      :type:  str
+      :value: 'temp'
+
+
+
+   .. py:attribute:: _target
+      :type:  str
+      :value: 'data.csv'
+
+
+
+   .. py:attribute:: columns
+      :value: None
+
+
+
+   .. py:attribute:: _root
+
+
+   .. py:method:: _read_data(path: str, dedup: bool, train: bool, random_seed: int, **kwargs: Any) -> pandas.DataFrame
+
+
+   .. py:method:: __len__() -> int
+
+
+   .. py:method:: _fetch_item(index) -> pandas.DataFrame
+
+
+   .. py:method:: _format_item(item: pandas.DataFrame) -> collections.OrderedDict[str, Any]
+
+
+   .. py:method:: __getitem__(index) -> collections.OrderedDict[str, Any]
+
+
+.. py:function:: ordered_dict_collator(batch: list[collections.OrderedDict[str, Any]]) -> collections.OrderedDict[str, Any]
+
+   Collates a batch of OrderedDicts into a single OrderedDict.
+
+

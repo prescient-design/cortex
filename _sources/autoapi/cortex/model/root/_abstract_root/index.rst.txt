@@ -1,0 +1,44 @@
+cortex.model.root._abstract_root
+================================
+
+.. py:module:: cortex.model.root._abstract_root
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.root._abstract_root.RootNodeOutput
+   cortex.model.root._abstract_root.RootNode
+
+
+Module Contents
+---------------
+
+.. py:class:: RootNodeOutput
+
+   .. py:attribute:: root_features
+      :type:  torch.Tensor
+
+
+   .. py:attribute:: corrupt_frac
+      :type:  Optional[torch.Tensor]
+      :value: None
+
+
+
+.. py:class:: RootNode
+
+   Bases: :py:obj:`abc.ABC`, :py:obj:`torch.nn.Module`
+
+
+   Input node, receives e.g. sequences, point-clouds, graphs, images, or tabular features.
+   Extracts mode-specific features and passes result to a trunk node.
+
+
+   .. py:method:: forward(*args, **kwargs) -> RootNodeOutput
+      :abstractmethod:
+
+
+
