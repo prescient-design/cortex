@@ -1,0 +1,34 @@
+cortex.model.elemental._functional
+==================================
+
+.. py:module:: cortex.model.elemental._functional
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.model.elemental._functional.identity
+   cortex.model.elemental._functional.permute_spatial_channel_dims
+   cortex.model.elemental._functional.swish
+
+
+Module Contents
+---------------
+
+.. py:function:: identity(x: torch.Tensor) -> torch.Tensor
+
+   This function returns its input.
+
+
+.. py:function:: permute_spatial_channel_dims(x: torch.Tensor) -> torch.Tensor
+
+   Permute the last two dimensions of a 3D tensor.
+
+
+.. py:function:: swish(x: torch.Tensor) -> torch.Tensor
+
+   Swish activation function.
+
+

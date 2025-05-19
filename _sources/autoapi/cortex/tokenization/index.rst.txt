@@ -1,0 +1,164 @@
+cortex.tokenization
+===================
+
+.. py:module:: cortex.tokenization
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/tokenization/_cached_bert_tokenizer/index
+   /autoapi/cortex/tokenization/_protein_seq_tokenizer/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.tokenization.CachedBertTokenizerFast
+   cortex.tokenization.ProteinComplex
+   cortex.tokenization.ProteinSequenceTokenizerFast
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.tokenization.tokenize_protein_complex
+
+
+Package Contents
+----------------
+
+.. py:class:: CachedBertTokenizerFast(vocab_file: str = None, tokenizer_file: str = None, do_lower_case: bool = False, unk_token: str = '[UNK]', sep_token: str = '[SEP]', pad_token: str = '[PAD]', cls_token: str = '[CLS]', mask_token: str = '[MASK]', raise_unk_exception: bool = False, add_cls_and_sep: bool = False, **kwargs)
+
+   Bases: :py:obj:`transformers.BertTokenizerFast`
+
+
+   This class is a wrapper around the BertTokenizerFast class from the transformers library.
+   It adds an additional cached encoding method for faster runtimes on smaller datasets.
+   It also provides attributes indicating which tokens can be corrupted and sampled by denoising models,
+   and a convenience method for getting a mask of corruptible tokens from a sequence of token ids.
+
+
+   .. py:attribute:: padding_idx
+
+
+   .. py:attribute:: masking_idx
+
+
+   .. py:attribute:: corruption_vocab_excluded
+
+
+   .. py:attribute:: sampling_vocab_excluded
+
+
+   .. py:attribute:: _raise_unk_exception
+      :value: False
+
+
+
+   .. py:attribute:: _add_cls_and_sep
+      :value: False
+
+
+
+   .. py:property:: corruption_vocab_included
+
+      Tokens that can be corrupted by denoising models.
+
+
+   .. py:property:: sampling_vocab_included
+
+      Tokens that can be sampled by denoising models.
+
+
+   .. py:method:: decode(token_ids: torch.LongTensor, skip_special_tokens: bool = True)
+
+      Decode a sequence of token ids into a string.
+
+
+
+   .. py:method:: cached_encode(text: str)
+
+      Cached tokenizer call, for faster runtimes on smaller datasets.
+
+
+
+   .. py:method:: get_corruptible_mask(token_batch: torch.LongTensor) -> torch.Tensor
+
+      :param token_batch: a batch of token ids (LongTensor).
+
+      :returns: a boolean mask tensor of corruptible tokens (corrupt if True).
+
+
+
+.. py:class:: ProteinComplex
+
+   Dataclass for protein complex.
+   :param chains: dict[str, str]: an ordered dict of chain_id: chain_sequence pairs (e.g. {"VH": "AVAVAV", "VL": "ACVACA"})
+   :param species: Optional[str]: species of the complex (e.g. <human>, <mouse>, etc.)
+   :param format: Optional[str]: format of the complex  (e.g. <igg>, <igm>, etc.)
+
+
+   .. py:attribute:: chains
+      :type:  collections.OrderedDict[str, str]
+
+
+   .. py:attribute:: species
+      :type:  Optional[str]
+      :value: None
+
+
+
+   .. py:attribute:: format
+      :type:  Optional[str]
+      :value: None
+
+
+
+.. py:class:: ProteinSequenceTokenizerFast(vocab_file: Optional[str] = None, tokenizer_file: Optional[str] = None, custom_tokens: Optional[list[str]] = None, ambiguous_tokens: Optional[list[str]] = None, do_lower_case: bool = False, unk_token: str = '<unk>', sep_token: str = '<eos>', pad_token: str = '<pad>', cls_token: str = '<cls>', mask_token: str = '<mask>', **kwargs)
+
+   Bases: :py:obj:`cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast`
+
+
+   Subclass of CachedBertTokenizerFast with vocabulary for protein complexes.
+
+
+   .. py:attribute:: sampling_vocab_excluded
+
+
+   .. py:attribute:: corruption_vocab_excluded
+
+
+   .. py:attribute:: chain_tokens
+      :value: ['-']
+
+
+
+.. py:function:: tokenize_protein_complex(complex: ProteinComplex, sep_with_chain_ids: bool = False, include_species: bool = False, include_format: bool = False)
+
+   Tokenize a protein complex.
+   :param complex: ProteinComplex: a protein complex dataclass
+   :param seq_with_chain_ids: bool: whether to include chain ids in the tokenized sequence
+
+   :returns: tokenized protein complex
+   :rtype: str
+
+   Example:
+   >>> complex = ProteinComplex(
+   ...     chains={
+   ...         "VH": "A V A V A V",
+   ...         "VL": "A C V A C A",
+   ...     },
+   ... )
+   >>> tokens = tokenize_protein_complex(complex)
+   >>> tokens
+   "A V A V A V . A C V A C A"
+
+

@@ -1,0 +1,15 @@
+cortex.config
+=============
+
+.. py:module:: cortex.config
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/config/hydra/index
+
+

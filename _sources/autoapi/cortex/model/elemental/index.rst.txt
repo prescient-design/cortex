@@ -1,0 +1,311 @@
+cortex.model.elemental
+======================
+
+.. py:module:: cortex.model.elemental
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/model/elemental/_apply/index
+   /autoapi/cortex/model/elemental/_bidirectional_self_attention/index
+   /autoapi/cortex/model/elemental/_causal_self_attention/index
+   /autoapi/cortex/model/elemental/_ddp_standardize/index
+   /autoapi/cortex/model/elemental/_expression/index
+   /autoapi/cortex/model/elemental/_functional/index
+   /autoapi/cortex/model/elemental/_layernorm/index
+   /autoapi/cortex/model/elemental/_mean_pooling/index
+   /autoapi/cortex/model/elemental/_mlp/index
+   /autoapi/cortex/model/elemental/_pooling_self_attention/index
+   /autoapi/cortex/model/elemental/_sine_pos_encoder/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.elemental.Apply
+   cortex.model.elemental.BidirectionalSelfAttention
+   cortex.model.elemental.CausalSelfAttention
+   cortex.model.elemental.DDPStandardize
+   cortex.model.elemental.Expression
+   cortex.model.elemental.MaskLayerNorm1d
+   cortex.model.elemental.MeanPooling
+   cortex.model.elemental.WeightedMeanPooling
+   cortex.model.elemental.PoolingSelfAttention
+   cortex.model.elemental.SinePosEncoder
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.model.elemental.identity
+   cortex.model.elemental.permute_spatial_channel_dims
+   cortex.model.elemental.swish
+
+
+Package Contents
+----------------
+
+.. py:class:: Apply(module: Callable, dim: int = 0)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   `nn.Module` which applies a function to a specific dimension of the input
+
+
+   .. py:attribute:: module
+
+
+   .. py:attribute:: dim
+      :value: 0
+
+
+
+   .. py:method:: forward(x: Iterable) -> Iterable
+
+
+.. py:class:: BidirectionalSelfAttention(num_heads: int = 4, embed_dim: int = 32, dropout_p: float = 0.0, bias: bool = False)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:attribute:: c_attn
+
+
+   .. py:attribute:: c_proj
+
+
+   .. py:attribute:: dropout
+
+
+   .. py:attribute:: dropout_p
+      :value: 0.0
+
+
+
+   .. py:attribute:: head_dim
+      :value: 8
+
+
+
+   .. py:attribute:: num_heads
+      :value: 4
+
+
+
+   .. py:method:: forward(inputs: tuple[torch.Tensor, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor]
+
+
+.. py:class:: CausalSelfAttention(num_heads: int = 4, embed_dim: int = 32, dropout_p: float = 0.0, bias: bool = False)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:attribute:: c_attn
+
+
+   .. py:attribute:: c_proj
+
+
+   .. py:attribute:: dropout
+
+
+   .. py:attribute:: dropout_p
+      :value: 0.0
+
+
+
+   .. py:attribute:: head_dim
+      :value: 8
+
+
+
+   .. py:attribute:: num_heads
+      :value: 4
+
+
+
+   .. py:method:: forward(inputs: tuple[torch.Tensor, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor]
+
+
+.. py:class:: DDPStandardize(m: int, outputs: Optional[list[int]] = None, batch_shape: torch.Size = torch.Size(), min_stdv: float = 1e-08)
+
+   Bases: :py:obj:`botorch.models.transforms.outcome.Standardize`
+
+
+   Standardize outcomes (zero mean, unit variance).
+
+   This module is stateful: If in train mode, calling forward updates the
+   module state (i.e. the mean/std normalizing constants). If in eval mode,
+   calling forward simply applies the standardization using the current module
+   state.
+
+
+   .. py:attribute:: _outputs
+
+
+   .. py:attribute:: _m
+
+
+   .. py:attribute:: _batch_shape
+
+
+   .. py:attribute:: _min_stdv
+      :value: 1e-08
+
+
+
+   .. py:method:: load_state_dict(state_dict: Mapping[str, Any], strict: bool = True) -> None
+
+      Custom logic for loading the state dict.
+
+
+
+   .. py:method:: forward(Y: torch.Tensor, Yvar: Optional[torch.Tensor] = None) -> tuple[torch.Tensor, Optional[torch.Tensor]]
+
+      Standardize outcomes.
+
+      If the module is in train mode, this updates the module state (i.e. the
+      mean/std normalizing constants). If the module is in eval mode, simply
+      applies the normalization using the module state.
+
+      :param Y: A `batch_shape x n x m`-dim tensor of training targets.
+      :param Yvar: A `batch_shape x n x m`-dim tensor of observation noises
+                   associated with the training targets (if applicable).
+
+      :returns:
+
+                - The transformed outcome observations.
+                - The transformed observation noise (if applicable).
+      :rtype: A two-tuple with the transformed outcomes
+
+
+
+.. py:class:: Expression(func: Callable)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   `nn.Module` wrapper for arbitrary function (useful for `nn.Sequential`)
+
+
+   .. py:attribute:: func
+
+
+   .. py:method:: forward(x: torch.Tensor) -> torch.Tensor
+
+
+.. py:function:: identity(x: torch.Tensor) -> torch.Tensor
+
+   This function returns its input.
+
+
+.. py:function:: permute_spatial_channel_dims(x: torch.Tensor) -> torch.Tensor
+
+   Permute the last two dimensions of a 3D tensor.
+
+
+.. py:function:: swish(x: torch.Tensor) -> torch.Tensor
+
+   Swish activation function.
+
+
+.. py:class:: MaskLayerNorm1d
+
+   Bases: :py:obj:`torch.nn.LayerNorm`
+
+
+   Transformer-style layer-norm layer
+
+
+   .. py:method:: forward(inp: tuple[torch.Tensor, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor]
+
+
+.. py:class:: MeanPooling
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   Average pooling over the sequence dimension excluding padding token positions.
+
+
+   .. py:method:: forward(inputs: tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor
+
+
+.. py:class:: WeightedMeanPooling(in_dim)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   Weighted average pooling over the sequence dimension excluding padding token positions.
+   Weights are learned by a linear layer. Breaks fused Adam optimizer.
+
+
+   .. py:attribute:: encoder
+
+
+   .. py:method:: forward(inputs: tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor
+
+
+.. py:class:: PoolingSelfAttention(num_heads: int = 4, embed_dim: int = 32, dropout_p: float = 0.0, bias: bool = False)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:attribute:: c_attn
+
+
+   .. py:attribute:: c_proj
+
+
+   .. py:attribute:: dropout
+
+
+   .. py:attribute:: dropout_p
+      :value: 0.0
+
+
+
+   .. py:attribute:: head_dim
+      :value: 8
+
+
+
+   .. py:attribute:: num_heads
+      :value: 4
+
+
+
+   .. py:method:: forward(inputs: tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor
+
+
+.. py:class:: SinePosEncoder(embed_dim: int, dropout: float = 0.0, max_len: int = 5000, batch_first: bool = False)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   Sinusoidal positional encoding for Transformer models
+
+
+   .. py:attribute:: dropout
+
+
+   .. py:attribute:: batch_first
+      :value: False
+
+
+
+   .. py:method:: forward(x: torch.Tensor) -> torch.Tensor
+
+      :param x: Tensor, shape [seq_len, batch_size, embedding_dim] or [batch_size, seq_len, embedding_dim]
+
+
+

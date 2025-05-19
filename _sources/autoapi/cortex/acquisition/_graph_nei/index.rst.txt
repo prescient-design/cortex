@@ -1,0 +1,112 @@
+cortex.acquisition._graph_nei
+=============================
+
+.. py:module:: cortex.acquisition._graph_nei
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   cortex.acquisition._graph_nei.GRAPH_OBJECTIVES
+   cortex.acquisition._graph_nei.GRAPH_CONSTRAINTS
+   cortex.acquisition._graph_nei.GRAPH_OBJ_TRANSFORM
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.acquisition._graph_nei.GraphNEI
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.acquisition._graph_nei.get_joint_objective_values
+   cortex.acquisition._graph_nei.scale_value
+   cortex.acquisition._graph_nei.tree_output_to_dict
+   cortex.acquisition._graph_nei.get_graph_nei_runtime_kwargs
+
+
+Module Contents
+---------------
+
+.. py:data:: GRAPH_OBJECTIVES
+   :value: ['stability', 'log_fluorescence']
+
+
+.. py:data:: GRAPH_CONSTRAINTS
+
+.. py:data:: GRAPH_OBJ_TRANSFORM
+
+.. py:function:: get_joint_objective_values(inputs: dict[str, torch.Tensor], objectives: list[str], constraints: Optional[dict[str, list[str]]] = None, scaling: Optional[dict[str, dict[str, float]]] = None) -> torch.Tensor
+
+   Get joint objective values from predicted properties based on objectives and constraints.
+
+   :param inputs: dictionary of predicted properties. Each key is a property name and each value is a tensor of shape (ensemble size, batch_size)
+   :type inputs: dict[str, Tensor]
+   :param objectives: list of objective names. Each objective name must be a key in inputs.
+   :type objectives: list[str]
+   :param constraints: dictionary of constraints. Each key is a constraint name and each value is a list of objective names that are constrained by the constraint.
+   :type constraints: Optional[dict[str, list[str]]], optional
+   :param scaling: dictionary of scaling parameters. Each key is a property name and each value is a dictionary with keys "scale" and "shift".
+   :type scaling: Optional[dict[str, dict[str, float]]], optional
+
+   :returns: Joint objective values of shape (ensemble size, batch_size, num_objectives)
+   :rtype: Tensor
+
+
+.. py:function:: scale_value(value: torch.Tensor, *, shift: float, scale: float) -> torch.Tensor
+
+.. py:function:: tree_output_to_dict(tree_output: cortex.model.tree.NeuralTreeOutput, objectives: list[str], constraints: Optional[dict[str, list[str]]] = None, scaling: Optional[dict[str, dict[str, float]]] = None) -> dict[str, torch.Tensor]
+
+   Convert tree output to dictionary of tensors.
+
+   :param tree_output: Tree output
+   :type tree_output: NeuralTreeOutput
+   :param objectives: list of objective names. Each objective adds a key to the output dictionary.
+   :type objectives: list[str]
+   :param constraints: Optional dictionary of constraints. Each key is added to the output dictionary.
+   :type constraints: Optional[dict[str, list[str]]], optional
+   :param scaling: Optional dictionary of scaling parameters. Must be a subset of objectives and each value is a dictionary with keys "scale" and "shift".
+   :type scaling: Optional[dict[str, dict[str, float]]], optional
+
+   :returns: dictionary of tensors with keys corresponding to objectives and constraints.
+   :rtype: dict[str, Tensor]
+
+
+.. py:function:: get_graph_nei_runtime_kwargs(model: cortex.model.tree.NeuralTree, candidate_points: numpy.ndarray, objectives: list[str] = GRAPH_OBJECTIVES, constraints: dict[str, list[str]] = GRAPH_CONSTRAINTS, scaling: dict[str, dict[str, float]] = GRAPH_OBJ_TRANSFORM)
+
+.. py:class:: GraphNEI(objectives: list[str], constraints: dict[str, list[str]], scaling: dict[str, dict[str, float]], f_ref: torch.Tensor, f_baseline: torch.Tensor)
+
+   Bases: :py:obj:`object`
+
+
+   .. py:attribute:: objectives
+
+
+   .. py:attribute:: constraints
+
+
+   .. py:attribute:: scaling
+
+
+   .. py:attribute:: _obj_dim
+
+
+   .. py:attribute:: has_pointwise_reference
+      :value: False
+
+
+
+   .. py:method:: get_objective_vals(tree_output: cortex.model.tree.NeuralTreeOutput)
+
+
+   .. py:method:: __call__(input: cortex.model.tree.NeuralTreeOutput | torch.Tensor, pointwise=True)
+
+

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cortex.model.leaf._denoising_lm_leaf &#8212; cortex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
+    <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="cortex.model.leaf._regressor_leaf" href="../_regressor_leaf/index.html" />
+    <link rel="prev" title="cortex.model.leaf._classifier_leaf" href="../_classifier_leaf/index.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-cortex.model.leaf._denoising_lm_leaf">
+<span id="cortex-model-leaf-denoising-lm-leaf"></span><h1>cortex.model.leaf._denoising_lm_leaf<a class="headerlink" href="#module-cortex.model.leaf._denoising_lm_leaf" title="Link to this heading">¶</a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput" title="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DenoisingLanguageModelLeafOutput</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf" title="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DenoisingLanguageModelLeaf</span></code></a></p></td>
+<td><p>Leaf node which transforms branch sequence features to discrete sequence logits.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.model.leaf._denoising_lm_leaf.format_denoising_lm_ensemble_output" title="cortex.model.leaf._denoising_lm_leaf.format_denoising_lm_ensemble_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_denoising_lm_ensemble_output</span></code></a>(leaf_outputs, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cortex.model.leaf._denoising_lm_leaf.mlm_conditional_log_likelihood" title="cortex.model.leaf._denoising_lm_leaf.mlm_conditional_log_likelihood"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlm_conditional_log_likelihood</span></code></a>(tree_output, ...)</p></td>
+<td><p>Compute the MLM conditional log-likelihood of the masked tokens in <cite>x_occluded</cite> given the unmasked tokens in <cite>x_instances</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.model.leaf._denoising_lm_leaf.mlm_pseudo_log_likelihood" title="cortex.model.leaf._denoising_lm_leaf.mlm_pseudo_log_likelihood"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlm_pseudo_log_likelihood</span></code></a>(tok_idxs, null_value, model, ...)</p></td>
+<td><p>Compute the MLM pseudo-log-likelihood of the full tok_idxs sequence</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.model.leaf._denoising_lm_leaf.</span></span><span class="sig-name descname"><span class="pre">DenoisingLanguageModelLeafOutput</span></span><a class="headerlink" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../index.html#cortex.model.leaf.LeafNodeOutput" title="cortex.model.leaf.LeafNodeOutput"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cortex.model.leaf.LeafNodeOutput</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput.logits">
+<span class="sig-name descname"><span class="pre">logits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">torch.Tensor</span></em><a class="headerlink" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput.logits" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.model.leaf._denoising_lm_leaf.</span></span><span class="sig-name descname"><span class="pre">DenoisingLanguageModelLeaf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corruption_process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../corruption/_abstract_corruption/index.html#cortex.corruption._abstract_corruption.CorruptionProcess" title="cortex.corruption._abstract_corruption.CorruptionProcess"><span class="pre">cortex.corruption._abstract_corruption.CorruptionProcess</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corruption_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layernorm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../index.html#cortex.model.leaf.ClassifierLeaf" title="cortex.model.leaf.ClassifierLeaf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cortex.model.leaf.ClassifierLeaf</span></code></a></p>
+<p>Leaf node which transforms branch sequence features to discrete sequence logits.</p>
+<p>Can optionally apply a corruption process to the masked tokens during training,
+which serves as a form of data augmentation to increase sample diversity and
+potentially improve embedding quality. This is particularly useful with
+biologically-informed corruption processes like BLOSUM62-based substitutions
+for protein sequences.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf.corruption_process">
+<span class="sig-name descname"><span class="pre">corruption_process</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf.corruption_process" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf.corruption_rate">
+<span class="sig-name descname"><span class="pre">corruption_rate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.1</span></em><a class="headerlink" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf.corruption_rate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">branch_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../branch/index.html#cortex.model.branch.BranchNodeOutput" title="cortex.model.branch.BranchNodeOutput"><span class="pre">cortex.model.branch.BranchNodeOutput</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput" title="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput"><span class="pre">DenoisingLanguageModelLeafOutput</span></a></span></span><a class="headerlink" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf.forward" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>branch_outputs</strong> – SeqCNNBranchOutput</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DenoisingLanguageModelLeafOutput</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>outputs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leaf_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput" title="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput"><span class="pre">DenoisingLanguageModelLeafOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../root/index.html#cortex.model.root.RootNodeOutput" title="cortex.model.root.RootNodeOutput"><span class="pre">cortex.model.root.RootNodeOutput</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf.loss" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf.format_outputs">
+<span class="sig-name descname"><span class="pre">format_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leaf_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput" title="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput"><span class="pre">DenoisingLanguageModelLeafOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../root/index.html#cortex.model.root.RootNodeOutput" title="cortex.model.root.RootNodeOutput"><span class="pre">cortex.model.root.RootNodeOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf.format_outputs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leaf_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput" title="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput"><span class="pre">DenoisingLanguageModelLeafOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../root/index.html#cortex.model.root.RootNodeOutput" title="cortex.model.root.RootNodeOutput"><span class="pre">cortex.model.root.RootNodeOutput</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf.evaluate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.model.leaf._denoising_lm_leaf.format_denoising_lm_ensemble_output">
+<span class="sig-prename descclassname"><span class="pre">cortex.model.leaf._denoising_lm_leaf.</span></span><span class="sig-name descname"><span class="pre">format_denoising_lm_ensemble_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leaf_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput" title="cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput"><span class="pre">DenoisingLanguageModelLeafOutput</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../root/index.html#cortex.model.root.RootNodeOutput" title="cortex.model.root.RootNodeOutput"><span class="pre">cortex.model.root.RootNodeOutput</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.leaf._denoising_lm_leaf.format_denoising_lm_ensemble_output" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.model.leaf._denoising_lm_leaf.mlm_conditional_log_likelihood">
+<span class="sig-prename descclassname"><span class="pre">cortex.model.leaf._denoising_lm_leaf.</span></span><span class="sig-name descname"><span class="pre">mlm_conditional_log_likelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree_output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../tree/index.html#cortex.model.tree.NeuralTreeOutput" title="cortex.model.tree.NeuralTreeOutput"><span class="pre">cortex.model.tree.NeuralTreeOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_instances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_occluded</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.leaf._denoising_lm_leaf.mlm_conditional_log_likelihood" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the MLM conditional log-likelihood of the masked tokens in <cite>x_occluded</cite> given the unmasked tokens in <cite>x_instances</cite>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.model.leaf._denoising_lm_leaf.mlm_pseudo_log_likelihood">
+<span class="sig-prename descclassname"><span class="pre">cortex.model.leaf._denoising_lm_leaf.</span></span><span class="sig-name descname"><span class="pre">mlm_pseudo_log_likelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tok_idxs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.LongTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../tree/index.html#cortex.model.tree.NeuralTree" title="cortex.model.tree.NeuralTree"><span class="pre">cortex.model.tree.NeuralTree</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_excluded</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.BoolTensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.model.leaf._denoising_lm_leaf.mlm_pseudo_log_likelihood" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the MLM pseudo-log-likelihood of the full tok_idxs sequence</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">cortex</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html">cortex</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">API Reference</a><ul>
+  <li><a href="../../../index.html">cortex</a><ul>
+  <li><a href="../../index.html">cortex.model</a><ul>
+  <li><a href="../index.html">cortex.model.leaf</a><ul>
+      <li>Previous: <a href="../_classifier_leaf/index.html" title="previous chapter">cortex.model.leaf._classifier_leaf</a></li>
+      <li>Next: <a href="../_regressor_leaf/index.html" title="next chapter">cortex.model.leaf._regressor_leaf</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Sam Stanton.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../../../../_sources/autoapi/cortex/model/leaf/_denoising_lm_leaf/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

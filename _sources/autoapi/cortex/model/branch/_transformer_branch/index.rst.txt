@@ -1,0 +1,69 @@
+cortex.model.branch._transformer_branch
+=======================================
+
+.. py:module:: cortex.model.branch._transformer_branch
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.branch._transformer_branch.TransformerBranchOutput
+   cortex.model.branch._transformer_branch.TransformerBranch
+
+
+Module Contents
+---------------
+
+.. py:class:: TransformerBranchOutput
+
+   Bases: :py:obj:`cortex.model.branch.BranchNodeOutput`
+
+
+   .. py:attribute:: branch_mask
+      :type:  torch.Tensor
+
+
+   .. py:attribute:: pooled_features
+      :type:  torch.Tensor
+
+
+.. py:class:: TransformerBranch(in_dim: int, out_dim: int = 64, channel_dim: int = 64, num_blocks: int = 2, num_heads: int = 4, is_causal: bool = False, dropout_prob: float = 0.0, pooling_type: str = 'mean', **kwargs)
+
+   Bases: :py:obj:`cortex.model.branch.BranchNode`
+
+
+   Branch node which transforms aggregated trunk features to task branch specific features
+
+
+   .. py:attribute:: in_dim
+
+
+   .. py:attribute:: out_dim
+      :value: 64
+
+
+
+   .. py:attribute:: channel_dim
+      :value: 64
+
+
+
+   .. py:attribute:: num_blocks
+      :value: 2
+
+
+
+   .. py:attribute:: encoder
+
+
+   .. py:method:: forward(trunk_outputs: cortex.model.trunk.PaddedTrunkOutput) -> TransformerBranchOutput
+
+      :param trunk_outputs: {'trunk_features': torch.Tensor, 'padding_mask': torch.Tensor}
+
+      :returns: {'branch_features': torch.Tensor, 'branch_mask': torch.Tensor, 'pooled_features': torch.Tensor}
+      :rtype: outputs
+
+
+

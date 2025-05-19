@@ -1,0 +1,63 @@
+cortex.corruption._diffusion_noise_schedule
+===========================================
+
+.. py:module:: cortex.corruption._diffusion_noise_schedule
+
+.. autoapi-nested-parse::
+
+   This code started out as a PyTorch port of Ho et al's diffusion models:
+   https://github.com/hojonathanho/diffusion/blob/1e0dceb3b3495bbe19116a5e1b3596cd0706c543/diffusion_tf/diffusion_utils_2.py
+
+   Docstrings have been added, as well as DDIM sampling and a new collection of beta schedules.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.corruption._diffusion_noise_schedule.get_named_beta_schedule
+   cortex.corruption._diffusion_noise_schedule._betas_for_alpha_bar2
+   cortex.corruption._diffusion_noise_schedule._betas_for_alpha_bar
+
+
+Module Contents
+---------------
+
+.. py:function:: get_named_beta_schedule(schedule_name: str, num_diffusion_timesteps: int) -> numpy.ndarray
+
+   Get a pre-defined beta schedule for the given name.
+
+   The beta schedule library consists of beta schedules which remain similar
+   in the limit of num_diffusion_timesteps.
+   Beta schedules may be added, but should not be removed or changed once
+   they are committed to maintain backwards compatibility.
+
+
+.. py:function:: _betas_for_alpha_bar2(num_diffusion_timesteps: int, alpha_bar: Callable, max_beta: float = 0.999) -> numpy.ndarray
+
+   Create a beta schedule that discretizes the given alpha_t_bar function,
+   which defines the cumulative product of (1-beta) over time from t = [0,1].
+
+   :param num_diffusion_timesteps: the number of betas to produce.
+   :param alpha_bar: a lambda that takes an argument t from 0 to 1 and
+                     produces the cumulative product of (1-beta) up to that
+                     part of the diffusion process.
+   :param max_beta: the maximum beta to use; use values lower than 1 to
+                    prevent singularities.
+
+
+.. py:function:: _betas_for_alpha_bar(num_diffusion_timesteps: int, alpha_bar: Callable, max_beta: float = 0.999) -> numpy.ndarray
+
+   Create a beta schedule that discretizes the given alpha_t_bar function,
+   which defines the cumulative product of (1-beta) over time from t = [0,1].
+
+   :param num_diffusion_timesteps: the number of betas to produce.
+   :param alpha_bar: a lambda that takes an argument t from 0 to 1 and
+                     produces the cumulative product of (1-beta) up to that
+                     part of the diffusion process.
+   :param max_beta: the maximum beta to use; use values lower than 1 to
+                    prevent singularities.
+
+

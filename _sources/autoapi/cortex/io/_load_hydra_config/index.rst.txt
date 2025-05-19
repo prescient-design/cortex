@@ -1,0 +1,25 @@
+cortex.io._load_hydra_config
+============================
+
+.. py:module:: cortex.io._load_hydra_config
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.io._load_hydra_config.load_hydra_config
+
+
+Module Contents
+---------------
+
+.. py:function:: load_hydra_config(cfg_fpath: str) -> omegaconf.DictConfig
+
+   Load saved OmegaConf object from YAML file.
+   :param cfg_fpath: path to YAML file. Must point to local file or S3 object.
+
+   :returns: OmegaConf object
+
+

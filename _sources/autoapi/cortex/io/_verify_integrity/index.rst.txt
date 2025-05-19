@@ -1,0 +1,19 @@
+cortex.io._verify_integrity
+===========================
+
+.. py:module:: cortex.io._verify_integrity
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.io._verify_integrity.verify_integrity
+
+
+Module Contents
+---------------
+
+.. py:function:: verify_integrity(path: str, checksum: Optional[str] = None) -> bool
+

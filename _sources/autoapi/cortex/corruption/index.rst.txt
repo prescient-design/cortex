@@ -1,0 +1,208 @@
+cortex.corruption
+=================
+
+.. py:module:: cortex.corruption
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/corruption/_abstract_corruption/index
+   /autoapi/cortex/corruption/_diffusion_noise_schedule/index
+   /autoapi/cortex/corruption/_gaussian_corruption/index
+   /autoapi/cortex/corruption/_mask_corruption/index
+   /autoapi/cortex/corruption/_substitution_corruption/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.corruption.CorruptionProcess
+   cortex.corruption.GaussianCorruptionProcess
+   cortex.corruption.MaskCorruptionProcess
+   cortex.corruption.SubstitutionCorruptionProcess
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.corruption.get_named_beta_schedule
+
+
+Package Contents
+----------------
+
+.. py:class:: CorruptionProcess(schedule: str = 'cosine', max_steps: int = 1000, t_base_dist: Optional[torch.distributions.Distribution] = None, *args, **kwargs)
+
+   Bases: :py:obj:`abc.ABC`
+
+
+   Base class for corruption processes, must be subclassed and
+   the _corrupt method must be implemented.
+   Provides noise schedule and timestep sampling, and defines
+   the corruption interface.
+
+
+   .. py:attribute:: betas
+
+
+   .. py:attribute:: max_steps
+
+
+   .. py:attribute:: alphas_cumprod
+
+
+   .. py:attribute:: sqrt_alphas_cumprod
+
+
+   .. py:method:: sample_timestep(n: Optional[int] = 1) -> torch.Tensor
+
+      Sample timestep(s) from the noise schedule.
+
+      :param n: Number of timesteps to sample. If None, returns a single int.
+                If an integer, returns an array of shape (n,).
+
+      :returns: Int or array of timesteps.
+
+
+
+   .. py:method:: sample_corrupt_frac(n: Optional[int] = None) -> torch.Tensor
+
+      Sample corruption fraction(s).
+
+      :param n: Number of corruption fractions to sample. If None, returns a tensor with a single value.
+                If an integer, returns a tensor of shape (n,).
+
+      :returns: Tensor of corruption fractions.
+
+
+
+   .. py:method:: timestep_to_corrupt_frac(timestep: Union[int, torch.Tensor]) -> float
+
+
+   .. py:method:: __call__(x_start: torch.Tensor, timestep: Optional[int] = None, corrupt_frac: Optional[Union[float, torch.Tensor]] = None, corruption_allowed: Optional[torch.Tensor] = None, *args, **kwargs) -> tuple[torch.Tensor]
+
+
+   .. py:method:: _corrupt(x_start: torch.Tensor, corrupt_frac: float, *args, **kwargs)
+      :abstractmethod:
+
+
+
+.. py:function:: get_named_beta_schedule(schedule_name: str, num_diffusion_timesteps: int) -> numpy.ndarray
+
+   Get a pre-defined beta schedule for the given name.
+
+   The beta schedule library consists of beta schedules which remain similar
+   in the limit of num_diffusion_timesteps.
+   Beta schedules may be added, but should not be removed or changed once
+   they are committed to maintain backwards compatibility.
+
+
+.. py:class:: GaussianCorruptionProcess(noise_variance: float = 10.0, *args, **kwargs)
+
+   Bases: :py:obj:`cortex.corruption._abstract_corruption.CorruptionProcess`
+
+
+   Corrupt input tensor with additive Gaussian noise with
+   variance `noise_variance`. Each tensor element is corrupted
+   independently with probability `corrupt_frac`.
+
+
+   .. py:attribute:: noise_variance
+      :value: 10.0
+
+
+
+   .. py:method:: _corrupt(x_start: torch.Tensor, corrupt_frac: Union[float, torch.Tensor], *args, **kwargs) -> tuple[torch.Tensor]
+
+
+.. py:class:: MaskCorruptionProcess
+
+   Bases: :py:obj:`cortex.corruption._abstract_corruption.CorruptionProcess`
+
+
+   Corrupt input tensor with mask values. Each tensor element is corrupted
+   independently with probability `corrupt_frac`.
+
+
+   .. py:method:: __call__(x_start: torch.Tensor, mask_val: int, timestep: Optional[int] = None, corrupt_frac: Optional[float] = None, corruption_allowed: Optional[torch.Tensor] = None, *args, **kwargs)
+
+
+   .. py:method:: _corrupt(x_start: torch.Tensor, corrupt_frac: Union[float, torch.Tensor], mask_val: int, *args, **kwargs) -> tuple[torch.Tensor]
+
+
+.. py:class:: SubstitutionCorruptionProcess(vocab_size: int, excluded_token_ids: Optional[Set[int]] = None, substitution_matrix: Optional[torch.Tensor] = None, schedule: str = 'cosine', max_steps: int = 1000, *args, **kwargs)
+
+   Bases: :py:obj:`cortex.corruption._abstract_corruption.CorruptionProcess`
+
+
+   Corrupt input tensor by substituting values according to a substitution probability matrix.
+   Each tensor element is corrupted independently with probability `corrupt_frac`.
+
+   If no substitution_matrix is provided, uniform random substitution is used.
+   If a substitution_matrix is provided, it defines the probability of substituting
+   token i with token j.
+
+   :param vocab_size: Size of the vocabulary (number of possible tokens).
+   :param excluded_token_ids: Set of token IDs that should not be corrupted or used as substitutes.
+   :param substitution_matrix: Optional substitution probability matrix of shape (vocab_size, vocab_size).
+                               Each row i contains the probability distribution for substituting token i with any other token.
+                               If None, uniform random substitution is used.
+   :param schedule: Noise schedule type ("linear", "cosine", etc.).
+   :param max_steps: Maximum number of diffusion steps.
+
+
+   .. py:attribute:: vocab_size
+
+
+   .. py:attribute:: excluded_token_ids
+
+
+   .. py:attribute:: substitution_matrix
+      :value: None
+
+
+
+   .. py:method:: _corrupt(x_start: torch.Tensor, corrupt_frac: Union[float, torch.Tensor], *args, **kwargs) -> tuple[torch.Tensor, torch.Tensor]
+
+      Corrupt the input tensor by substituting tokens according to the substitution matrix.
+
+      :param x_start: Input tensor to corrupt.
+      :param corrupt_frac: Fraction of tokens to corrupt, either a scalar or per-example tensor.
+
+      :returns: Tuple of (corrupted tensor, corruption mask).
+
+
+
+   .. py:method:: from_tokenizer(tokenizer, **kwargs)
+      :classmethod:
+
+
+      Create a SubstitutionCorruptionProcess using a tokenizer's vocabulary.
+
+      :param tokenizer: A tokenizer with vocab and corruption_vocab_excluded attributes.
+
+      :returns: SubstitutionCorruptionProcess with uniform substitution matrix respecting tokenizer constraints.
+
+
+
+   .. py:method:: from_blosum62(vocab_file_path=None, **kwargs)
+      :classmethod:
+
+
+      Create a SubstitutionCorruptionProcess using BLOSUM62 substitution probabilities.
+
+      :param tokenizer: A tokenizer with vocabulary mapping functions (used for excluded tokens).
+      :param vocab_file_path: Optional path to vocab file. If None, uses default in ProteinSequenceTokenizer.
+
+      :returns: SubstitutionCorruptionProcess with BLOSUM62-based substitution matrix.
+
+
+

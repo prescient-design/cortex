@@ -1,0 +1,58 @@
+cortex.data.samplers.functional
+===============================
+
+.. py:module:: cortex.data.samplers.functional
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/data/samplers/functional/_round_robin_longest/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.data.samplers.functional.SizedIterable
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.data.samplers.functional.round_robin_longest
+
+
+Package Contents
+----------------
+
+.. py:class:: SizedIterable
+
+   Bases: :py:obj:`Sized`, :py:obj:`Iterable`
+
+
+.. py:function:: round_robin_longest(iterables: List[SizedIterable]) -> Iterable
+
+   Round robin of iterables until the longest have been exhausted.
+
+   .. rubric:: Example
+
+   >>> iterables = [range(5), "ABCDE", ["cat", "dog", "rabbit"]]
+   >>> iterator = round_robin_longest(iterables)
+   >>> list(iterator)
+   [0, 'A', 'cat', 1, 'B', 'dog', 2, 'C', 'rabbit', 3, 'D', 'cat', 4, 'E', 'dog']
+
+   :param iterables: The iterables to roundly robin
+   :type iterables: list[SizedIterable]
+
+   :returns: The iterator stepping round robinly through.
+             Cycles through shorter iterators.
+   :rtype: Iterable
+
+

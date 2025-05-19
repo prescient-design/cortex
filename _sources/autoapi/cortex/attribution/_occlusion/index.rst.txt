@@ -1,0 +1,36 @@
+cortex.attribution._occlusion
+=============================
+
+.. py:module:: cortex.attribution._occlusion
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.attribution._occlusion.occlusion
+   cortex.attribution._occlusion.approximate_occlusion
+   cortex.attribution._occlusion.greedy_occlusion_search
+
+
+Module Contents
+---------------
+
+.. py:function:: occlusion(score_fn: callable, tok_idxs: torch.LongTensor, null_value: int, is_excluded: Optional[torch.BoolTensor] = None)
+
+.. py:function:: approximate_occlusion(score_fn: callable, tok_embeddings: torch.FloatTensor, null_embedding: torch.FloatTensor, is_excluded: Optional[torch.BoolTensor] = None)
+
+   First-order Taylor expansion of the occlusion score.
+
+
+.. py:function:: greedy_occlusion_search(tok_idxs: torch.LongTensor, score_fn: callable, null_value: int, num_coordinates: int, is_excluded: Optional[torch.BoolTensor] = None, take_second_prob: float = 0.5)
+
+   Greedy coordinate selection based on sensitivity of `score_fn` to pointwise occlusion.
+   `score_fn` should be a callable that takes a tensor of token indices and returns a batch of scalar scores.
+   At each iteration, each coordinate is occluded and the score_fn is evaluated on the resulting tensor.
+   For each element in the batch, the coordinate with the highest score is selected and remains occluded.
+   This process is repeated until `num_coordinates` coordinates are selected.
+   Returns a tensor of indices of selected coordinates.
+
+

@@ -1,0 +1,246 @@
+cortex.model.tree
+=================
+
+.. py:module:: cortex.model.tree
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/model/tree/_abstract_tree/index
+   /autoapi/cortex/model/tree/_seq_model_tree/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.tree.NeuralTree
+   cortex.model.tree.NeuralTreeOutput
+   cortex.model.tree.SequenceModelTree
+
+
+Package Contents
+----------------
+
+.. py:class:: NeuralTree(root_nodes: torch.nn.ModuleDict, trunk_node: torch.nn.Module, branch_nodes: torch.nn.ModuleDict, leaf_nodes: torch.nn.ModuleDict)
+
+   Bases: :py:obj:`abc.ABC`, :py:obj:`torch.nn.Module`
+
+
+   Compute tree graph composed of root, trunk, branch, and leaf neural network nodes
+
+
+   .. py:attribute:: root_nodes
+
+
+   .. py:attribute:: trunk_node
+
+
+   .. py:attribute:: branch_nodes
+
+
+   .. py:attribute:: leaf_nodes
+
+
+   .. py:method:: build_tree(*args, **kwargs)
+      :abstractmethod:
+
+
+
+   .. py:method:: forward(root_inputs: dict, trunk_outputs: Optional[cortex.model.trunk.TrunkNodeOutput] = None, branch_outputs: Optional[dict[str, torch.Tensor]] = None, leaf_keys: Optional[list[str]] = None) -> NeuralTreeOutput
+
+
+   .. py:method:: predict(*args, **kwargs)
+      :abstractmethod:
+
+
+
+   .. py:method:: _predict_batch(*args, **kwargs)
+      :abstractmethod:
+
+
+
+   .. py:method:: evaluate(*args, **kwargs)
+      :abstractmethod:
+
+
+
+   .. py:method:: prediction_metrics(*args, **kwargs)
+      :abstractmethod:
+
+
+
+   .. py:method:: get_trainable_params()
+
+
+   .. py:method:: freeze_roots() -> None
+
+
+   .. py:method:: freeze_trunk() -> None
+
+
+   .. py:method:: freeze_branches() -> None
+
+
+   .. py:method:: add_branch(branch_cfg: omegaconf.DictConfig, branch_key: str) -> None
+
+
+   .. py:method:: add_leaf(leaf_node: cortex.model.leaf._abstract_leaf.LeafNode, leaf_key: str) -> None
+
+
+   .. py:method:: call_from_trunk_output(trunk_output, leaf_keys: Optional[list[str]] = None, **kwargs)
+
+
+.. py:class:: NeuralTreeOutput
+
+   .. py:attribute:: root_outputs
+      :type:  dict[str, cortex.model.root.RootNodeOutput]
+
+
+   .. py:attribute:: trunk_outputs
+      :type:  dict[str, cortex.model.trunk.TrunkNodeOutput]
+
+
+   .. py:attribute:: branch_outputs
+      :type:  dict[str, cortex.model.branch.BranchNodeOutput]
+
+
+   .. py:attribute:: leaf_outputs
+      :type:  dict[str, cortex.model.leaf._abstract_leaf.LeafNodeOutput]
+
+
+   .. py:method:: fetch_task_outputs(task_key: str)
+
+
+.. py:class:: SequenceModelTree(root_nodes: Optional[torch.nn.ModuleDict] = None, trunk_node: Optional[torch.nn.Module] = None, branch_nodes: Optional[torch.nn.ModuleDict] = None, leaf_nodes: Optional[torch.nn.ModuleDict] = None, fit_cfg: Optional[omegaconf.DictConfig] = None)
+
+   Bases: :py:obj:`cortex.model.tree.NeuralTree`, :py:obj:`lightning.LightningModule`
+
+
+   Compute tree graph composed of root, trunk, branch, and leaf neural network nodes
+
+
+   .. py:attribute:: _train_state_dict
+      :value: None
+
+
+
+   .. py:attribute:: _eval_state_dict
+      :value: None
+
+
+
+   .. py:attribute:: _w_avg_step_count
+      :value: 1
+
+
+
+   .. py:attribute:: training_step_outputs
+      :value: []
+
+
+
+   .. py:attribute:: validation_step_outputs
+      :value: []
+
+
+
+   .. py:attribute:: automatic_optimization
+      :value: False
+
+
+
+   .. py:method:: train(*args, **kwargs)
+
+
+   .. py:method:: eval(*args, **kwargs)
+
+
+   .. py:method:: get_dataloader(split='train')
+
+
+   .. py:method:: training_step(batch: dict, batch_idx: int, dataloader_idx: Optional[int] = None)
+
+
+   .. py:method:: training_step_end(step_metrics)
+
+
+   .. py:method:: on_train_epoch_end()
+
+
+   .. py:method:: _weight_average_update(w_avg_step_count: int) -> int
+
+
+   .. py:method:: on_train_epoch_start()
+
+
+   .. py:method:: on_fit_start() -> None
+
+
+   .. py:method:: configure_optimizers()
+
+
+   .. py:method:: evaluate(*args, **kwargs)
+
+
+   .. py:method:: validation_step(batch: dict, batch_idx: int, dataloader_idx: Optional[int] = None)
+
+
+   .. py:method:: on_validation_epoch_start()
+
+
+   .. py:method:: on_validation_epoch_end()
+
+
+   .. py:method:: finetune(cfg: omegaconf.DictConfig, task_dict: dict, log_prefix: Optional[str] = '', ckpt_file: Optional[str] = None, ckpt_cfg: Optional[str] = None, tune_branches: bool = True, reinitialize_leaves: bool = False, linear_probing: bool = False, **kwargs) -> list[Dict]
+
+
+   .. py:method:: add_task_nodes(branch_key: str, task_key: str, task_cfg: omegaconf.DictConfig, branch_cfg: Optional[omegaconf.DictConfig] = None, data_dir: str = './data') -> None
+
+
+   .. py:method:: initialize_leaves(task_dict) -> None
+
+
+   .. py:method:: build_tree(cfg: omegaconf.DictConfig, skip_task_setup: bool = False) -> dict
+
+
+   .. py:method:: predict(data: collections.OrderedDict, batch_limit: Optional[int] = None, predict_tasks: Optional[list[str]] = None, format_outputs: bool = True, cpu_offload: bool = True) -> dict[str, torch.Tensor]
+
+      :param predict_inputs: array of inputs (use `AbModel.df_to_pred_inputs` to convert a dataframe)
+
+      :returns: dict[str, torch.Tensor] of task prediction outputs for `predict_inputs`.
+      :rtype: predict_out
+
+
+
+   .. py:method:: prediction_metrics(task_dict, predict_out, predict_targets, log_prefix='')
+
+
+   .. py:method:: _predict_batch(data: pandas.DataFrame, format_outputs: bool = True, task_keys: Optional[list[str]] = None) -> dict
+
+      :param aa_seqs: [(AbHC, AbLC, Ag), ...]
+      :param predict_tasks: list of task keys indicating which task predictions are required.
+                            Defaults to `None`, which indicates all tasks are required without enumeration.
+
+
+
+   .. py:method:: format_task_outputs(task_out, task_keys, task_leaves)
+
+
+   .. py:method:: call_from_str_array(str_array, root_key: Optional[str] = None, leaf_keys: Optional[list[str]] = None, **kwargs)
+
+
+   .. py:method:: call_from_tok_idxs(tok_idxs: torch.LongTensor, root_key: Optional[str] = None, leaf_keys: Optional[list[str]] = None, **kwargs)
+
+
+   .. py:method:: call_from_tok_embs(tok_embs: torch.FloatTensor, root_key: Optional[str] = None, leaf_keys: Optional[list[str]] = None, **kwargs)
+
+
+   .. py:method:: get_tokenizer(root_key: Optional[str] = None)
+
+

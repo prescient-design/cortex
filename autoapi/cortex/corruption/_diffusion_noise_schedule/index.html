@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cortex.corruption._diffusion_noise_schedule &#8212; cortex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+    <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="cortex.corruption._gaussian_corruption" href="../_gaussian_corruption/index.html" />
+    <link rel="prev" title="cortex.corruption._abstract_corruption" href="../_abstract_corruption/index.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-cortex.corruption._diffusion_noise_schedule">
+<span id="cortex-corruption-diffusion-noise-schedule"></span><h1>cortex.corruption._diffusion_noise_schedule<a class="headerlink" href="#module-cortex.corruption._diffusion_noise_schedule" title="Link to this heading">¶</a></h1>
+<p>This code started out as a PyTorch port of Ho et al’s diffusion models:
+<a class="reference external" href="https://github.com/hojonathanho/diffusion/blob/1e0dceb3b3495bbe19116a5e1b3596cd0706c543/diffusion_tf/diffusion_utils_2.py">https://github.com/hojonathanho/diffusion/blob/1e0dceb3b3495bbe19116a5e1b3596cd0706c543/diffusion_tf/diffusion_utils_2.py</a></p>
+<p>Docstrings have been added, as well as DDIM sampling and a new collection of beta schedules.</p>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.corruption._diffusion_noise_schedule.get_named_beta_schedule" title="cortex.corruption._diffusion_noise_schedule.get_named_beta_schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_named_beta_schedule</span></code></a>(→ numpy.ndarray)</p></td>
+<td><p>Get a pre-defined beta schedule for the given name.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cortex.corruption._diffusion_noise_schedule._betas_for_alpha_bar2" title="cortex.corruption._diffusion_noise_schedule._betas_for_alpha_bar2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_betas_for_alpha_bar2</span></code></a>(→ numpy.ndarray)</p></td>
+<td><p>Create a beta schedule that discretizes the given alpha_t_bar function,</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.corruption._diffusion_noise_schedule._betas_for_alpha_bar" title="cortex.corruption._diffusion_noise_schedule._betas_for_alpha_bar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_betas_for_alpha_bar</span></code></a>(→ numpy.ndarray)</p></td>
+<td><p>Create a beta schedule that discretizes the given alpha_t_bar function,</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.corruption._diffusion_noise_schedule.get_named_beta_schedule">
+<span class="sig-prename descclassname"><span class="pre">cortex.corruption._diffusion_noise_schedule.</span></span><span class="sig-name descname"><span class="pre">get_named_beta_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schedule_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_diffusion_timesteps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#cortex.corruption._diffusion_noise_schedule.get_named_beta_schedule" title="Link to this definition">¶</a></dt>
+<dd><p>Get a pre-defined beta schedule for the given name.</p>
+<p>The beta schedule library consists of beta schedules which remain similar
+in the limit of num_diffusion_timesteps.
+Beta schedules may be added, but should not be removed or changed once
+they are committed to maintain backwards compatibility.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.corruption._diffusion_noise_schedule._betas_for_alpha_bar2">
+<span class="sig-prename descclassname"><span class="pre">cortex.corruption._diffusion_noise_schedule.</span></span><span class="sig-name descname"><span class="pre">_betas_for_alpha_bar2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_diffusion_timesteps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_bar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.999</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#cortex.corruption._diffusion_noise_schedule._betas_for_alpha_bar2" title="Link to this definition">¶</a></dt>
+<dd><p>Create a beta schedule that discretizes the given alpha_t_bar function,
+which defines the cumulative product of (1-beta) over time from t = [0,1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_diffusion_timesteps</strong> – the number of betas to produce.</p></li>
+<li><p><strong>alpha_bar</strong> – a lambda that takes an argument t from 0 to 1 and
+produces the cumulative product of (1-beta) up to that
+part of the diffusion process.</p></li>
+<li><p><strong>max_beta</strong> – the maximum beta to use; use values lower than 1 to
+prevent singularities.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.corruption._diffusion_noise_schedule._betas_for_alpha_bar">
+<span class="sig-prename descclassname"><span class="pre">cortex.corruption._diffusion_noise_schedule.</span></span><span class="sig-name descname"><span class="pre">_betas_for_alpha_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_diffusion_timesteps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_bar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.999</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#cortex.corruption._diffusion_noise_schedule._betas_for_alpha_bar" title="Link to this definition">¶</a></dt>
+<dd><p>Create a beta schedule that discretizes the given alpha_t_bar function,
+which defines the cumulative product of (1-beta) over time from t = [0,1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_diffusion_timesteps</strong> – the number of betas to produce.</p></li>
+<li><p><strong>alpha_bar</strong> – a lambda that takes an argument t from 0 to 1 and
+produces the cumulative product of (1-beta) up to that
+part of the diffusion process.</p></li>
+<li><p><strong>max_beta</strong> – the maximum beta to use; use values lower than 1 to
+prevent singularities.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">cortex</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">cortex</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">API Reference</a><ul>
+  <li><a href="../../index.html">cortex</a><ul>
+  <li><a href="../index.html">cortex.corruption</a><ul>
+      <li>Previous: <a href="../_abstract_corruption/index.html" title="previous chapter">cortex.corruption._abstract_corruption</a></li>
+      <li>Next: <a href="../_gaussian_corruption/index.html" title="next chapter">cortex.corruption._gaussian_corruption</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Sam Stanton.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../../../_sources/autoapi/cortex/corruption/_diffusion_noise_schedule/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

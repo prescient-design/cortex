@@ -1,0 +1,121 @@
+cortex.model.trunk
+==================
+
+.. py:module:: cortex.model.trunk
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/model/trunk/_abstract_trunk/index
+   /autoapi/cortex/model/trunk/_sum_trunk/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.trunk.TrunkNode
+   cortex.model.trunk.TrunkNodeOutput
+   cortex.model.trunk.PaddedTrunkOutput
+   cortex.model.trunk.SumTrunk
+
+
+Package Contents
+----------------
+
+.. py:class:: TrunkNode
+
+   Bases: :py:obj:`abc.ABC`, :py:obj:`torch.nn.Module`
+
+
+   Mixes mode-specific features from different roots, extracts multi-modal features
+   and passes result to branch nodes.
+   Cannot be instantiated directly, must be subclassed.
+
+
+   .. py:property:: in_dims
+      :type: list[int]
+
+      :abstractmethod:
+
+
+      Returns:
+      in_dims: list of input dimensions
+
+
+   .. py:property:: out_dim
+      :type: int
+
+      :abstractmethod:
+
+
+      Returns:
+      out_dim: output dimension of aggregated features
+
+
+   .. py:method:: forward(*args, **kwargs) -> TrunkNodeOutput
+      :abstractmethod:
+
+
+
+.. py:class:: TrunkNodeOutput
+
+   Dataclass for output of TrunkNode.
+
+
+   .. py:attribute:: trunk_features
+      :type:  torch.Tensor
+
+
+.. py:class:: PaddedTrunkOutput
+
+   Bases: :py:obj:`cortex.model.trunk.TrunkNodeOutput`
+
+
+   .. py:attribute:: padding_mask
+      :type:  torch.Tensor
+
+
+.. py:class:: SumTrunk(in_dims: list[int], out_dim: int, project_features: bool = False)
+
+   Bases: :py:obj:`cortex.model.trunk.TrunkNode`
+
+
+   A trunk node which aggregates 1D sequence embeddings from one or more root nodes by summing them together.
+   If the output dimension of a root node is different from the output dimension of the trunk,
+   a linear projection is applied to the root features before aggregation.
+
+
+   .. py:attribute:: encoder
+
+
+   .. py:attribute:: _in_dims
+
+
+   .. py:attribute:: _out_dim
+
+
+   .. py:property:: in_dims
+      :type: list[int]
+
+
+
+   .. py:property:: out_dim
+      :type: int
+
+
+
+   .. py:method:: forward(*root_outputs: cortex.model.root.RootNodeOutput) -> cortex.model.trunk.TrunkNodeOutput
+
+      :param root_outputs: {'root_features': torch.Tensor, 'padding_mask': torch.Tensor}
+
+      :returns: {'trunk_features': torch.Tensor, 'padding_mask': torch.Tensor}
+      :rtype: outputs
+
+
+

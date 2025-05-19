@@ -1,0 +1,85 @@
+cortex.model.leaf._autoregressive_lm_leaf
+=========================================
+
+.. py:module:: cortex.model.leaf._autoregressive_lm_leaf
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.leaf._autoregressive_lm_leaf.AutoregressiveLanguageModelLeafOutput
+   cortex.model.leaf._autoregressive_lm_leaf.AutoregressiveLanguageModelLeaf
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.model.leaf._autoregressive_lm_leaf.format_autoregressive_lm_ensemble_output
+   cortex.model.leaf._autoregressive_lm_leaf.autoregressive_log_likelihood
+
+
+Module Contents
+---------------
+
+.. py:class:: AutoregressiveLanguageModelLeafOutput
+
+   Bases: :py:obj:`cortex.model.leaf.LeafNodeOutput`
+
+
+   .. py:attribute:: logits
+      :type:  torch.Tensor
+
+
+.. py:class:: AutoregressiveLanguageModelLeaf(*args, corruption_process: Optional[cortex.corruption._abstract_corruption.CorruptionProcess] = None, corruption_rate: float = 0.1, layernorm: bool = True, **kwargs)
+
+   Bases: :py:obj:`cortex.model.leaf.ClassifierLeaf`
+
+
+   Leaf node which transforms branch sequence features to discrete sequence logits.
+
+   Can optionally apply a corruption process to the masked tokens during training,
+   which serves as a form of data augmentation to increase sample diversity and
+   potentially improve embedding quality. This is particularly useful with
+   biologically-informed corruption processes like BLOSUM62-based substitutions
+   for protein sequences.
+
+
+   .. py:attribute:: corruption_process
+      :value: None
+
+
+
+   .. py:attribute:: corruption_rate
+      :value: 0.1
+
+
+
+   .. py:method:: forward(branch_outputs: cortex.model.branch.BranchNodeOutput, *args, **kwargs) -> AutoregressiveLanguageModelLeafOutput
+
+      :param branch_outputs: TransforerBranchOutput  (is_causal should be true)
+
+      :returns: AutoregressiveLanguageModelLeafOutput
+      :rtype: outputs
+
+
+
+   .. py:method:: loss(leaf_outputs: AutoregressiveLanguageModelLeafOutput, root_outputs: cortex.model.root.RootNodeOutput, *args, **kwargs) -> torch.Tensor
+
+
+   .. py:method:: format_outputs(leaf_outputs: AutoregressiveLanguageModelLeafOutput, root_outputs: cortex.model.root.RootNodeOutput) -> tuple[torch.Tensor, torch.Tensor]
+
+
+   .. py:method:: evaluate(leaf_outputs: AutoregressiveLanguageModelLeafOutput, root_outputs: cortex.model.root.RootNodeOutput, *args, **kwargs) -> dict
+
+
+.. py:function:: format_autoregressive_lm_ensemble_output(leaf_outputs: list[AutoregressiveLanguageModelLeafOutput], root_outputs: list[cortex.model.root.RootNodeOutput], task_key: str)
+
+.. py:function:: autoregressive_log_likelihood(tree_output: cortex.model.tree.NeuralTreeOutput, x_instances, root_key: str)
+
+   Compute the autoregressive log-likelihood of the tokens in `x_instances`.
+
+

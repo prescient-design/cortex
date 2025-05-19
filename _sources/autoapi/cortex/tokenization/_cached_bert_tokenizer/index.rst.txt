@@ -1,0 +1,80 @@
+cortex.tokenization._cached_bert_tokenizer
+==========================================
+
+.. py:module:: cortex.tokenization._cached_bert_tokenizer
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast
+
+
+Module Contents
+---------------
+
+.. py:class:: CachedBertTokenizerFast(vocab_file: str = None, tokenizer_file: str = None, do_lower_case: bool = False, unk_token: str = '[UNK]', sep_token: str = '[SEP]', pad_token: str = '[PAD]', cls_token: str = '[CLS]', mask_token: str = '[MASK]', raise_unk_exception: bool = False, add_cls_and_sep: bool = False, **kwargs)
+
+   Bases: :py:obj:`transformers.BertTokenizerFast`
+
+
+   This class is a wrapper around the BertTokenizerFast class from the transformers library.
+   It adds an additional cached encoding method for faster runtimes on smaller datasets.
+   It also provides attributes indicating which tokens can be corrupted and sampled by denoising models,
+   and a convenience method for getting a mask of corruptible tokens from a sequence of token ids.
+
+
+   .. py:attribute:: padding_idx
+
+
+   .. py:attribute:: masking_idx
+
+
+   .. py:attribute:: corruption_vocab_excluded
+
+
+   .. py:attribute:: sampling_vocab_excluded
+
+
+   .. py:attribute:: _raise_unk_exception
+      :value: False
+
+
+
+   .. py:attribute:: _add_cls_and_sep
+      :value: False
+
+
+
+   .. py:property:: corruption_vocab_included
+
+      Tokens that can be corrupted by denoising models.
+
+
+   .. py:property:: sampling_vocab_included
+
+      Tokens that can be sampled by denoising models.
+
+
+   .. py:method:: decode(token_ids: torch.LongTensor, skip_special_tokens: bool = True)
+
+      Decode a sequence of token ids into a string.
+
+
+
+   .. py:method:: cached_encode(text: str)
+
+      Cached tokenizer call, for faster runtimes on smaller datasets.
+
+
+
+   .. py:method:: get_corruptible_mask(token_batch: torch.LongTensor) -> torch.Tensor
+
+      :param token_batch: a batch of token ids (LongTensor).
+
+      :returns: a boolean mask tensor of corruptible tokens (corrupt if True).
+
+
+

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cortex.acquisition._graph_nei &#8212; cortex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+    <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="cortex.assets" href="../../assets/index.html" />
+    <link rel="prev" title="cortex.acquisition" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-cortex.acquisition._graph_nei">
+<span id="cortex-acquisition-graph-nei"></span><h1>cortex.acquisition._graph_nei<a class="headerlink" href="#module-cortex.acquisition._graph_nei" title="Link to this heading">¶</a></h1>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.acquisition._graph_nei.GRAPH_OBJECTIVES" title="cortex.acquisition._graph_nei.GRAPH_OBJECTIVES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GRAPH_OBJECTIVES</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cortex.acquisition._graph_nei.GRAPH_CONSTRAINTS" title="cortex.acquisition._graph_nei.GRAPH_CONSTRAINTS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GRAPH_CONSTRAINTS</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.acquisition._graph_nei.GRAPH_OBJ_TRANSFORM" title="cortex.acquisition._graph_nei.GRAPH_OBJ_TRANSFORM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GRAPH_OBJ_TRANSFORM</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.acquisition._graph_nei.GraphNEI" title="cortex.acquisition._graph_nei.GraphNEI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GraphNEI</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.acquisition._graph_nei.get_joint_objective_values" title="cortex.acquisition._graph_nei.get_joint_objective_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_joint_objective_values</span></code></a>(→ torch.Tensor)</p></td>
+<td><p>Get joint objective values from predicted properties based on objectives and constraints.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cortex.acquisition._graph_nei.scale_value" title="cortex.acquisition._graph_nei.scale_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_value</span></code></a>(→ torch.Tensor)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cortex.acquisition._graph_nei.tree_output_to_dict" title="cortex.acquisition._graph_nei.tree_output_to_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tree_output_to_dict</span></code></a>(→ dict[str, torch.Tensor])</p></td>
+<td><p>Convert tree output to dictionary of tensors.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cortex.acquisition._graph_nei.get_graph_nei_runtime_kwargs" title="cortex.acquisition._graph_nei.get_graph_nei_runtime_kwargs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_graph_nei_runtime_kwargs</span></code></a>(model, candidate_points)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.GRAPH_OBJECTIVES">
+<span class="sig-prename descclassname"><span class="pre">cortex.acquisition._graph_nei.</span></span><span class="sig-name descname"><span class="pre">GRAPH_OBJECTIVES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['stability',</span> <span class="pre">'log_fluorescence']</span></em><a class="headerlink" href="#cortex.acquisition._graph_nei.GRAPH_OBJECTIVES" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.GRAPH_CONSTRAINTS">
+<span class="sig-prename descclassname"><span class="pre">cortex.acquisition._graph_nei.</span></span><span class="sig-name descname"><span class="pre">GRAPH_CONSTRAINTS</span></span><a class="headerlink" href="#cortex.acquisition._graph_nei.GRAPH_CONSTRAINTS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.GRAPH_OBJ_TRANSFORM">
+<span class="sig-prename descclassname"><span class="pre">cortex.acquisition._graph_nei.</span></span><span class="sig-name descname"><span class="pre">GRAPH_OBJ_TRANSFORM</span></span><a class="headerlink" href="#cortex.acquisition._graph_nei.GRAPH_OBJ_TRANSFORM" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.get_joint_objective_values">
+<span class="sig-prename descclassname"><span class="pre">cortex.acquisition._graph_nei.</span></span><span class="sig-name descname"><span class="pre">get_joint_objective_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#cortex.acquisition._graph_nei.get_joint_objective_values" title="Link to this definition">¶</a></dt>
+<dd><p>Get joint objective values from predicted properties based on objectives and constraints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputs</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Tensor</em><em>]</em>) – dictionary of predicted properties. Each key is a property name and each value is a tensor of shape (ensemble size, batch_size)</p></li>
+<li><p><strong>objectives</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – list of objective names. Each objective name must be a key in inputs.</p></li>
+<li><p><strong>constraints</strong> (<em>Optional</em><em>[</em><em>dict</em><em>[</em><em>str</em><em>, </em><em>list</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – dictionary of constraints. Each key is a constraint name and each value is a list of objective names that are constrained by the constraint.</p></li>
+<li><p><strong>scaling</strong> (<em>Optional</em><em>[</em><em>dict</em><em>[</em><em>str</em><em>, </em><em>dict</em><em>[</em><em>str</em><em>, </em><em>float</em><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – dictionary of scaling parameters. Each key is a property name and each value is a dictionary with keys “scale” and “shift”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Joint objective values of shape (ensemble size, batch_size, num_objectives)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.scale_value">
+<span class="sig-prename descclassname"><span class="pre">cortex.acquisition._graph_nei.</span></span><span class="sig-name descname"><span class="pre">scale_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#cortex.acquisition._graph_nei.scale_value" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.tree_output_to_dict">
+<span class="sig-prename descclassname"><span class="pre">cortex.acquisition._graph_nei.</span></span><span class="sig-name descname"><span class="pre">tree_output_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree_output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../model/tree/index.html#cortex.model.tree.NeuralTreeOutput" title="cortex.model.tree.NeuralTreeOutput"><span class="pre">cortex.model.tree.NeuralTreeOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cortex.acquisition._graph_nei.tree_output_to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Convert tree output to dictionary of tensors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tree_output</strong> (<a class="reference internal" href="../../model/tree/_abstract_tree/index.html#cortex.model.tree._abstract_tree.NeuralTreeOutput" title="cortex.model.tree._abstract_tree.NeuralTreeOutput"><em>NeuralTreeOutput</em></a>) – Tree output</p></li>
+<li><p><strong>objectives</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – list of objective names. Each objective adds a key to the output dictionary.</p></li>
+<li><p><strong>constraints</strong> (<em>Optional</em><em>[</em><em>dict</em><em>[</em><em>str</em><em>, </em><em>list</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Optional dictionary of constraints. Each key is added to the output dictionary.</p></li>
+<li><p><strong>scaling</strong> (<em>Optional</em><em>[</em><em>dict</em><em>[</em><em>str</em><em>, </em><em>dict</em><em>[</em><em>str</em><em>, </em><em>float</em><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Optional dictionary of scaling parameters. Must be a subset of objectives and each value is a dictionary with keys “scale” and “shift”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dictionary of tensors with keys corresponding to objectives and constraints.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str, Tensor]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.get_graph_nei_runtime_kwargs">
+<span class="sig-prename descclassname"><span class="pre">cortex.acquisition._graph_nei.</span></span><span class="sig-name descname"><span class="pre">get_graph_nei_runtime_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../model/tree/index.html#cortex.model.tree.NeuralTree" title="cortex.model.tree.NeuralTree"><span class="pre">cortex.model.tree.NeuralTree</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">GRAPH_OBJECTIVES</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">GRAPH_CONSTRAINTS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">GRAPH_OBJ_TRANSFORM</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.acquisition._graph_nei.get_graph_nei_runtime_kwargs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.GraphNEI">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cortex.acquisition._graph_nei.</span></span><span class="sig-name descname"><span class="pre">GraphNEI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_baseline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.acquisition._graph_nei.GraphNEI" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.GraphNEI.objectives">
+<span class="sig-name descname"><span class="pre">objectives</span></span><a class="headerlink" href="#cortex.acquisition._graph_nei.GraphNEI.objectives" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.GraphNEI.constraints">
+<span class="sig-name descname"><span class="pre">constraints</span></span><a class="headerlink" href="#cortex.acquisition._graph_nei.GraphNEI.constraints" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.GraphNEI.scaling">
+<span class="sig-name descname"><span class="pre">scaling</span></span><a class="headerlink" href="#cortex.acquisition._graph_nei.GraphNEI.scaling" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.GraphNEI._obj_dim">
+<span class="sig-name descname"><span class="pre">_obj_dim</span></span><a class="headerlink" href="#cortex.acquisition._graph_nei.GraphNEI._obj_dim" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.GraphNEI.has_pointwise_reference">
+<span class="sig-name descname"><span class="pre">has_pointwise_reference</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#cortex.acquisition._graph_nei.GraphNEI.has_pointwise_reference" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.GraphNEI.get_objective_vals">
+<span class="sig-name descname"><span class="pre">get_objective_vals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree_output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../model/tree/index.html#cortex.model.tree.NeuralTreeOutput" title="cortex.model.tree.NeuralTreeOutput"><span class="pre">cortex.model.tree.NeuralTreeOutput</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.acquisition._graph_nei.GraphNEI.get_objective_vals" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cortex.acquisition._graph_nei.GraphNEI.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../model/tree/index.html#cortex.model.tree.NeuralTreeOutput" title="cortex.model.tree.NeuralTreeOutput"><span class="pre">cortex.model.tree.NeuralTreeOutput</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pointwise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cortex.acquisition._graph_nei.GraphNEI.__call__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">cortex</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">cortex</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">API Reference</a><ul>
+  <li><a href="../../index.html">cortex</a><ul>
+  <li><a href="../index.html">cortex.acquisition</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">cortex.acquisition</a></li>
+      <li>Next: <a href="../../assets/index.html" title="next chapter">cortex.assets</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Sam Stanton.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../../../_sources/autoapi/cortex/acquisition/_graph_nei/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

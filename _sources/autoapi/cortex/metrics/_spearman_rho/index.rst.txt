@@ -1,0 +1,23 @@
+cortex.metrics._spearman_rho
+============================
+
+.. py:module:: cortex.metrics._spearman_rho
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.metrics._spearman_rho.spearman_rho
+
+
+Module Contents
+---------------
+
+.. py:function:: spearman_rho(scores: numpy.ndarray, targets: numpy.ndarray)
+
+   Compute the Spearman's rank correlation coefficient between scores and targets,
+   averaged across the last dimension.
+
+

@@ -1,0 +1,108 @@
+cortex.model.tree._abstract_tree
+================================
+
+.. py:module:: cortex.model.tree._abstract_tree
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.tree._abstract_tree.NeuralTreeOutput
+   cortex.model.tree._abstract_tree.NeuralTree
+
+
+Module Contents
+---------------
+
+.. py:class:: NeuralTreeOutput
+
+   .. py:attribute:: root_outputs
+      :type:  dict[str, cortex.model.root.RootNodeOutput]
+
+
+   .. py:attribute:: trunk_outputs
+      :type:  dict[str, cortex.model.trunk.TrunkNodeOutput]
+
+
+   .. py:attribute:: branch_outputs
+      :type:  dict[str, cortex.model.branch.BranchNodeOutput]
+
+
+   .. py:attribute:: leaf_outputs
+      :type:  dict[str, cortex.model.leaf._abstract_leaf.LeafNodeOutput]
+
+
+   .. py:method:: fetch_task_outputs(task_key: str)
+
+
+.. py:class:: NeuralTree(root_nodes: torch.nn.ModuleDict, trunk_node: torch.nn.Module, branch_nodes: torch.nn.ModuleDict, leaf_nodes: torch.nn.ModuleDict)
+
+   Bases: :py:obj:`abc.ABC`, :py:obj:`torch.nn.Module`
+
+
+   Compute tree graph composed of root, trunk, branch, and leaf neural network nodes
+
+
+   .. py:attribute:: root_nodes
+
+
+   .. py:attribute:: trunk_node
+
+
+   .. py:attribute:: branch_nodes
+
+
+   .. py:attribute:: leaf_nodes
+
+
+   .. py:method:: build_tree(*args, **kwargs)
+      :abstractmethod:
+
+
+
+   .. py:method:: forward(root_inputs: dict, trunk_outputs: Optional[cortex.model.trunk.TrunkNodeOutput] = None, branch_outputs: Optional[dict[str, torch.Tensor]] = None, leaf_keys: Optional[list[str]] = None) -> NeuralTreeOutput
+
+
+   .. py:method:: predict(*args, **kwargs)
+      :abstractmethod:
+
+
+
+   .. py:method:: _predict_batch(*args, **kwargs)
+      :abstractmethod:
+
+
+
+   .. py:method:: evaluate(*args, **kwargs)
+      :abstractmethod:
+
+
+
+   .. py:method:: prediction_metrics(*args, **kwargs)
+      :abstractmethod:
+
+
+
+   .. py:method:: get_trainable_params()
+
+
+   .. py:method:: freeze_roots() -> None
+
+
+   .. py:method:: freeze_trunk() -> None
+
+
+   .. py:method:: freeze_branches() -> None
+
+
+   .. py:method:: add_branch(branch_cfg: omegaconf.DictConfig, branch_key: str) -> None
+
+
+   .. py:method:: add_leaf(leaf_node: cortex.model.leaf._abstract_leaf.LeafNode, leaf_key: str) -> None
+
+
+   .. py:method:: call_from_trunk_output(trunk_output, leaf_keys: Optional[list[str]] = None, **kwargs)
+
+

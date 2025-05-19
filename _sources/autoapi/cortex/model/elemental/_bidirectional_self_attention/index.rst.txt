@@ -1,0 +1,49 @@
+cortex.model.elemental._bidirectional_self_attention
+====================================================
+
+.. py:module:: cortex.model.elemental._bidirectional_self_attention
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.elemental._bidirectional_self_attention.BidirectionalSelfAttention
+
+
+Module Contents
+---------------
+
+.. py:class:: BidirectionalSelfAttention(num_heads: int = 4, embed_dim: int = 32, dropout_p: float = 0.0, bias: bool = False)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:attribute:: c_attn
+
+
+   .. py:attribute:: c_proj
+
+
+   .. py:attribute:: dropout
+
+
+   .. py:attribute:: dropout_p
+      :value: 0.0
+
+
+
+   .. py:attribute:: head_dim
+      :value: 8
+
+
+
+   .. py:attribute:: num_heads
+      :value: 4
+
+
+
+   .. py:method:: forward(inputs: tuple[torch.Tensor, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor]
+
+

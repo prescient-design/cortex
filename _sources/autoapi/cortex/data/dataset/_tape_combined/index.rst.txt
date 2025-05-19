@@ -1,0 +1,30 @@
+cortex.data.dataset._tape_combined
+==================================
+
+.. py:module:: cortex.data.dataset._tape_combined
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.data.dataset._tape_combined.TAPECombinedDataset
+
+
+Module Contents
+---------------
+
+.. py:class:: TAPECombinedDataset(root: str, download: bool = False, **kwargs)
+
+   Bases: :py:obj:`cortex.data.dataset._data_frame_dataset.DataFrameDataset`
+
+
+   .. py:attribute:: columns
+      :value: ['tokenized_seq', 'partition']
+
+
+
+   .. py:attribute:: _data
+
+

@@ -1,0 +1,32 @@
+cortex.data.dataset._numpy_dataset
+==================================
+
+.. py:module:: cortex.data.dataset._numpy_dataset
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.data.dataset._numpy_dataset.NumpyDataset
+
+
+Module Contents
+---------------
+
+.. py:class:: NumpyDataset(data: dict[str, numpy.typing.NDArray], train: bool = True, random_seed: int = 3735928559)
+
+   Bases: :py:obj:`cortex.data.dataset._data_frame_dataset.DataFrameDataset`
+
+
+   Create a DataFrameDataset from a dictionary of numpy arrays stored in memory.
+   Useful if not reading data from disk.
+
+
+   .. py:attribute:: _data
+
+
+   .. py:attribute:: columns
+
+

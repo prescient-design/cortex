@@ -1,0 +1,31 @@
+cortex.model.elemental._expression
+==================================
+
+.. py:module:: cortex.model.elemental._expression
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.elemental._expression.Expression
+
+
+Module Contents
+---------------
+
+.. py:class:: Expression(func: Callable)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   `nn.Module` wrapper for arbitrary function (useful for `nn.Sequential`)
+
+
+   .. py:attribute:: func
+
+
+   .. py:method:: forward(x: torch.Tensor) -> torch.Tensor
+
+

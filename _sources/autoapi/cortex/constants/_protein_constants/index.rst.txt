@@ -1,0 +1,62 @@
+cortex.constants._protein_constants
+===================================
+
+.. py:module:: cortex.constants._protein_constants
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   cortex.constants._protein_constants.ANTIGEN_COMPLEX_TOKEN
+   cortex.constants._protein_constants.AB_AG_COMPLEX_COL
+   cortex.constants._protein_constants.ANTIGEN_COL
+   cortex.constants._protein_constants.AMINO_ACID_GROUPS
+   cortex.constants._protein_constants.CANON_AMINO_ACIDS
+   cortex.constants._protein_constants.STANDARD_AA_FREQS
+   cortex.constants._protein_constants.VARIABLE_HEAVY_CHAIN_TOKEN
+   cortex.constants._protein_constants.VARIABLE_HEAVY_COL
+   cortex.constants._protein_constants.VARIABLE_LIGHT_CHAIN_TOKEN
+   cortex.constants._protein_constants.VARIABLE_LIGHT_COL
+
+
+Module Contents
+---------------
+
+.. py:data:: ANTIGEN_COMPLEX_TOKEN
+   :value: '<ag>'
+
+
+.. py:data:: AB_AG_COMPLEX_COL
+   :value: 'tokenized_ab_ag_complex'
+
+
+.. py:data:: ANTIGEN_COL
+   :value: 'affinity_antigen_sequence'
+
+
+.. py:data:: AMINO_ACID_GROUPS
+
+.. py:data:: CANON_AMINO_ACIDS
+   :value: []
+
+
+.. py:data:: STANDARD_AA_FREQS
+
+.. py:data:: VARIABLE_HEAVY_CHAIN_TOKEN
+   :value: '<vh>'
+
+
+.. py:data:: VARIABLE_HEAVY_COL
+   :value: 'fv_heavy_aho'
+
+
+.. py:data:: VARIABLE_LIGHT_CHAIN_TOKEN
+   :value: '<vl>'
+
+
+.. py:data:: VARIABLE_LIGHT_COL
+   :value: 'fv_light_aho'
+
+

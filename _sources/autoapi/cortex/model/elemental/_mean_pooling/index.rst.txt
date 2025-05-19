@@ -1,0 +1,44 @@
+cortex.model.elemental._mean_pooling
+====================================
+
+.. py:module:: cortex.model.elemental._mean_pooling
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.elemental._mean_pooling.MeanPooling
+   cortex.model.elemental._mean_pooling.WeightedMeanPooling
+
+
+Module Contents
+---------------
+
+.. py:class:: MeanPooling
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   Average pooling over the sequence dimension excluding padding token positions.
+
+
+   .. py:method:: forward(inputs: tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor
+
+
+.. py:class:: WeightedMeanPooling(in_dim)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   Weighted average pooling over the sequence dimension excluding padding token positions.
+   Weights are learned by a linear layer. Breaks fused Adam optimizer.
+
+
+   .. py:attribute:: encoder
+
+
+   .. py:method:: forward(inputs: tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor
+
+

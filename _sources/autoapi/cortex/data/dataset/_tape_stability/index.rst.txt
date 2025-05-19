@@ -1,0 +1,62 @@
+cortex.data.dataset._tape_stability
+===================================
+
+.. py:module:: cortex.data.dataset._tape_stability
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   cortex.data.dataset._tape_stability._DOWNLOAD_URL
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.data.dataset._tape_stability.TAPEStabilityDataset
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.data.dataset._tape_stability.tokenize_gfp_df
+
+
+Module Contents
+---------------
+
+.. py:data:: _DOWNLOAD_URL
+   :value: 'http://s3.amazonaws.com/songlabdata/proteindata/data_raw_pytorch/stability.tar.gz'
+
+
+.. py:function:: tokenize_gfp_df(data: pandas.DataFrame) -> pandas.DataFrame
+
+.. py:class:: TAPEStabilityDataset(root: str, download: bool = False, download_source: str = _DOWNLOAD_URL, **kwargs)
+
+   Bases: :py:obj:`cortex.data.dataset._data_frame_dataset.DataFrameDataset`
+
+
+   .. py:attribute:: _name
+      :value: 'tape_stability'
+
+
+
+   .. py:attribute:: _target
+      :value: 'stability'
+
+
+
+   .. py:attribute:: columns
+      :value: ['tokenized_seq', 'stability_score']
+
+
+
+   .. py:method:: _read_data(path: str, dedup: bool, train: bool, random_seed: int, **kwargs: Any) -> pandas.DataFrame
+
+

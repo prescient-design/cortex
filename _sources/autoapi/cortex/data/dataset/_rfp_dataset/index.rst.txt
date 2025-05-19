@@ -1,0 +1,62 @@
+cortex.data.dataset._rfp_dataset
+================================
+
+.. py:module:: cortex.data.dataset._rfp_dataset
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   cortex.data.dataset._rfp_dataset._DOWNLOAD_URL
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.data.dataset._rfp_dataset.RedFluorescentProteinDataset
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.data.dataset._rfp_dataset.tokenize_rfp_df
+
+
+Module Contents
+---------------
+
+.. py:data:: _DOWNLOAD_URL
+   :value: 'https://raw.githubusercontent.com/samuelstanton/lambo/main/lambo/assets/fpbase/rfp_known_structu...
+
+
+.. py:function:: tokenize_rfp_df(data: pandas.DataFrame) -> pandas.DataFrame
+
+.. py:class:: RedFluorescentProteinDataset(root: str, download: bool = False, download_source: str = _DOWNLOAD_URL, **kwargs)
+
+   Bases: :py:obj:`cortex.data.dataset._data_frame_dataset.DataFrameDataset`
+
+
+   .. py:attribute:: _name
+      :value: 'rfp'
+
+
+
+   .. py:attribute:: _target
+      :value: 'rfp_known_structures.csv'
+
+
+
+   .. py:attribute:: columns
+      :value: ['tokenized_seq', 'foldx_total_energy', 'SASA']
+
+
+
+   .. py:attribute:: _data
+
+

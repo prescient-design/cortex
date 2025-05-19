@@ -1,0 +1,90 @@
+cortex.tokenization._protein_seq_tokenizer
+==========================================
+
+.. py:module:: cortex.tokenization._protein_seq_tokenizer
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.tokenization._protein_seq_tokenizer.ProteinComplex
+   cortex.tokenization._protein_seq_tokenizer.ProteinSequenceTokenizerFast
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.tokenization._protein_seq_tokenizer.tokenize_protein_complex
+
+
+Module Contents
+---------------
+
+.. py:class:: ProteinComplex
+
+   Dataclass for protein complex.
+   :param chains: dict[str, str]: an ordered dict of chain_id: chain_sequence pairs (e.g. {"VH": "AVAVAV", "VL": "ACVACA"})
+   :param species: Optional[str]: species of the complex (e.g. <human>, <mouse>, etc.)
+   :param format: Optional[str]: format of the complex  (e.g. <igg>, <igm>, etc.)
+
+
+   .. py:attribute:: chains
+      :type:  collections.OrderedDict[str, str]
+
+
+   .. py:attribute:: species
+      :type:  Optional[str]
+      :value: None
+
+
+
+   .. py:attribute:: format
+      :type:  Optional[str]
+      :value: None
+
+
+
+.. py:function:: tokenize_protein_complex(complex: ProteinComplex, sep_with_chain_ids: bool = False, include_species: bool = False, include_format: bool = False)
+
+   Tokenize a protein complex.
+   :param complex: ProteinComplex: a protein complex dataclass
+   :param seq_with_chain_ids: bool: whether to include chain ids in the tokenized sequence
+
+   :returns: tokenized protein complex
+   :rtype: str
+
+   Example:
+   >>> complex = ProteinComplex(
+   ...     chains={
+   ...         "VH": "A V A V A V",
+   ...         "VL": "A C V A C A",
+   ...     },
+   ... )
+   >>> tokens = tokenize_protein_complex(complex)
+   >>> tokens
+   "A V A V A V . A C V A C A"
+
+
+.. py:class:: ProteinSequenceTokenizerFast(vocab_file: Optional[str] = None, tokenizer_file: Optional[str] = None, custom_tokens: Optional[list[str]] = None, ambiguous_tokens: Optional[list[str]] = None, do_lower_case: bool = False, unk_token: str = '<unk>', sep_token: str = '<eos>', pad_token: str = '<pad>', cls_token: str = '<cls>', mask_token: str = '<mask>', **kwargs)
+
+   Bases: :py:obj:`cortex.tokenization._cached_bert_tokenizer.CachedBertTokenizerFast`
+
+
+   Subclass of CachedBertTokenizerFast with vocabulary for protein complexes.
+
+
+   .. py:attribute:: sampling_vocab_excluded
+
+
+   .. py:attribute:: corruption_vocab_excluded
+
+
+   .. py:attribute:: chain_tokens
+      :value: ['-']
+
+
+

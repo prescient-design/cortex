@@ -1,0 +1,22 @@
+cortex.metrics._edit_dist
+=========================
+
+.. py:module:: cortex.metrics._edit_dist
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.metrics._edit_dist.edit_dist
+
+
+Module Contents
+---------------
+
+.. py:function:: edit_dist(x: str, y: str)
+
+   Computes the edit distance between two strings.
+
+

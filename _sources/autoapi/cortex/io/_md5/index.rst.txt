@@ -1,0 +1,19 @@
+cortex.io._md5
+==============
+
+.. py:module:: cortex.io._md5
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.io._md5.md5
+
+
+Module Contents
+---------------
+
+.. py:function:: md5(fpath: str, chunk_size: int = 1024 * 1024) -> str
+

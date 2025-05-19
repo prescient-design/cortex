@@ -1,0 +1,401 @@
+cortex.model.leaf
+=================
+
+.. py:module:: cortex.model.leaf
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/model/leaf/_abstract_leaf/index
+   /autoapi/cortex/model/leaf/_autoregressive_lm_leaf/index
+   /autoapi/cortex/model/leaf/_classifier_leaf/index
+   /autoapi/cortex/model/leaf/_denoising_lm_leaf/index
+   /autoapi/cortex/model/leaf/_regressor_leaf/index
+   /autoapi/cortex/model/leaf/_seq_regressor_leaf/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.leaf.LeafNode
+   cortex.model.leaf.LeafNodeOutput
+   cortex.model.leaf.ClassifierLeaf
+   cortex.model.leaf.ClassifierLeafOutput
+   cortex.model.leaf.AutoregressiveLanguageModelLeaf
+   cortex.model.leaf.AutoregressiveLanguageModelLeafOutput
+   cortex.model.leaf.DenoisingLanguageModelLeaf
+   cortex.model.leaf.DenoisingLanguageModelLeafOutput
+   cortex.model.leaf.RegressorLeaf
+   cortex.model.leaf.RegressorLeafOutput
+   cortex.model.leaf.SequenceRegressorLeaf
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.model.leaf.check_probs
+   cortex.model.leaf.format_classifier_ensemble_output
+   cortex.model.leaf.autoregressive_log_likelihood
+   cortex.model.leaf.format_autoregressive_lm_ensemble_output
+   cortex.model.leaf.format_denoising_lm_ensemble_output
+   cortex.model.leaf.mlm_conditional_log_likelihood
+   cortex.model.leaf.mlm_pseudo_log_likelihood
+   cortex.model.leaf.check_scale
+   cortex.model.leaf.format_regressor_ensemble_output
+   cortex.model.leaf.adjust_sequence_mask
+
+
+Package Contents
+----------------
+
+.. py:class:: LeafNode
+
+   Bases: :py:obj:`abc.ABC`, :py:obj:`torch.nn.Module`
+
+
+   Receives task-specific features and returns task outputs
+
+
+   .. py:method:: forward(*args, **kwargs)
+      :abstractmethod:
+
+
+
+.. py:class:: LeafNodeOutput
+
+.. py:class:: ClassifierLeaf(in_dim: int, num_classes: int, branch_key: str, num_layers: int = 0, last_layer_bias: bool = True, label_smoothing: Union[float, str] = 0.0, root_key: Optional[str] = None, layernorm: bool = False)
+
+   Bases: :py:obj:`cortex.model.leaf.LeafNode`
+
+
+   Leaf node which transforms pooled branch features to discrete classifier logits
+
+
+   .. py:attribute:: in_dim
+
+
+   .. py:attribute:: num_classes
+
+
+   .. py:attribute:: branch_key
+
+
+   .. py:attribute:: root_key
+      :value: None
+
+
+
+   .. py:attribute:: encoder
+
+
+   .. py:attribute:: loss_fn
+
+
+   .. py:attribute:: label_smoothing
+      :value: 0.0
+
+
+
+   .. py:method:: forward(branch_outputs: cortex.model.branch.BranchNodeOutput) -> ClassifierLeafOutput
+
+      :param branch_outputs: {
+                             'branch_features': torch.Tensor,
+                             'branch_mask': torch.Tensor,
+                             'pooled_features': torch.Tensor
+      :param }:
+
+      :returns: {'logits': torch.Tensor}
+      :rtype: outputs
+
+
+
+   .. py:method:: tie_last_layer_weight(weight)
+
+
+   .. py:method:: untie_last_layer_weight()
+
+
+   .. py:method:: class_probs(branch_outputs: cortex.model.branch.BranchNodeOutput)
+
+
+   .. py:method:: sample(branch_outputs: cortex.model.branch.BranchNodeOutput, num_samples: int)
+
+
+   .. py:method:: _preprocess_targets(targets: torch.Tensor, device: torch.device)
+
+
+   .. py:method:: loss(leaf_outputs: ClassifierLeafOutput, root_outputs: cortex.model.root.RootNodeOutput, targets: torch.Tensor, *args, **kwargs)
+
+
+   .. py:method:: evaluate(outputs: ClassifierLeafOutput, targets: torch.Tensor)
+
+
+   .. py:method:: initialize() -> None
+
+      initialize leaf weights
+
+
+
+.. py:class:: ClassifierLeafOutput
+
+   Bases: :py:obj:`cortex.model.leaf.LeafNodeOutput`
+
+
+   .. py:attribute:: logits
+      :type:  torch.Tensor
+
+
+.. py:function:: check_probs(probs: torch.Tensor, dim: int = -1) -> bool
+
+   Check that the probabilities are valid
+
+
+.. py:function:: format_classifier_ensemble_output(leaf_outputs: ClassifierLeafOutput, task_key: str)
+
+.. py:class:: AutoregressiveLanguageModelLeaf(*args, corruption_process: Optional[cortex.corruption._abstract_corruption.CorruptionProcess] = None, corruption_rate: float = 0.1, layernorm: bool = True, **kwargs)
+
+   Bases: :py:obj:`cortex.model.leaf.ClassifierLeaf`
+
+
+   Leaf node which transforms branch sequence features to discrete sequence logits.
+
+   Can optionally apply a corruption process to the masked tokens during training,
+   which serves as a form of data augmentation to increase sample diversity and
+   potentially improve embedding quality. This is particularly useful with
+   biologically-informed corruption processes like BLOSUM62-based substitutions
+   for protein sequences.
+
+
+   .. py:attribute:: corruption_process
+      :value: None
+
+
+
+   .. py:attribute:: corruption_rate
+      :value: 0.1
+
+
+
+   .. py:method:: forward(branch_outputs: cortex.model.branch.BranchNodeOutput, *args, **kwargs) -> AutoregressiveLanguageModelLeafOutput
+
+      :param branch_outputs: TransforerBranchOutput  (is_causal should be true)
+
+      :returns: AutoregressiveLanguageModelLeafOutput
+      :rtype: outputs
+
+
+
+   .. py:method:: loss(leaf_outputs: AutoregressiveLanguageModelLeafOutput, root_outputs: cortex.model.root.RootNodeOutput, *args, **kwargs) -> torch.Tensor
+
+
+   .. py:method:: format_outputs(leaf_outputs: AutoregressiveLanguageModelLeafOutput, root_outputs: cortex.model.root.RootNodeOutput) -> tuple[torch.Tensor, torch.Tensor]
+
+
+   .. py:method:: evaluate(leaf_outputs: AutoregressiveLanguageModelLeafOutput, root_outputs: cortex.model.root.RootNodeOutput, *args, **kwargs) -> dict
+
+
+.. py:class:: AutoregressiveLanguageModelLeafOutput
+
+   Bases: :py:obj:`cortex.model.leaf.LeafNodeOutput`
+
+
+   .. py:attribute:: logits
+      :type:  torch.Tensor
+
+
+.. py:function:: autoregressive_log_likelihood(tree_output: cortex.model.tree.NeuralTreeOutput, x_instances, root_key: str)
+
+   Compute the autoregressive log-likelihood of the tokens in `x_instances`.
+
+
+.. py:function:: format_autoregressive_lm_ensemble_output(leaf_outputs: list[AutoregressiveLanguageModelLeafOutput], root_outputs: list[cortex.model.root.RootNodeOutput], task_key: str)
+
+.. py:class:: DenoisingLanguageModelLeaf(*args, corruption_process: Optional[cortex.corruption._abstract_corruption.CorruptionProcess] = None, corruption_rate: float = 0.1, layernorm: bool = True, **kwargs)
+
+   Bases: :py:obj:`cortex.model.leaf.ClassifierLeaf`
+
+
+   Leaf node which transforms branch sequence features to discrete sequence logits.
+
+   Can optionally apply a corruption process to the masked tokens during training,
+   which serves as a form of data augmentation to increase sample diversity and
+   potentially improve embedding quality. This is particularly useful with
+   biologically-informed corruption processes like BLOSUM62-based substitutions
+   for protein sequences.
+
+
+   .. py:attribute:: corruption_process
+      :value: None
+
+
+
+   .. py:attribute:: corruption_rate
+      :value: 0.1
+
+
+
+   .. py:method:: forward(branch_outputs: cortex.model.branch.BranchNodeOutput, *args, **kwargs) -> DenoisingLanguageModelLeafOutput
+
+      :param branch_outputs: SeqCNNBranchOutput
+
+      :returns: DenoisingLanguageModelLeafOutput
+      :rtype: outputs
+
+
+
+   .. py:method:: loss(leaf_outputs: DenoisingLanguageModelLeafOutput, root_outputs: cortex.model.root.RootNodeOutput, *args, **kwargs) -> torch.Tensor
+
+
+   .. py:method:: format_outputs(leaf_outputs: DenoisingLanguageModelLeafOutput, root_outputs: cortex.model.root.RootNodeOutput) -> tuple[torch.Tensor, torch.Tensor]
+
+
+   .. py:method:: evaluate(leaf_outputs: DenoisingLanguageModelLeafOutput, root_outputs: cortex.model.root.RootNodeOutput, *args, **kwargs) -> dict
+
+
+.. py:class:: DenoisingLanguageModelLeafOutput
+
+   Bases: :py:obj:`cortex.model.leaf.LeafNodeOutput`
+
+
+   .. py:attribute:: logits
+      :type:  torch.Tensor
+
+
+.. py:function:: format_denoising_lm_ensemble_output(leaf_outputs: list[DenoisingLanguageModelLeafOutput], root_outputs: list[cortex.model.root.RootNodeOutput], task_key: str)
+
+.. py:function:: mlm_conditional_log_likelihood(tree_output: cortex.model.tree.NeuralTreeOutput, x_instances, x_occluded, root_key: str)
+
+   Compute the MLM conditional log-likelihood of the masked tokens in `x_occluded` given the unmasked tokens in `x_instances`.
+
+
+.. py:function:: mlm_pseudo_log_likelihood(tok_idxs: torch.LongTensor, null_value: int, model: cortex.model.tree.NeuralTree, root_key: str, is_excluded: Optional[torch.BoolTensor] = None)
+
+   Compute the MLM pseudo-log-likelihood of the full tok_idxs sequence
+
+
+.. py:class:: RegressorLeaf(in_dim: int, out_dim: int, branch_key: str, num_layers: int = 0, outcome_transform: Optional[botorch.models.transforms.outcome.OutcomeTransform] = None, label_smoothing: float = 0.0, nominal_label_var: float = 0.25**2, var_lb: float = 0.0001, root_key: Optional[str] = None)
+
+   Bases: :py:obj:`cortex.model.leaf.LeafNode`
+
+
+   .. py:attribute:: in_dim
+
+
+   .. py:attribute:: out_dim
+
+
+   .. py:attribute:: branch_key
+
+
+   .. py:attribute:: encoder
+
+
+   .. py:attribute:: loss_fn
+
+
+   .. py:attribute:: outcome_transform
+      :value: None
+
+
+
+   .. py:attribute:: label_smoothing
+      :value: 0.0
+
+
+
+   .. py:attribute:: root_key
+      :value: None
+
+
+
+   .. py:attribute:: nominal_label_var
+      :value: 0.0625
+
+
+
+   .. py:attribute:: var_lb
+      :value: 0.0001
+
+
+
+   .. py:method:: forward(branch_outputs: cortex.model.branch.BranchNodeOutput) -> RegressorLeafOutput
+
+
+   .. py:method:: sample(pooled_features, num_samples)
+
+
+   .. py:method:: _preprocess_targets(targets, device, dtype)
+
+
+   .. py:method:: transform_output(nn_out: torch.Tensor) -> RegressorLeafOutput
+
+      Return mean and std. dev. of diagonal Gaussian distribution
+      :param nn_out: torch.Tensor
+
+      :returns: {'loc': torch.Tensor, 'scale': torch.Tensor}
+      :rtype: outputs
+
+
+
+   .. py:method:: loss_from_canon_param(canon_param: torch.Tensor, targets: torch.Tensor, alpha: Union[float, torch.Tensor] = 0.0) -> torch.Tensor
+
+
+   .. py:method:: loss(leaf_outputs: RegressorLeafOutput, root_outputs, targets, *args, **kwargs)
+
+
+   .. py:method:: evaluate(outputs: RegressorLeafOutput, targets)
+
+
+   .. py:method:: initialize() -> None
+
+      initialize leaf weights
+
+
+
+.. py:class:: RegressorLeafOutput
+
+   Bases: :py:obj:`cortex.model.leaf.LeafNodeOutput`
+
+
+   .. py:attribute:: loc
+      :type:  torch.Tensor
+
+
+   .. py:attribute:: scale
+      :type:  torch.Tensor
+
+
+   .. py:attribute:: canon_param
+      :type:  Optional[torch.Tensor]
+      :value: None
+
+
+
+.. py:function:: check_scale(scales: torch.Tensor) -> bool
+
+   Check that scale factors are positive.
+
+
+.. py:function:: format_regressor_ensemble_output(leaf_outputs: list[RegressorLeafOutput], task_key: str) -> dict
+
+.. py:class:: SequenceRegressorLeaf(in_dim: int, out_dim: int, branch_key: str, num_layers: int = 0, outcome_transform: Optional[botorch.models.transforms.outcome.OutcomeTransform] = None, label_smoothing: float = 0.0, nominal_label_var: float = 0.25**2, var_lb: float = 0.0001, root_key: Optional[str] = None)
+
+   Bases: :py:obj:`cortex.model.leaf.RegressorLeaf`
+
+
+   .. py:method:: forward(branch_outputs: cortex.model.branch.BranchNodeOutput) -> cortex.model.leaf.RegressorLeafOutput
+
+
+   .. py:method:: loss(leaf_outputs: cortex.model.leaf.RegressorLeafOutput, root_outputs: cortex.model.root.RootNodeOutput, targets: torch.Tensor, position_mask: Optional[numpy.ndarray] = None, *args, **kwargs) -> torch.Tensor
+
+
+.. py:function:: adjust_sequence_mask(mask: torch.Tensor, tgt_tensor: torch.Tensor) -> torch.Tensor
+

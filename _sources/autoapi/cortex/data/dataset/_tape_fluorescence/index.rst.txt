@@ -1,0 +1,62 @@
+cortex.data.dataset._tape_fluorescence
+======================================
+
+.. py:module:: cortex.data.dataset._tape_fluorescence
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   cortex.data.dataset._tape_fluorescence._DOWNLOAD_URL
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.data.dataset._tape_fluorescence.TAPEFluorescenceDataset
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.data.dataset._tape_fluorescence.tokenize_gfp_df
+
+
+Module Contents
+---------------
+
+.. py:data:: _DOWNLOAD_URL
+   :value: 'http://s3.amazonaws.com/songlabdata/proteindata/data_raw_pytorch/fluorescence.tar.gz'
+
+
+.. py:function:: tokenize_gfp_df(data: pandas.DataFrame) -> pandas.DataFrame
+
+.. py:class:: TAPEFluorescenceDataset(root: str, download: bool = False, download_source: str = _DOWNLOAD_URL, **kwargs)
+
+   Bases: :py:obj:`cortex.data.dataset._data_frame_dataset.DataFrameDataset`
+
+
+   .. py:attribute:: _name
+      :value: 'tape_fluorescence'
+
+
+
+   .. py:attribute:: _target
+      :value: 'fluorescence'
+
+
+
+   .. py:attribute:: columns
+      :value: ['tokenized_seq', 'log_fluorescence']
+
+
+
+   .. py:method:: _read_data(path: str, dedup: bool, train: bool, random_seed: int, **kwargs: Any) -> pandas.DataFrame
+
+

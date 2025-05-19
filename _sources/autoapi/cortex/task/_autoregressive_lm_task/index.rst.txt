@@ -1,0 +1,53 @@
+cortex.task._autoregressive_lm_task
+===================================
+
+.. py:module:: cortex.task._autoregressive_lm_task
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.task._autoregressive_lm_task.AutoregressiveLanguageModelTask
+
+
+Module Contents
+---------------
+
+.. py:class:: AutoregressiveLanguageModelTask(data_module: cortex.data.data_module.TaskDataModule, input_map: dict[str, str], leaf_key: str, root_key: str, tokenizer: transformers.BertTokenizer, corruption_process: Optional[Any] = None, corruption_rate: float = 0.1, **kwargs)
+
+   Bases: :py:obj:`cortex.task._abstract_task.BaseTask`
+
+
+   .. py:attribute:: vocab_size
+
+
+   .. py:attribute:: root_key
+
+
+   .. py:attribute:: corruption_process
+      :value: None
+
+
+
+   .. py:attribute:: corruption_rate
+      :value: 0.1
+
+
+
+   .. py:method:: format_inputs(batch: collections.OrderedDict, corrupt_frac: Optional[float] = None) -> dict
+
+      Format input DataFrame for a `NeuralTree` object
+
+
+
+   .. py:method:: create_leaf(in_dim: int, branch_key: str) -> cortex.model.leaf.AutoregressiveLanguageModelLeaf
+
+      Create the leaf node for this task to be added to a `NeuralTree` object.
+
+
+
+   .. py:method:: compute_eval_metrics(ensemble_output, targets, task_key) -> dict
+
+

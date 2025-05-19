@@ -1,0 +1,296 @@
+cortex.task
+===========
+
+.. py:module:: cortex.task
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/task/_abstract_task/index
+   /autoapi/cortex/task/_autoregressive_lm_task/index
+   /autoapi/cortex/task/_classification/index
+   /autoapi/cortex/task/_denoising_lm_task/index
+   /autoapi/cortex/task/_regression/index
+   /autoapi/cortex/task/_sequence_regression/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.task.BaseTask
+   cortex.task.AutoregressiveLanguageModelTask
+   cortex.task.ClassificationTask
+   cortex.task.DenoisingLanguageModelTask
+   cortex.task.RegressionTask
+   cortex.task.SequenceRegressionTask
+
+
+Package Contents
+----------------
+
+.. py:class:: BaseTask(data_module: cortex.data.data_module.TaskDataModule, input_map: dict[str, str], leaf_key: str, corrupt_train_inputs: bool = False, corrupt_inference_inputs: bool = False, **kwargs)
+
+   Bases: :py:obj:`abc.ABC`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:attribute:: data_module
+
+
+   .. py:attribute:: input_map
+
+
+   .. py:attribute:: leaf_key
+
+
+   .. py:attribute:: _dataloaders
+
+
+   .. py:attribute:: corrupt_train_inputs
+      :value: False
+
+
+
+   .. py:attribute:: corrupt_inference_inputs
+      :value: False
+
+
+
+   .. py:method:: sample_minibatch(split: str = 'train', as_df: bool = False) -> dict | pandas.DataFrame
+
+      Return a random minibatch of data formatted for a `NeuralTree` object
+
+
+
+   .. py:method:: format_batch(batch: collections.OrderedDict, corrupt_frac: float = None) -> dict
+
+      Format a batch of data for a `NeuralTree` object
+
+
+
+   .. py:method:: format_inputs(batch: collections.OrderedDict) -> dict
+      :abstractmethod:
+
+
+      Format input DataFrame for a `NeuralTree` object
+
+
+
+   .. py:method:: create_leaf(**kwargs) -> cortex.model.leaf.LeafNode
+      :abstractmethod:
+
+
+
+   .. py:method:: compute_eval_metrics(**kwargs) -> dict
+      :abstractmethod:
+
+
+
+.. py:class:: AutoregressiveLanguageModelTask(data_module: cortex.data.data_module.TaskDataModule, input_map: dict[str, str], leaf_key: str, root_key: str, tokenizer: transformers.BertTokenizer, corruption_process: Optional[Any] = None, corruption_rate: float = 0.1, **kwargs)
+
+   Bases: :py:obj:`cortex.task._abstract_task.BaseTask`
+
+
+   .. py:attribute:: vocab_size
+
+
+   .. py:attribute:: root_key
+
+
+   .. py:attribute:: corruption_process
+      :value: None
+
+
+
+   .. py:attribute:: corruption_rate
+      :value: 0.1
+
+
+
+   .. py:method:: format_inputs(batch: collections.OrderedDict, corrupt_frac: Optional[float] = None) -> dict
+
+      Format input DataFrame for a `NeuralTree` object
+
+
+
+   .. py:method:: create_leaf(in_dim: int, branch_key: str) -> cortex.model.leaf.AutoregressiveLanguageModelLeaf
+
+      Create the leaf node for this task to be added to a `NeuralTree` object.
+
+
+
+   .. py:method:: compute_eval_metrics(ensemble_output, targets, task_key) -> dict
+
+
+.. py:class:: ClassificationTask(data_module: lightning.LightningDataModule, input_map: dict[str, str], leaf_key: str, class_col: str, num_classes: int, root_key: Optional[str] = None, corrupt_train_inputs: bool = False, corrupt_inference_inputs: bool = False, **kwargs)
+
+   Bases: :py:obj:`cortex.task._abstract_task.BaseTask`
+
+
+   Binary or multiclass classification
+
+
+   .. py:attribute:: class_col
+
+
+   .. py:attribute:: num_classes
+
+
+   .. py:attribute:: root_key
+      :value: None
+
+
+
+   .. py:method:: format_batch(batch: collections.OrderedDict, corrupt_frac: float = None) -> dict
+
+      Format a batch of data for a `NeuralTree` object
+
+
+
+   .. py:method:: format_inputs(batch: collections.OrderedDict, corrupt_frac: Optional[float] = None) -> dict
+
+      Format input DataFrame for a `NeuralTree` object
+
+
+
+   .. py:method:: format_targets(batch: collections.OrderedDict) -> dict
+
+      Format target DataFrame for a `NeuralTree` object
+
+
+
+   .. py:method:: create_leaf(in_dim: int, branch_key: str) -> cortex.model.leaf.ClassifierLeaf
+
+      Create the leaf node for this task to be added to a `NeuralTree` object.
+
+
+
+   .. py:method:: compute_eval_metrics(ensemble_output: dict, targets: dict, task_key: str) -> dict
+
+
+.. py:class:: DenoisingLanguageModelTask(data_module: cortex.data.data_module.TaskDataModule, input_map: dict[str, str], leaf_key: str, root_key: str, tokenizer: transformers.BertTokenizer, corruption_process: Optional[Any] = None, corruption_rate: float = 0.1, **kwargs)
+
+   Bases: :py:obj:`cortex.task._abstract_task.BaseTask`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:attribute:: vocab_size
+
+
+   .. py:attribute:: root_key
+
+
+   .. py:attribute:: corruption_process
+      :value: None
+
+
+
+   .. py:attribute:: corruption_rate
+      :value: 0.1
+
+
+
+   .. py:method:: format_inputs(batch: collections.OrderedDict, corrupt_frac: Optional[float] = None) -> dict
+
+      Format input DataFrame for a `NeuralTree` object
+
+
+
+   .. py:method:: create_leaf(in_dim: int, branch_key: str) -> cortex.model.leaf.DenoisingLanguageModelLeaf
+
+      Create the leaf node for this task to be added to a `NeuralTree` object.
+
+
+
+   .. py:method:: compute_eval_metrics(ensemble_output, targets, task_key) -> dict
+
+
+.. py:class:: RegressionTask(data_module: cortex.data.data_module.TaskDataModule, input_map: dict[str, str], outcome_cols: list[str], leaf_key: str, corrupt_train_inputs: bool = False, corrupt_inference_inputs: bool = False, root_key: Optional[str] = None, nominal_label_var: float = 0.25**2, **kwargs)
+
+   Bases: :py:obj:`cortex.task._abstract_task.BaseTask`
+
+
+   Regression task
+
+
+   .. py:attribute:: outcome_cols
+
+
+   .. py:attribute:: out_dim
+
+
+   .. py:attribute:: root_key
+      :value: None
+
+
+
+   .. py:attribute:: nominal_label_var
+      :value: 0.0625
+
+
+
+   .. py:method:: fit_transform(outcome_transform: botorch.models.transforms.outcome.OutcomeTransform, device: torch.device, dtype: torch.dtype) -> None
+
+      Fit an `OutcomeTransform` object to the training data.
+
+
+
+   .. py:method:: format_batch(batch: collections.OrderedDict, corrupt_frac: float = None) -> dict
+
+      Format a batch of data for a `NeuralTree` object
+
+
+
+   .. py:method:: format_inputs(batch: collections.OrderedDict, corrupt_frac: float = 0.0) -> dict
+
+      Format input DataFrame for a `NeuralTree` object
+
+
+
+   .. py:method:: format_targets(batch: collections.OrderedDict) -> dict
+
+      Format target DataFrame for a `NeuralTree` object
+
+
+
+   .. py:method:: create_leaf(in_dim: int, branch_key: str) -> cortex.model.leaf.RegressorLeaf
+
+      Create the leaf node for this task to be added to a `NeuralTree` object.
+
+
+
+   .. py:method:: compute_eval_metrics(ensemble_output: dict, targets: dict, task_key: str) -> dict
+
+
+.. py:class:: SequenceRegressionTask
+
+   Bases: :py:obj:`cortex.task._regression.RegressionTask`
+
+
+   .. py:method:: format_inputs(batch: collections.OrderedDict, corrupt_frac: float = 0.0) -> dict
+
+
+   .. py:method:: format_targets(batch: collections.OrderedDict) -> dict
+
+
+   .. py:method:: create_leaf(in_dim: int, branch_key: str) -> cortex.model.leaf.SequenceRegressorLeaf
+
+      Create the leaf node for this task to be added to a `NeuralTree` object.
+
+
+
+   .. py:method:: compute_eval_metrics(ensemble_output: dict, targets: dict, task_key: str) -> dict
+
+

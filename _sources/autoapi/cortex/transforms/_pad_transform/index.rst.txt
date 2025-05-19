@@ -1,0 +1,45 @@
+cortex.transforms._pad_transform
+================================
+
+.. py:module:: cortex.transforms._pad_transform
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.transforms._pad_transform.PadTransform
+
+
+Module Contents
+---------------
+
+.. py:class:: PadTransform(max_length: int, pad_value: int)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   Pad tensor to a fixed length with given padding value.
+
+   :param max_length: Maximum length to pad to
+   :type max_length: int
+   :param pad_value: Value to pad the tensor with
+   :type pad_value: bool
+
+
+   .. py:attribute:: max_length
+
+
+   .. py:attribute:: pad_value
+
+
+   .. py:method:: forward(x: torch.Tensor) -> torch.Tensor
+
+      :param x: The tensor to pad
+      :type x: Tensor
+      :return: Tensor padded up to max_length with pad_value
+      :rtype: Tensor
+
+
+

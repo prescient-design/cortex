@@ -1,0 +1,91 @@
+cortex.model.leaf._denoising_lm_leaf
+====================================
+
+.. py:module:: cortex.model.leaf._denoising_lm_leaf
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeafOutput
+   cortex.model.leaf._denoising_lm_leaf.DenoisingLanguageModelLeaf
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.model.leaf._denoising_lm_leaf.format_denoising_lm_ensemble_output
+   cortex.model.leaf._denoising_lm_leaf.mlm_conditional_log_likelihood
+   cortex.model.leaf._denoising_lm_leaf.mlm_pseudo_log_likelihood
+
+
+Module Contents
+---------------
+
+.. py:class:: DenoisingLanguageModelLeafOutput
+
+   Bases: :py:obj:`cortex.model.leaf.LeafNodeOutput`
+
+
+   .. py:attribute:: logits
+      :type:  torch.Tensor
+
+
+.. py:class:: DenoisingLanguageModelLeaf(*args, corruption_process: Optional[cortex.corruption._abstract_corruption.CorruptionProcess] = None, corruption_rate: float = 0.1, layernorm: bool = True, **kwargs)
+
+   Bases: :py:obj:`cortex.model.leaf.ClassifierLeaf`
+
+
+   Leaf node which transforms branch sequence features to discrete sequence logits.
+
+   Can optionally apply a corruption process to the masked tokens during training,
+   which serves as a form of data augmentation to increase sample diversity and
+   potentially improve embedding quality. This is particularly useful with
+   biologically-informed corruption processes like BLOSUM62-based substitutions
+   for protein sequences.
+
+
+   .. py:attribute:: corruption_process
+      :value: None
+
+
+
+   .. py:attribute:: corruption_rate
+      :value: 0.1
+
+
+
+   .. py:method:: forward(branch_outputs: cortex.model.branch.BranchNodeOutput, *args, **kwargs) -> DenoisingLanguageModelLeafOutput
+
+      :param branch_outputs: SeqCNNBranchOutput
+
+      :returns: DenoisingLanguageModelLeafOutput
+      :rtype: outputs
+
+
+
+   .. py:method:: loss(leaf_outputs: DenoisingLanguageModelLeafOutput, root_outputs: cortex.model.root.RootNodeOutput, *args, **kwargs) -> torch.Tensor
+
+
+   .. py:method:: format_outputs(leaf_outputs: DenoisingLanguageModelLeafOutput, root_outputs: cortex.model.root.RootNodeOutput) -> tuple[torch.Tensor, torch.Tensor]
+
+
+   .. py:method:: evaluate(leaf_outputs: DenoisingLanguageModelLeafOutput, root_outputs: cortex.model.root.RootNodeOutput, *args, **kwargs) -> dict
+
+
+.. py:function:: format_denoising_lm_ensemble_output(leaf_outputs: list[DenoisingLanguageModelLeafOutput], root_outputs: list[cortex.model.root.RootNodeOutput], task_key: str)
+
+.. py:function:: mlm_conditional_log_likelihood(tree_output: cortex.model.tree.NeuralTreeOutput, x_instances, x_occluded, root_key: str)
+
+   Compute the MLM conditional log-likelihood of the masked tokens in `x_occluded` given the unmasked tokens in `x_instances`.
+
+
+.. py:function:: mlm_pseudo_log_likelihood(tok_idxs: torch.LongTensor, null_value: int, model: cortex.model.tree.NeuralTree, root_key: str, is_excluded: Optional[torch.BoolTensor] = None)
+
+   Compute the MLM pseudo-log-likelihood of the full tok_idxs sequence
+
+

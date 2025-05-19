@@ -1,0 +1,55 @@
+cortex.transforms._transform
+============================
+
+.. py:module:: cortex.transforms._transform
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.transforms._transform.Transform
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.transforms._transform._check_type
+
+
+Module Contents
+---------------
+
+.. py:function:: _check_type(obj: Any, types_or_checks: tuple[Union[type, Callable[[Any], bool]], Ellipsis]) -> bool
+
+.. py:class:: Transform
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:attribute:: _transformed_types
+      :type:  tuple[Union[type, Callable[[Any], bool]], Ellipsis]
+
+
+   .. py:method:: extra_repr() -> str
+
+
+   .. py:method:: forward(*data: Any) -> Any
+
+
+   .. py:method:: parameters_dict(flattened_data: list[Any]) -> dict[str, Any]
+
+
+   .. py:method:: transform(data: Any, parameters: dict[str, Any]) -> Any
+      :abstractmethod:
+
+
+
+   .. py:method:: validate(flat_inputs: list[Any]) -> None
+      :abstractmethod:
+
+
+

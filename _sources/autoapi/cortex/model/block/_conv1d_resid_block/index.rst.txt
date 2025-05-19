@@ -1,0 +1,47 @@
+cortex.model.block._conv1d_resid_block
+======================================
+
+.. py:module:: cortex.model.block._conv1d_resid_block
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.block._conv1d_resid_block.Conv1dResidBlock
+
+
+Module Contents
+---------------
+
+.. py:class:: Conv1dResidBlock(in_channels: int, out_channels: int, kernel_size: int, layernorm: bool = True, dropout_p: float = 0.0, act_fn: str = 'swish', stride: int = 1, dilation: int = 1)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   1D explicit convolution pre-norm residual block with optional layer-norm and swish activation.
+   Each block has two convolution layers.
+   The order of operations is norm -> act -> conv -> norm -> act -> conv -> add.
+
+   This module expects inputs to be a tuple of (features, padding_mask).
+
+   Dropout is applied to the output of the block.
+
+
+   .. py:attribute:: conv_1
+
+
+   .. py:attribute:: conv_2
+
+
+   .. py:attribute:: dropout
+
+
+   .. py:method:: forward(inputs: tuple[torch.Tensor, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor]
+
+      assumes inputs are already properly masked
+      assumes norm and act are applied pointwise in spatial dimension
+
+
+

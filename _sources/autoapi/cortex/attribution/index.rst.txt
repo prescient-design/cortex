@@ -1,0 +1,34 @@
+cortex.attribution
+==================
+
+.. py:module:: cortex.attribution
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/cortex/attribution/_occlusion/index
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.attribution.approximate_occlusion
+   cortex.attribution.occlusion
+
+
+Package Contents
+----------------
+
+.. py:function:: approximate_occlusion(score_fn: callable, tok_embeddings: torch.FloatTensor, null_embedding: torch.FloatTensor, is_excluded: Optional[torch.BoolTensor] = None)
+
+   First-order Taylor expansion of the occlusion score.
+
+
+.. py:function:: occlusion(score_fn: callable, tok_idxs: torch.LongTensor, null_value: int, is_excluded: Optional[torch.BoolTensor] = None)
+

@@ -1,0 +1,38 @@
+cortex.model.leaf._seq_regressor_leaf
+=====================================
+
+.. py:module:: cortex.model.leaf._seq_regressor_leaf
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.leaf._seq_regressor_leaf.SequenceRegressorLeaf
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.model.leaf._seq_regressor_leaf.adjust_sequence_mask
+
+
+Module Contents
+---------------
+
+.. py:class:: SequenceRegressorLeaf(in_dim: int, out_dim: int, branch_key: str, num_layers: int = 0, outcome_transform: Optional[botorch.models.transforms.outcome.OutcomeTransform] = None, label_smoothing: float = 0.0, nominal_label_var: float = 0.25**2, var_lb: float = 0.0001, root_key: Optional[str] = None)
+
+   Bases: :py:obj:`cortex.model.leaf.RegressorLeaf`
+
+
+   .. py:method:: forward(branch_outputs: cortex.model.branch.BranchNodeOutput) -> cortex.model.leaf.RegressorLeafOutput
+
+
+   .. py:method:: loss(leaf_outputs: cortex.model.leaf.RegressorLeafOutput, root_outputs: cortex.model.root.RootNodeOutput, targets: torch.Tensor, position_mask: Optional[numpy.ndarray] = None, *args, **kwargs) -> torch.Tensor
+
+
+.. py:function:: adjust_sequence_mask(mask: torch.Tensor, tgt_tensor: torch.Tensor) -> torch.Tensor
+

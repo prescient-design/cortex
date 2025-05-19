@@ -1,0 +1,85 @@
+cortex.corruption._substitution_corruption
+==========================================
+
+.. py:module:: cortex.corruption._substitution_corruption
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.corruption._substitution_corruption.SubstitutionCorruptionProcess
+
+
+Module Contents
+---------------
+
+.. py:class:: SubstitutionCorruptionProcess(vocab_size: int, excluded_token_ids: Optional[Set[int]] = None, substitution_matrix: Optional[torch.Tensor] = None, schedule: str = 'cosine', max_steps: int = 1000, *args, **kwargs)
+
+   Bases: :py:obj:`cortex.corruption._abstract_corruption.CorruptionProcess`
+
+
+   Corrupt input tensor by substituting values according to a substitution probability matrix.
+   Each tensor element is corrupted independently with probability `corrupt_frac`.
+
+   If no substitution_matrix is provided, uniform random substitution is used.
+   If a substitution_matrix is provided, it defines the probability of substituting
+   token i with token j.
+
+   :param vocab_size: Size of the vocabulary (number of possible tokens).
+   :param excluded_token_ids: Set of token IDs that should not be corrupted or used as substitutes.
+   :param substitution_matrix: Optional substitution probability matrix of shape (vocab_size, vocab_size).
+                               Each row i contains the probability distribution for substituting token i with any other token.
+                               If None, uniform random substitution is used.
+   :param schedule: Noise schedule type ("linear", "cosine", etc.).
+   :param max_steps: Maximum number of diffusion steps.
+
+
+   .. py:attribute:: vocab_size
+
+
+   .. py:attribute:: excluded_token_ids
+
+
+   .. py:attribute:: substitution_matrix
+      :value: None
+
+
+
+   .. py:method:: _corrupt(x_start: torch.Tensor, corrupt_frac: Union[float, torch.Tensor], *args, **kwargs) -> tuple[torch.Tensor, torch.Tensor]
+
+      Corrupt the input tensor by substituting tokens according to the substitution matrix.
+
+      :param x_start: Input tensor to corrupt.
+      :param corrupt_frac: Fraction of tokens to corrupt, either a scalar or per-example tensor.
+
+      :returns: Tuple of (corrupted tensor, corruption mask).
+
+
+
+   .. py:method:: from_tokenizer(tokenizer, **kwargs)
+      :classmethod:
+
+
+      Create a SubstitutionCorruptionProcess using a tokenizer's vocabulary.
+
+      :param tokenizer: A tokenizer with vocab and corruption_vocab_excluded attributes.
+
+      :returns: SubstitutionCorruptionProcess with uniform substitution matrix respecting tokenizer constraints.
+
+
+
+   .. py:method:: from_blosum62(vocab_file_path=None, **kwargs)
+      :classmethod:
+
+
+      Create a SubstitutionCorruptionProcess using BLOSUM62 substitution probabilities.
+
+      :param tokenizer: A tokenizer with vocabulary mapping functions (used for excluded tokens).
+      :param vocab_file_path: Optional path to vocab file. If None, uses default in ProteinSequenceTokenizer.
+
+      :returns: SubstitutionCorruptionProcess with BLOSUM62-based substitution matrix.
+
+
+

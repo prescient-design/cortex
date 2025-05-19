@@ -1,0 +1,28 @@
+cortex.io._parse_s3_path
+========================
+
+.. py:module:: cortex.io._parse_s3_path
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.io._parse_s3_path.parse_s3_path
+
+
+Module Contents
+---------------
+
+.. py:function:: parse_s3_path(s3_path: Union[upath.UPath, pathlib.Path, str])
+
+   Parse an S3 path and return the bucket name and key.
+
+   :param s3_path: The S3 bucket path of the file to be downloaded.
+   :type s3_path: Union[UPath, Path, str]
+
+   :returns: * **bucket_name** (*str*) -- The name of the S3 bucket.
+             * **bucket_key** (*str*) -- The key of the S3 bucket.
+
+

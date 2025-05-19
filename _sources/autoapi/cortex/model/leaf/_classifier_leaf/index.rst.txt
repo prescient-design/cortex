@@ -1,0 +1,128 @@
+cortex.model.leaf._classifier_leaf
+==================================
+
+.. py:module:: cortex.model.leaf._classifier_leaf
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.leaf._classifier_leaf.ClassifierLeafOutput
+   cortex.model.leaf._classifier_leaf.ClassifierLeaf
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.model.leaf._classifier_leaf.cross_entropy_with_per_sample_smoothing
+   cortex.model.leaf._classifier_leaf.check_probs
+   cortex.model.leaf._classifier_leaf.format_classifier_ensemble_output
+
+
+Module Contents
+---------------
+
+.. py:function:: cross_entropy_with_per_sample_smoothing(logits, targets, alpha=0.0)
+
+   Custom cross entropy loss function that supports per-sample label smoothing.
+
+   :param logits: Predicted logits of shape [batch_size, num_classes]
+   :param targets: Ground truth labels of shape [batch_size]
+   :param alpha: Float or tensor of shape [batch_size] specifying smoothing value per sample
+
+   :returns: Loss tensor averaged across the batch
+
+
+.. py:class:: ClassifierLeafOutput
+
+   Bases: :py:obj:`cortex.model.leaf.LeafNodeOutput`
+
+
+   .. py:attribute:: logits
+      :type:  torch.Tensor
+
+
+.. py:function:: check_probs(probs: torch.Tensor, dim: int = -1) -> bool
+
+   Check that the probabilities are valid
+
+
+.. py:class:: ClassifierLeaf(in_dim: int, num_classes: int, branch_key: str, num_layers: int = 0, last_layer_bias: bool = True, label_smoothing: Union[float, str] = 0.0, root_key: Optional[str] = None, layernorm: bool = False)
+
+   Bases: :py:obj:`cortex.model.leaf.LeafNode`
+
+
+   Leaf node which transforms pooled branch features to discrete classifier logits
+
+
+   .. py:attribute:: in_dim
+
+
+   .. py:attribute:: num_classes
+
+
+   .. py:attribute:: branch_key
+
+
+   .. py:attribute:: root_key
+      :value: None
+
+
+
+   .. py:attribute:: encoder
+
+
+   .. py:attribute:: loss_fn
+
+
+   .. py:attribute:: label_smoothing
+      :value: 0.0
+
+
+
+   .. py:method:: forward(branch_outputs: cortex.model.branch.BranchNodeOutput) -> ClassifierLeafOutput
+
+      :param branch_outputs: {
+                             'branch_features': torch.Tensor,
+                             'branch_mask': torch.Tensor,
+                             'pooled_features': torch.Tensor
+      :param }:
+
+      :returns: {'logits': torch.Tensor}
+      :rtype: outputs
+
+
+
+   .. py:method:: tie_last_layer_weight(weight)
+
+
+   .. py:method:: untie_last_layer_weight()
+
+
+   .. py:method:: class_probs(branch_outputs: cortex.model.branch.BranchNodeOutput)
+
+
+   .. py:method:: sample(branch_outputs: cortex.model.branch.BranchNodeOutput, num_samples: int)
+
+
+   .. py:method:: _preprocess_targets(targets: torch.Tensor, device: torch.device)
+
+
+   .. py:method:: loss(leaf_outputs: ClassifierLeafOutput, root_outputs: cortex.model.root.RootNodeOutput, targets: torch.Tensor, *args, **kwargs)
+
+
+   .. py:method:: evaluate(outputs: ClassifierLeafOutput, targets: torch.Tensor)
+
+
+   .. py:method:: initialize() -> None
+
+      initialize leaf weights
+
+
+
+.. py:function:: format_classifier_ensemble_output(leaf_outputs: ClassifierLeafOutput, task_key: str)
+

@@ -1,0 +1,28 @@
+cortex.cmdline.train_cortex_model
+=================================
+
+.. py:module:: cortex.cmdline.train_cortex_model
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.cmdline.train_cortex_model.main
+   cortex.cmdline.train_cortex_model.execute
+
+
+Module Contents
+---------------
+
+.. py:function:: main(cfg)
+
+   general setup
+
+
+.. py:function:: execute(cfg)
+
+   instantiate and train a multitask neural tree
+
+

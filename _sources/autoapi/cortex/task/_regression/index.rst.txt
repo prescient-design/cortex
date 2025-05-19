@@ -1,0 +1,84 @@
+cortex.task._regression
+=======================
+
+.. py:module:: cortex.task._regression
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.task._regression.RegressionTask
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.task._regression.regression_metrics
+
+
+Module Contents
+---------------
+
+.. py:class:: RegressionTask(data_module: cortex.data.data_module.TaskDataModule, input_map: dict[str, str], outcome_cols: list[str], leaf_key: str, corrupt_train_inputs: bool = False, corrupt_inference_inputs: bool = False, root_key: Optional[str] = None, nominal_label_var: float = 0.25**2, **kwargs)
+
+   Bases: :py:obj:`cortex.task._abstract_task.BaseTask`
+
+
+   Regression task
+
+
+   .. py:attribute:: outcome_cols
+
+
+   .. py:attribute:: out_dim
+
+
+   .. py:attribute:: root_key
+      :value: None
+
+
+
+   .. py:attribute:: nominal_label_var
+      :value: 0.0625
+
+
+
+   .. py:method:: fit_transform(outcome_transform: botorch.models.transforms.outcome.OutcomeTransform, device: torch.device, dtype: torch.dtype) -> None
+
+      Fit an `OutcomeTransform` object to the training data.
+
+
+
+   .. py:method:: format_batch(batch: collections.OrderedDict, corrupt_frac: float = None) -> dict
+
+      Format a batch of data for a `NeuralTree` object
+
+
+
+   .. py:method:: format_inputs(batch: collections.OrderedDict, corrupt_frac: float = 0.0) -> dict
+
+      Format input DataFrame for a `NeuralTree` object
+
+
+
+   .. py:method:: format_targets(batch: collections.OrderedDict) -> dict
+
+      Format target DataFrame for a `NeuralTree` object
+
+
+
+   .. py:method:: create_leaf(in_dim: int, branch_key: str) -> cortex.model.leaf.RegressorLeaf
+
+      Create the leaf node for this task to be added to a `NeuralTree` object.
+
+
+
+   .. py:method:: compute_eval_metrics(ensemble_output: dict, targets: dict, task_key: str) -> dict
+
+
+.. py:function:: regression_metrics(loc, scale, targets)
+

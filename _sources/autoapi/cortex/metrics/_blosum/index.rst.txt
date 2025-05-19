@@ -1,0 +1,135 @@
+cortex.metrics._blosum
+======================
+
+.. py:module:: cortex.metrics._blosum
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.metrics._blosum.create_blosum62_matrix
+   cortex.metrics._blosum.create_blosum62_transition_matrix
+   cortex.metrics._blosum.lookup_blosum62_score
+   cortex.metrics._blosum.blosum62_distance
+   cortex.metrics._blosum.batch_lookup_blosum62
+   cortex.metrics._blosum.batch_blosum62_distance
+   cortex.metrics._blosum.create_tokenizer_compatible_transition_matrix
+
+
+Module Contents
+---------------
+
+.. py:function:: create_blosum62_matrix() -> Tuple[torch.Tensor, Dict[str, int]]
+
+   Creates the BLOSUM62 substitution matrix as a PyTorch tensor.
+
+   The matrix is organized according to the Dayhoff classification of amino acids,
+   with amino acids grouped by their physicochemical properties.
+
+   :returns: The BLOSUM62 matrix as a torch.Tensor
+             and a dictionary mapping amino acid characters to indices.
+   :rtype: Tuple[torch.Tensor, Dict[str, int]]
+
+
+.. py:function:: create_blosum62_transition_matrix() -> Tuple[torch.Tensor, Dict[str, int]]
+
+   Convert BLOSUM matrix to transition probability matrix.
+
+   The transition matrix follows discrete Markov process conventions:
+   - Row index i represents the current state (amino acid)
+   - Column index j represents the next state (amino acid)
+   - Each entry [i,j] is the probability of transitioning from amino acid i to j
+
+   BLOSUM scores are log-odds scores: 2 * log2(p(a,b)/(p(a)*p(b)))
+   To convert back to substitution probabilities:
+   1. Convert score to odds ratio: 2^(score/2)
+   2. Multiply by background frequency: odds_ratio * p(b)
+
+   The resulting substitution probabilities reflect the underlying evolutionary
+   model captured by the BLOSUM matrix.
+
+   :returns:     - A transition probability matrix based on BLOSUM substitution rates
+                 - Dictionary mapping amino acids to indices
+   :rtype: Tuple[torch.Tensor, Dict[str, int]]
+
+
+.. py:function:: lookup_blosum62_score(seq1: str, seq2: str, blosum62: torch.Tensor, aa_to_idx: Dict[str, int]) -> torch.Tensor
+
+   Compute BLOSUM62 alignment scores between two amino acid sequences.
+
+   :param seq1: First amino acid sequence
+   :param seq2: Second amino acid sequence
+   :param blosum62: BLOSUM62 substitution matrix
+   :param aa_to_idx: Dictionary mapping amino acids to indices in the BLOSUM62 matrix
+
+   :returns: A tensor of scores with shape (len(seq1), len(seq2))
+   :rtype: torch.Tensor
+
+
+.. py:function:: blosum62_distance(seq1: str, seq2: str, blosum62: torch.Tensor, aa_to_idx: Dict[str, int], lambda_param: float = 0.267, gap_token: str = '-') -> torch.Tensor
+
+   Compute a proper distance metric between two aligned protein sequences using BLOSUM62.
+
+   This function assumes the sequences are pre-aligned and of the same length.
+   Gap tokens are treated as neutral and don't contribute to the distance calculation.
+
+   :param seq1: First protein sequence (aligned)
+   :param seq2: Second protein sequence (aligned)
+   :param blosum62: BLOSUM62 matrix as torch.Tensor
+   :param aa_to_idx: Dictionary mapping amino acids to indices in the BLOSUM62 matrix
+   :param lambda_param: Karlin-Altschul parameter for the scoring system (default=0.267)
+   :param gap_token: Character representing gaps in the alignment (default="-")
+
+   :returns: A distance value between 0 and 1
+   :rtype: torch.Tensor
+
+
+.. py:function:: batch_lookup_blosum62(batch_seq1: List[str], batch_seq2: List[str], blosum62: torch.Tensor, aa_to_idx: Dict[str, int]) -> List[torch.Tensor]
+
+   Compute BLOSUM62 alignment scores for batches of sequences.
+
+   :param batch_seq1: List of first amino acid sequences
+   :param batch_seq2: List of second amino acid sequences
+   :param blosum62: BLOSUM62 substitution matrix
+   :param aa_to_idx: Dictionary mapping amino acids to indices in the BLOSUM62 matrix
+
+   :returns: List of score tensors, each with shape (len(seq1_i), len(seq2_i))
+   :rtype: List[torch.Tensor]
+
+
+.. py:function:: batch_blosum62_distance(batch_seq1: List[str], batch_seq2: List[str], blosum62: torch.Tensor, aa_to_idx: Dict[str, int], lambda_param: float = 0.267, gap_token: str = '-') -> torch.Tensor
+
+   Compute BLOSUM62 distances for batches of aligned protein sequence pairs.
+
+   This function assumes the sequences in each pair are pre-aligned and of the same length.
+   Gap tokens are treated as neutral and don't contribute to the distance calculation.
+
+   :param batch_seq1: List of first protein sequences (aligned)
+   :param batch_seq2: List of second protein sequences (aligned)
+   :param blosum62: BLOSUM62 substitution matrix
+   :param aa_to_idx: Dictionary mapping amino acids to indices in the BLOSUM62 matrix
+   :param lambda_param: Karlin-Altschul parameter for the scoring system (default=0.267)
+   :param gap_token: Character representing gaps in the alignment (default="-")
+
+   :returns: A tensor of distances with shape (len(batch_seq1),)
+   :rtype: torch.Tensor
+
+
+.. py:function:: create_tokenizer_compatible_transition_matrix(vocab_file_path=None) -> torch.Tensor
+
+   Create a transition probability matrix compatible with a protein sequence tokenizer.
+
+   This function creates a transition probability matrix where:
+   1. Rows and columns are ordered according to vocabulary indices from the vocab file
+   2. Non-canonical amino acid tokens have identity transitions (1.0 on diagonal)
+   3. Canonical amino acid transitions follow BLOSUM62 probabilities
+
+   :param vocab_file_path: Path to the vocabulary file. If None, uses the default path:
+                           cortex/assets/protein_seq_tokenizer_32/vocab.txt
+
+   :returns: A vocab_size x vocab_size transition probability matrix
+   :rtype: torch.Tensor
+
+

@@ -1,0 +1,76 @@
+cortex.task._classification
+===========================
+
+.. py:module:: cortex.task._classification
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.task._classification.ClassificationTask
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   cortex.task._classification.binary_classification_metrics
+   cortex.task._classification.multiclass_classification_metrics
+
+
+Module Contents
+---------------
+
+.. py:class:: ClassificationTask(data_module: lightning.LightningDataModule, input_map: dict[str, str], leaf_key: str, class_col: str, num_classes: int, root_key: Optional[str] = None, corrupt_train_inputs: bool = False, corrupt_inference_inputs: bool = False, **kwargs)
+
+   Bases: :py:obj:`cortex.task._abstract_task.BaseTask`
+
+
+   Binary or multiclass classification
+
+
+   .. py:attribute:: class_col
+
+
+   .. py:attribute:: num_classes
+
+
+   .. py:attribute:: root_key
+      :value: None
+
+
+
+   .. py:method:: format_batch(batch: collections.OrderedDict, corrupt_frac: float = None) -> dict
+
+      Format a batch of data for a `NeuralTree` object
+
+
+
+   .. py:method:: format_inputs(batch: collections.OrderedDict, corrupt_frac: Optional[float] = None) -> dict
+
+      Format input DataFrame for a `NeuralTree` object
+
+
+
+   .. py:method:: format_targets(batch: collections.OrderedDict) -> dict
+
+      Format target DataFrame for a `NeuralTree` object
+
+
+
+   .. py:method:: create_leaf(in_dim: int, branch_key: str) -> cortex.model.leaf.ClassifierLeaf
+
+      Create the leaf node for this task to be added to a `NeuralTree` object.
+
+
+
+   .. py:method:: compute_eval_metrics(ensemble_output: dict, targets: dict, task_key: str) -> dict
+
+
+.. py:function:: binary_classification_metrics(avg_class_probs: numpy.ndarray, targets: numpy.ndarray, labels: list[int])
+
+.. py:function:: multiclass_classification_metrics(avg_class_probs: numpy.ndarray, targets: numpy.ndarray, labels: list[int])
+

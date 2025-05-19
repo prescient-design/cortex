@@ -1,0 +1,62 @@
+cortex.model.trunk._abstract_trunk
+==================================
+
+.. py:module:: cortex.model.trunk._abstract_trunk
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   cortex.model.trunk._abstract_trunk.TrunkNodeOutput
+   cortex.model.trunk._abstract_trunk.TrunkNode
+
+
+Module Contents
+---------------
+
+.. py:class:: TrunkNodeOutput
+
+   Dataclass for output of TrunkNode.
+
+
+   .. py:attribute:: trunk_features
+      :type:  torch.Tensor
+
+
+.. py:class:: TrunkNode
+
+   Bases: :py:obj:`abc.ABC`, :py:obj:`torch.nn.Module`
+
+
+   Mixes mode-specific features from different roots, extracts multi-modal features
+   and passes result to branch nodes.
+   Cannot be instantiated directly, must be subclassed.
+
+
+   .. py:property:: in_dims
+      :type: list[int]
+
+      :abstractmethod:
+
+
+      Returns:
+      in_dims: list of input dimensions
+
+
+   .. py:property:: out_dim
+      :type: int
+
+      :abstractmethod:
+
+
+      Returns:
+      out_dim: output dimension of aggregated features
+
+
+   .. py:method:: forward(*args, **kwargs) -> TrunkNodeOutput
+      :abstractmethod:
+
+
+
