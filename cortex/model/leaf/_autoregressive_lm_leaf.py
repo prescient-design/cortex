@@ -38,6 +38,7 @@ class AutoregressiveLanguageModelLeaf(ClassifierLeaf):
         *args,
         corruption_process: Optional[CorruptionProcess] = None,
         corruption_rate: float = 0.1,
+        layernorm: bool = True,
         **kwargs,
     ):
         """
@@ -49,7 +50,7 @@ class AutoregressiveLanguageModelLeaf(ClassifierLeaf):
             *args: Additional positional arguments to pass to the parent class
             **kwargs: Additional keyword arguments to pass to the parent class
         """
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, layernorm=layernorm, **kwargs)
         self.corruption_process = corruption_process
         self.corruption_rate = corruption_rate
 

@@ -91,7 +91,7 @@ class Conv1dBranch(BranchNode):
         padding_mask = trunk_outputs.padding_mask
 
         branch_features, branch_mask = self.encoder((trunk_features, padding_mask.to(trunk_features)))
-        pooled_features = self.pooling_op(branch_features, branch_mask)
+        pooled_features = self.pooling_op((branch_features, branch_mask))
 
         branch_outputs = Conv1dBranchOutput(
             branch_features=branch_features.contiguous(),

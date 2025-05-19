@@ -76,7 +76,10 @@ class TransformerBranch(BranchNode):
         elif pooling_type == "weighted_mean":
             self.pooling_op = WeightedMeanPooling(out_dim)
         elif pooling_type == "attention":
-            self.pooling_op = PoolingSelfAttention(num_heads=num_heads, embed_dim=out_dim, dropout_p=dropout_prob)
+            self.pooling_op = nn.Sequential(
+                Apply(nn.LayerNorm(out_dim, bias=False)),
+                PoolingSelfAttention(num_heads=num_heads, embed_dim=out_dim, dropout_p=dropout_prob),
+            )
         else:
             raise NotImplementedError
 
@@ -94,7 +97,7 @@ class TransformerBranch(BranchNode):
         padding_mask = trunk_outputs.padding_mask
 
         branch_features, branch_mask = self.encoder((trunk_features, padding_mask.to(trunk_features)))
-        pooled_features = self.pooling_op(branch_features, branch_mask)
+        pooled_features = self.pooling_op((branch_features, branch_mask))
 
         branch_outputs = TransformerBranchOutput(
             branch_features=branch_features.contiguous(),

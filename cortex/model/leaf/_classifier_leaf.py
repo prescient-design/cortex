@@ -75,6 +75,7 @@ class ClassifierLeaf(LeafNode):
         last_layer_bias: bool = True,
         label_smoothing: Union[float, str] = 0.0,
         root_key: Optional[str] = None,
+        layernorm: bool = False,
     ) -> None:
         super().__init__()
         self.in_dim = in_dim
@@ -83,7 +84,7 @@ class ClassifierLeaf(LeafNode):
         self.root_key = root_key
 
         # testing out normalizing the penultimate activations
-        encoder_modules = [nn.LayerNorm(in_dim, bias=False)]
+        encoder_modules = [nn.LayerNorm(in_dim, bias=False)] if layernorm else []
         if num_layers >= 1:
             for _ in range(num_layers):
                 encoder_modules.extend(
