@@ -1,9 +1,10 @@
-import pytest
-import torch
-import numpy as np
 from unittest.mock import Mock, patch
 
-from cortex.model.root import TransformerRootV2, TransformerRootOutput
+import numpy as np
+import pytest
+import torch
+
+from cortex.model.root import TransformerRootOutput, TransformerRootV2
 
 
 class MockTokenizerTransform:
@@ -97,7 +98,7 @@ def test_backward_compatibility_warning(transformer_root_v2):
                 padding_mask=torch.ones(2, 3, dtype=torch.bool),
             )
 
-            output = transformer_root_v2(seq_array=seq_array)
+            transformer_root_v2(seq_array=seq_array)
             mock_forward.assert_called_once()
 
 

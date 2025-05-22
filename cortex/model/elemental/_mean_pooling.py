@@ -7,7 +7,8 @@ class MeanPooling(nn.Module):
     Average pooling over the sequence dimension excluding padding token positions.
     """
 
-    def forward(self, x, padding_mask):
+    def forward(self, inputs: tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
+        x, padding_mask = inputs
         weights = torch.where(padding_mask.bool(), 0.0, float("-inf"))
         weights = weights.softmax(dim=-1).to(x)
         pooled_x = (x * weights[..., None]).sum(-2)
@@ -24,7 +25,8 @@ class WeightedMeanPooling(nn.Module):
         super().__init__()
         self.encoder = nn.Linear(in_dim, in_dim)
 
-    def forward(self, x, padding_mask):
+    def forward(self, inputs: tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
+        x, padding_mask = inputs
         weights = self.encoder(x)
         weights = torch.where(padding_mask.bool().unsqueeze(-1), weights, float("-inf"))
         weights = weights.softmax(dim=-2).to(x)

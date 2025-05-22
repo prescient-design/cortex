@@ -1,7 +1,8 @@
 """Tests for NeuralTreeConfig and HuggingFace integration."""
 
-import pytest
 import tempfile
+
+import pytest
 
 from cortex.config import NeuralTreeConfig, RootConfig
 

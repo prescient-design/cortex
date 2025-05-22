@@ -1,8 +1,9 @@
 """Tests for NeuralTreeModel and HuggingFace integration."""
 
+from unittest.mock import Mock, patch
+
 import pytest
 import torch
-from unittest.mock import Mock, patch
 
 from cortex.config import NeuralTreeConfig, RootConfig
 from cortex.model import NeuralTreeModel

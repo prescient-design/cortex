@@ -3,12 +3,12 @@ Integration tests for transform migration from model to dataloader.
 """
 
 import tempfile
-import pytest
-import torch
-import pandas as pd
 from unittest.mock import Mock
 
-from cortex.data.dataset import SequenceDataset
+import pandas as pd
+import pytest
+import torch
+
 from cortex.model.root import TransformerRootV2
 
 
@@ -57,7 +57,6 @@ def test_transform_separation_concept(mock_tokenizer, sample_protein_data):
         sample_protein_data.to_csv(csv_path, index=False)
 
         # Mock the dataloader and model transforms
-        from cortex.transforms import ToTensor, PadTransform
 
         # Create mock transforms that are nn.Modules
         class MockToTensor(torch.nn.Module):
@@ -86,8 +85,8 @@ def test_transform_separation_concept(mock_tokenizer, sample_protein_data):
         # (This is a conceptual test - full implementation would require more setup)
 
         # The key insight: tokenization should happen in dataloader, not model forward
-        tokenizer_in_dataloader = mock_tokenizer  # This would run in parallel workers
-        padding_in_dataloader = MockPadTransform(max_length=5, pad_value=0)
+        # tokenizer_in_dataloader = mock_tokenizer  # This would run in parallel workers
+        # padding_in_dataloader = MockPadTransform(max_length=5, pad_value=0)
 
         # Model should only receive pre-tokenized tensors
         model_root = TransformerRootV2(

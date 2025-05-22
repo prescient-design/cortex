@@ -1,5 +1,6 @@
+from typing import List, Optional
+
 import pandas as pd
-from typing import Optional, List
 
 from cortex.data.dataset._cortex_dataset import SequenceDataset
 

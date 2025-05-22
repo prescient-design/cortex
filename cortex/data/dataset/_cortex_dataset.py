@@ -1,12 +1,8 @@
 from abc import ABC, abstractmethod
-from collections import OrderedDict
-from typing import Any, Optional, Union, Dict
+from typing import Any, Dict, Optional
 
-import numpy as np
 import pandas as pd
-import torch
 from torch.nn import Sequential
-from torch.utils.data import Dataset
 
 from cortex.data.dataset._data_frame_dataset import DataFrameDataset
 
@@ -138,9 +134,9 @@ class SequenceDataset(CortexDataset):
         model_transforms = corruption_transforms or []
 
         super().__init__(
+            *args,
             dataloader_transforms=dataloader_transforms,
             model_transforms=model_transforms,
-            *args,
             **kwargs,
         )
 

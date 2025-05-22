@@ -4,8 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, Optional, Union
 
 import torch
-from torch import nn
-from transformers import AutoModel, AutoConfig, PreTrainedModel
+from transformers import AutoConfig, AutoModel
 
 from cortex.model.root import RootNode, RootNodeOutput
 
@@ -185,7 +184,6 @@ class HuggingFaceRoot(RootNode):
 
         elif self.pooling_strategy == "pooler":
             # Use model's pooler output if available
-            model_output = self.model.get_output_embeddings() if hasattr(self.model, "get_output_embeddings") else None
             if hasattr(self.model, "pooler") and self.model.pooler is not None:
                 return self.model.pooler(hidden_state)
             else:
