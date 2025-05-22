@@ -1,6 +1,7 @@
 from ._abstract_root import RootNode, RootNodeOutput
 from ._conv1d_root import Conv1dRoot, Conv1dRootOutput
 from ._transformer_root import TransformerRoot, TransformerRootOutput
+from ._transformer_root_v2 import TransformerRootV2
 from ._huggingface_root import HuggingFaceRoot, HuggingFaceRootOutput
 
 __all__ = [
@@ -10,6 +11,7 @@ __all__ = [
     "Conv1dRootOutput",
     "TransformerRoot",
     "TransformerRootOutput",
+    "TransformerRootV2",
     "HuggingFaceRoot",
     "HuggingFaceRootOutput",
 ]
