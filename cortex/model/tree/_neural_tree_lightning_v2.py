@@ -1,11 +1,11 @@
 """
-Lightning module v2 for neural tree architecture with HuggingFace integration.
+Lightning module v2 for neural tree architecture.
 
 This module modernizes the Lightning integration for v2/v3 infrastructure with:
 - Callback-based weight averaging and model management
-- Better integration with TransformerRootV2/V3 and HuggingFace models
 - Cleaner separation between model architecture and training logic
 - Improved multi-task training patterns
+- Support for HuggingFaceRoot and other modern root implementations
 """
 
 import warnings
@@ -29,15 +29,15 @@ class NeuralTreeLightningV2(NeuralTree, L.LightningModule):
     - Clean separation of model and training concerns
     - Callback-based weight averaging and checkpointing
     - Multi-task training with manual optimization
-    - HuggingFace model integration support
+    - Support for HuggingFaceRoot and other modern root implementations
     """
 
     def __init__(
         self,
-        root_nodes: Optional[nn.ModuleDict] = None,
-        trunk_node: Optional[nn.Module] = None,
-        branch_nodes: Optional[nn.ModuleDict] = None,
-        leaf_nodes: Optional[nn.ModuleDict] = None,
+        root_nodes: nn.ModuleDict,
+        trunk_node: nn.Module,
+        branch_nodes: nn.ModuleDict,
+        leaf_nodes: nn.ModuleDict,
         fit_cfg: Optional[DictConfig] = None,
         optimizer_config: Optional[DictConfig] = None,
         scheduler_config: Optional[DictConfig] = None,
@@ -47,7 +47,7 @@ class NeuralTreeLightningV2(NeuralTree, L.LightningModule):
         Initialize Lightning module v2.
 
         Args:
-            root_nodes: Root nodes (v1/v2/v3 compatible)
+            root_nodes: Root nodes (including HuggingFaceRoot)
             trunk_node: Trunk node for feature aggregation
             branch_nodes: Branch nodes for task-specific processing
             leaf_nodes: Leaf nodes for final task outputs
@@ -56,11 +56,10 @@ class NeuralTreeLightningV2(NeuralTree, L.LightningModule):
             scheduler_config: LR scheduler configuration
             **kwargs: Additional arguments
         """
-        root_nodes = root_nodes or nn.ModuleDict()
-        branch_nodes = branch_nodes or nn.ModuleDict()
-        leaf_nodes = leaf_nodes or nn.ModuleDict()
-
-        super().__init__(
+        # Initialize parent classes - Lightning first to set up the module
+        L.LightningModule.__init__(self)
+        NeuralTree.__init__(
+            self,
             root_nodes=root_nodes,
             trunk_node=trunk_node,
             branch_nodes=branch_nodes,

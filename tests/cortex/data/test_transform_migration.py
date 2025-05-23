@@ -9,7 +9,7 @@ import pandas as pd
 import pytest
 import torch
 
-from cortex.model.root import TransformerRootV2
+from cortex.model.root import TransformerRoot
 
 
 class MockTokenizerTransform(torch.nn.Module):
@@ -89,7 +89,7 @@ def test_transform_separation_concept(mock_tokenizer, sample_protein_data):
         # padding_in_dataloader = MockPadTransform(max_length=5, pad_value=0)
 
         # Model should only receive pre-tokenized tensors
-        model_root = TransformerRootV2(
+        model_root = TransformerRoot(
             tokenizer_transform=mock_tokenizer,  # Config only, not used for forward tokenization
             max_len=5,
             out_dim=64,
@@ -133,7 +133,7 @@ def test_gpu_utilization_improvement_concept():
     mock_tokenizer = MockTokenizerTransform()
 
     # Test that new model accepts pre-tokenized inputs
-    model = TransformerRootV2(
+    model = TransformerRoot(
         tokenizer_transform=mock_tokenizer,
         max_len=10,
         out_dim=64,

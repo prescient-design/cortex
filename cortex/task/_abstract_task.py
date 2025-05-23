@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from collections import OrderedDict
+from typing import Any, Dict
 
 import pandas as pd
 
@@ -55,7 +55,7 @@ class BaseTask(ABC):
 
         return self.format_batch(batch, corrupt_frac=corrupt_frac)
 
-    def format_batch(self, batch: OrderedDict, corrupt_frac: float = None) -> dict:
+    def format_batch(self, batch: Dict[str, Any], corrupt_frac: float = None) -> dict:
         """
         Format a batch of data for a `NeuralTree` object
         """
@@ -65,7 +65,7 @@ class BaseTask(ABC):
         }
 
     @abstractmethod
-    def format_inputs(self, batch: OrderedDict) -> dict:
+    def format_inputs(self, batch: Dict[str, Any]) -> dict:
         """
         Format input DataFrame for a `NeuralTree` object
         """

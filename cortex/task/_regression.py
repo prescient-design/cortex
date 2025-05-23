@@ -1,5 +1,4 @@
-from collections import OrderedDict
-from typing import Optional
+from typing import Any, Dict, Optional
 
 import numpy as np
 import torch
@@ -53,7 +52,7 @@ class RegressionTask(BaseTask):
         outcome_transform(outcomes)
         outcome_transform.eval()
 
-    def format_batch(self, batch: OrderedDict, corrupt_frac: float = None) -> dict:
+    def format_batch(self, batch: Dict[str, Any], corrupt_frac: float = None) -> dict:
         """
         Format a batch of data for a `NeuralTree` object
         """
@@ -63,7 +62,7 @@ class RegressionTask(BaseTask):
             "leaf_targets": self.format_targets(batch),
         }
 
-    def format_inputs(self, batch: OrderedDict, corrupt_frac: float = 0.0) -> dict:
+    def format_inputs(self, batch: Dict[str, Any], corrupt_frac: float = 0.0) -> dict:
         """
         Format input DataFrame for a `NeuralTree` object
         """
@@ -75,7 +74,7 @@ class RegressionTask(BaseTask):
             }
         return inputs
 
-    def format_targets(self, batch: OrderedDict) -> dict:
+    def format_targets(self, batch: Dict[str, Any]) -> dict:
         """
         Format target DataFrame for a `NeuralTree` object
         """

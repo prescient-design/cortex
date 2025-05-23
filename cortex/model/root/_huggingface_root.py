@@ -27,6 +27,11 @@ class HuggingFaceRootOutput(RootNodeOutput):
     # Raw HF model output for advanced use cases
     raw_output: Optional[Any] = None
 
+    @property
+    def padding_mask(self) -> Optional[torch.Tensor]:
+        """Alias for attention_mask to maintain compatibility with cortex trunk nodes."""
+        return self.attention_mask
+
 
 class HuggingFaceRoot(RootNode):
     """
@@ -45,7 +50,7 @@ class HuggingFaceRoot(RootNode):
         output_hidden_states: bool = False,
         output_attentions: bool = False,
         feature_extraction_layer: int = -1,  # Which layer to use for root_features
-        pooling_strategy: str = "mean",  # "mean", "cls", "max", "pooler"
+        pooling_strategy: str = "none",  # "mean", "cls", "max", "pooler", "none"
         freeze_pretrained: bool = False,
         corruption_process: Optional[Any] = None,
         **model_kwargs,
@@ -60,7 +65,14 @@ class HuggingFaceRoot(RootNode):
         # Load HuggingFace model
         if config is not None:
             if isinstance(config, dict):
-                config = AutoConfig.from_dict(config)
+                # Create config from dict based on model_type
+                from transformers import BertConfig
+
+                # TODO: Add more model types as needed
+                if config.get("model_type") == "bert":
+                    config = BertConfig(**config)
+                else:
+                    raise ValueError(f"Unsupported model_type: {config.get('model_type')}")
             self.model = AutoModel.from_config(config, **model_kwargs)
         else:
             self.model = AutoModel.from_pretrained(
@@ -189,6 +201,10 @@ class HuggingFaceRoot(RootNode):
             else:
                 # Fallback to CLS token
                 return hidden_state[:, 0, :]
+
+        elif self.pooling_strategy == "none":
+            # Return the full sequence without pooling
+            return hidden_state
 
         else:
             raise ValueError(f"Unknown pooling strategy: {self.pooling_strategy}")
