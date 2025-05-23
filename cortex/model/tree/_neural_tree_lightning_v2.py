@@ -102,45 +102,49 @@ class NeuralTreeLightningV2(NeuralTree, L.LightningModule):
 
         # Build tasks
         task_dict = {}
-        for task_key, task_cfg in cfg.tasks.items():
-            # Set up data module options
-            if hasattr(task_cfg, "data_module"):
-                task_cfg.data_module["skip_task_setup"] = skip_task_setup
+        for branch_key, branch_tasks in cfg.tasks.items():
+            for task_key, task_cfg in branch_tasks.items():
+                # Delay setup until after _tokenizer_config is set
+                if hasattr(task_cfg, "data_module"):
+                    task_cfg.data_module["skip_task_setup"] = True
 
-            # Instantiate task
-            task = hydra.utils.instantiate(task_cfg)
+                # Instantiate task
+                # passing task_key to leaf_key arg is bad code smell, should be revisited
+                task = hydra.utils.instantiate(task_cfg, leaf_key=task_key)
 
-            # Pass tokenizer config from root to task's data module
-            if hasattr(task, "root_key") and task.root_key in self.root_nodes:
-                root = self.root_nodes[task.root_key]
-                if hasattr(root, "get_tokenizer_config") and hasattr(task, "data_module"):
-                    # Store tokenizer config on data module for use in dataloaders
-                    task.data_module._tokenizer_config = root.get_tokenizer_config()
+                # Pass tokenizer config from root to task's data module
+                if hasattr(task, "root_key") and task.root_key in self.root_nodes:
+                    root = self.root_nodes[task.root_key]
+                    if hasattr(root, "get_tokenizer_config") and hasattr(task, "data_module"):
+                        # Store tokenizer config on data module for use in dataloaders
+                        task.data_module._tokenizer_config = root.get_tokenizer_config()
 
-            task_dict[task_key] = task
+                if hasattr(task_cfg, "data_module") and not skip_task_setup:
+                    task.data_module.setup()
 
-            # Create branch and leaf nodes
-            ensemble_size = getattr(task_cfg, "ensemble_size", 1)
-            branch_key = getattr(task_cfg, "branch_key", task_key)
+                task_dict[task_key] = task
 
-            if branch_key in cfg.branches:
-                branch_cfg = cfg.branches[branch_key]
+                # Create branch and leaf nodes
+                ensemble_size = getattr(task_cfg, "ensemble_size", 1)
 
-                # Ensure branch has correct input dimension
-                branch_cfg["in_dim"] = self.trunk_node.out_dim
+                if branch_key in cfg.branches:
+                    branch_cfg = cfg.branches[branch_key]
 
-                # Create ensemble of branches and leaves
-                for idx in range(ensemble_size):
-                    # Create branch
-                    b_key = f"{branch_key}_{idx}"
-                    if b_key not in self.branch_nodes:
-                        self.add_branch(branch_cfg, b_key)
+                    # Ensure branch has correct input dimension
+                    branch_cfg["in_dim"] = self.trunk_node.out_dim
 
-                    # Create leaf
-                    l_key = f"{task_key}_{idx}"
-                    leaf_in_dim = branch_cfg.out_dim
-                    leaf_node = task.create_leaf(leaf_in_dim, b_key)
-                    self.add_leaf(leaf_node, l_key)
+                    # Create ensemble of branches and leaves
+                    for idx in range(ensemble_size):
+                        # Create branch
+                        b_key = f"{branch_key}_{idx}"
+                        if b_key not in self.branch_nodes:
+                            self.add_branch(branch_cfg, b_key)
+
+                        # Create leaf
+                        l_key = f"{task_key}_{idx}"
+                        leaf_in_dim = branch_cfg.out_dim
+                        leaf_node = task.create_leaf(leaf_in_dim, b_key)
+                        self.add_leaf(leaf_node, l_key)
 
         self.task_dict = task_dict
         return task_dict
@@ -242,8 +246,9 @@ class NeuralTreeLightningV2(NeuralTree, L.LightningModule):
             optimizer.step()
 
             # Record metrics
+            # import pdb; pdb.set_trace()
             step_metrics.setdefault(task_key, []).append(loss.item())
-            batch_sizes.setdefault(task_key, []).append(batch[leaf_key]["batch_size"])
+            batch_sizes.setdefault(task_key, []).append(leaf_targets["targets"].shape[0])
 
         # Aggregate metrics
         aggregated_metrics = {}

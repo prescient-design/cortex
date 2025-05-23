@@ -4,6 +4,7 @@ HuggingFace-compatible task data module with efficient tokenization.
 
 from typing import Optional
 
+import torch
 from datasets import Dataset, DatasetDict, IterableDataset
 from lightning import LightningDataModule
 from omegaconf import DictConfig
@@ -84,7 +85,7 @@ class HFTaskDataModule(LightningDataModule):
             # Handle different dataset types
             if isinstance(dataset, DatasetDict):
                 self.train_dataset = dataset.get("train")
-                self.val_dataset = dataset.get("validation", dataset.get("val"))
+                self.val_dataset = dataset.get("validation", dataset.get("valid", dataset.get("val")))
                 self.test_dataset = dataset.get("test", self.val_dataset)
             elif isinstance(dataset, Dataset):
                 # Single dataset - need to split
@@ -130,7 +131,12 @@ class HFTaskDataModule(LightningDataModule):
 
             # Preserve labels if they exist
             if self.label_field in examples:
-                tokenized[self.label_field] = examples[self.label_field]
+                # Convert labels to float32 for MPS compatibility
+                labels = examples[self.label_field]
+                if isinstance(labels[0], (int, float)):
+                    tokenized[self.label_field] = [float(label) for label in labels]
+                else:
+                    tokenized[self.label_field] = labels
 
             return tokenized
 
@@ -148,7 +154,7 @@ class HFTaskDataModule(LightningDataModule):
                 desc="Tokenizing train dataset",
                 cache_file_name=f"{self.cache_dir}/train_tokenized.arrow" if self.cache_dir else None,
             )
-            self.train_dataset.set_format("torch")
+            self.train_dataset.set_format("torch", dtype=torch.float32)
 
         if self.val_dataset and not isinstance(self.val_dataset, IterableDataset):
             self.val_dataset = self.val_dataset.map(
@@ -160,7 +166,7 @@ class HFTaskDataModule(LightningDataModule):
                 desc="Tokenizing validation dataset",
                 cache_file_name=f"{self.cache_dir}/val_tokenized.arrow" if self.cache_dir else None,
             )
-            self.val_dataset.set_format("torch")
+            self.val_dataset.set_format("torch", dtype=torch.float32)
 
         if self.test_dataset and not isinstance(self.test_dataset, IterableDataset):
             self.test_dataset = self.test_dataset.map(
@@ -172,7 +178,7 @@ class HFTaskDataModule(LightningDataModule):
                 desc="Tokenizing test dataset",
                 cache_file_name=f"{self.cache_dir}/test_tokenized.arrow" if self.cache_dir else None,
             )
-            self.test_dataset.set_format("torch")
+            self.test_dataset.set_format("torch", dtype=torch.float32)
 
         self._tokenized = True
 

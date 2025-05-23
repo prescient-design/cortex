@@ -22,7 +22,7 @@ class RegressionTask(BaseTask):
         data_module: TaskDataModule,
         input_map: dict[str, str],
         outcome_cols: list[str],
-        leaf_key: str,
+        leaf_key: str,  # in practice NeuralTree models are passing task keys
         corrupt_train_inputs: bool = False,
         corrupt_inference_inputs: bool = False,
         root_key: Optional[str] = None,
@@ -77,8 +77,7 @@ class RegressionTask(BaseTask):
                 "attention_mask": batch.get("attention_mask"),
                 "token_type_ids": batch.get("token_type_ids"),
             }
-            if corrupt_frac > 0:
-                inputs[root_key]["corrupt_frac"] = corrupt_frac
+            inputs[root_key]["corrupt_frac"] = corrupt_frac
         else:
             # Original column-based formatting (to be deprecated)
             for root_key, input_cols in self.input_map.items():

@@ -98,6 +98,7 @@ class HuggingFaceRoot(RootNode):
         token_type_ids: Optional[torch.Tensor] = None,
         position_ids: Optional[torch.Tensor] = None,
         inputs_embeds: Optional[torch.Tensor] = None,
+        corrupt_frac: float = 0.0,
         **kwargs,
     ) -> HuggingFaceRootOutput:
         """
@@ -116,9 +117,9 @@ class HuggingFaceRoot(RootNode):
         """
         # Forward through HuggingFace model
         model_output = self.model(
-            input_ids=input_ids,
+            input_ids=input_ids.long(),
             attention_mask=attention_mask,
-            token_type_ids=token_type_ids,
+            token_type_ids=token_type_ids.long(),
             position_ids=position_ids,
             inputs_embeds=inputs_embeds,
             **kwargs,
@@ -139,7 +140,6 @@ class HuggingFaceRoot(RootNode):
         root_features = self._pool_features(hidden_state, attention_mask)
 
         # Apply corruption if specified (for guided generation)
-        corrupt_frac = None
         if self.corruption_process is not None:
             # This will be modernized in the torch.compile milestone
             corrupted_output = self.corruption_process(

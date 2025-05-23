@@ -3,26 +3,24 @@ log_fluorescence_hf:
   # Single root key mapping for HF tokenized inputs
   input_map:
     protein_seq: []  # Empty list since we'll use tokenized inputs directly
-  outcome_cols: ["fluorescence"]
+  outcome_cols: ["label"]
   root_key: protein_seq
   corrupt_train_inputs: false
   corrupt_inference_inputs: false
   nominal_label_var: 0.01
-  ensemble_size: 1
-  branch_key: protein_property
 
   data_module:
     _target_: cortex.data.data_module.HFTaskDataModule
     dataset_config:
       _target_: datasets.load_dataset
-      path: "InstaDeepAI/true-cds-protein-tasks"
-      name: "fluorescence"
+      path: "proteinglm/fluorescence_prediction"
+      name: default
       trust_remote_code: true
     batch_size: ${fit.batch_size}
     num_workers: ${num_workers}
     drop_last: true
-    text_field: "sequence"
-    label_field: "fluorescence"
+    text_field: "seq"
+    label_field: "label"
     add_spaces_between_chars: true
     tokenization_batch_size: 1000
     tokenization_num_proc: 4

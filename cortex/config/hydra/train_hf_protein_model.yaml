@@ -1,6 +1,8 @@
 defaults:
   - _self_
   - logging: default
+  - tasks:
+    - protein_property/log_fluorescence_hf
 
 # HuggingFace protein model training configuration
 job_name: hf_protein_model
@@ -53,34 +55,9 @@ branches:
 
 # Task configuration using HuggingFace datasets
 tasks:
-  log_fluorescence:
-    _target_: cortex.task.RegressionTask
-    input_map:
-      protein_seq: []  # Empty list for HF tokenized inputs
-    outcome_cols: ["label"]
-    root_key: protein_seq
-    corrupt_train_inputs: false
-    corrupt_inference_inputs: false
-    nominal_label_var: 0.01
-    ensemble_size: 1
-    branch_key: protein_property
-    leaf_key: log_fluorescence  # Need to specify leaf_key for proper leaf creation
-    data_module:
-      _target_: cortex.data.data_module.HFTaskDataModule
-      dataset_config:
-        _target_: datasets.load_dataset
-        path: "InstaDeepAI/true-cds-protein-tasks"
-        name: "fluorescence"
-        trust_remote_code: true
-      batch_size: ${fit.batch_size}
-      num_workers: ${num_workers}
-      drop_last: true
-      text_field: "sequence"
-      label_field: "label"
-      add_spaces_between_chars: true
-      tokenization_batch_size: 1000
-      tokenization_num_proc: 2  # Reduced for Mac
-      skip_task_setup: true  # Setup will be called after tokenizer config is set
+  protein_property:
+    log_fluorescence_hf:
+      ensemble_size: 1
 
 # Training configuration
 fit:
@@ -97,7 +74,7 @@ fit:
 trainer:
   _target_: lightning.pytorch.Trainer
   max_epochs: 2  # Just 2 epochs for demo
-  accelerator: auto
+  accelerator: cpu
   devices: 1
   precision: 32  # Full precision on Mac
   # gradient_clip_val: 1.0  # Not supported with manual optimization
