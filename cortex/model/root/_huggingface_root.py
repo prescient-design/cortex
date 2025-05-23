@@ -53,6 +53,7 @@ class HuggingFaceRoot(RootNode):
         pooling_strategy: str = "none",  # "mean", "cls", "max", "pooler", "none"
         freeze_pretrained: bool = False,
         corruption_process: Optional[Any] = None,
+        cropped_max_len: Optional[int] = None,
         **model_kwargs,
     ):
         super().__init__()
@@ -61,6 +62,7 @@ class HuggingFaceRoot(RootNode):
         self.feature_extraction_layer = feature_extraction_layer
         self.pooling_strategy = pooling_strategy
         self.corruption_process = corruption_process
+        self.cropped_max_len = cropped_max_len
 
         # Load HuggingFace model
         if config is not None:
@@ -90,6 +92,15 @@ class HuggingFaceRoot(RootNode):
 
         # Store model config for introspection
         self.config = self.model.config
+
+        if cropped_max_len is not None:
+            self.crop_max_len(cropped_max_len)
+
+    # max length hack
+    def crop_max_len(self, max_len):
+        self.config.max_position_embeddings = max_len
+        w_pos = self.model.embeddings.position_embeddings.weight
+        w_pos = w_pos[:max_len]
 
     def forward(
         self,

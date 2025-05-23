@@ -95,8 +95,8 @@ class RegressionTask(BaseTask):
         if len(self.outcome_cols) == 1 and isinstance(batch.get(self.outcome_cols[0]), (torch.Tensor, np.ndarray)):
             # Direct tensor/array from HF dataset
             targets_array = batch[self.outcome_cols[0]]
-            if isinstance(targets_array, torch.Tensor):
-                targets_array = targets_array.cpu().numpy()
+            # if isinstance(targets_array, torch.Tensor):
+            #     targets_array = targets_array.cpu().numpy()
             # Ensure 2D shape
             if targets_array.ndim == 1:
                 targets_array = targets_array.reshape(-1, 1)

@@ -97,8 +97,14 @@ class NeuralTreeLightningV2(NeuralTree, L.LightningModule):
         # Build root nodes
         self._build_roots(cfg)
 
-        # Build trunk node
-        self._build_trunk(cfg)
+        # create trunk node
+        root_out_dims = [r_node.out_dim for r_node in self.root_nodes.values()]
+        if not hasattr(cfg.trunk, "out_dim"):
+            cfg.trunk["out_dim"] = max(root_out_dims)
+        self.trunk_node = hydra.utils.instantiate(
+            cfg.trunk,
+            in_dims=root_out_dims,
+        ).to(self.device, self.dtype)
 
         # Build tasks
         task_dict = {}
@@ -306,7 +312,7 @@ class NeuralTreeLightningV2(NeuralTree, L.LightningModule):
 
             # Record metrics
             step_metrics.setdefault(task_key, []).append(loss.item())
-            batch_sizes.setdefault(task_key, []).append(batch[leaf_key]["batch_size"])
+            batch_sizes.setdefault(task_key, []).append(leaf_targets["targets"].shape[0])
 
         # Aggregate metrics
         aggregated_metrics = {}
@@ -348,6 +354,7 @@ class NeuralTreeLightningV2(NeuralTree, L.LightningModule):
 
         # Clear accumulated outputs
         self.validation_step_outputs.clear()
+        self.train()
 
     def _log_task_metrics(self, metrics: Dict[str, float], prefix: str) -> None:
         """
