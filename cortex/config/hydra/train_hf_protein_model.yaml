@@ -1,0 +1,110 @@
+defaults:
+  - _self_
+  - logging: default
+
+# HuggingFace protein model training configuration
+job_name: hf_protein_model
+
+# Tree configuration
+tree:
+  _target_: cortex.model.tree.NeuralTreeLightningV2
+  root_nodes:
+    _target_: torch.nn.ModuleDict
+  trunk_node: null
+  branch_nodes:
+    _target_: torch.nn.ModuleDict
+  leaf_nodes:
+    _target_: torch.nn.ModuleDict
+seed: 42
+num_workers: 2  # Reduced for Mac
+download_datasets: true
+dataset_root_dir: ${hydra:runtime.cwd}/data
+data_dir: ${hydra:runtime.cwd}/data
+save_ckpt: true
+ckpt_file: model.ckpt
+ckpt_cfg: model.yaml
+warnings_filter: default
+
+# Wandb config
+wandb_mode: offline
+
+# Model configuration - using tiny BERT for Mac
+roots:
+  protein_seq:
+    _target_: cortex.model.root.HuggingFaceRoot
+    model_name_or_path: prajjwal1/bert-tiny  # 4.4M params instead of 420M
+    pooling_strategy: none  # Keep sequence dimension for Conv1dBranch
+    freeze_pretrained: false
+
+trunk:
+  _target_: cortex.model.trunk.SumTrunk
+  out_dim: 128  # Smaller for tiny model
+
+branches:
+  protein_property:
+    _target_: cortex.model.branch.Conv1dBranch
+    out_dim: 64  # Smaller
+    num_blocks: 1  # Fewer blocks
+    kernel_size: 5
+    dilation_base: 1
+    channel_dim: 128  # Smaller
+    channel_dim_mult: 1
+    dropout_p: 0.1
+
+# Task configuration using HuggingFace datasets
+tasks:
+  log_fluorescence:
+    _target_: cortex.task.RegressionTask
+    input_map:
+      protein_seq: []  # Empty list for HF tokenized inputs
+    outcome_cols: ["label"]
+    root_key: protein_seq
+    corrupt_train_inputs: false
+    corrupt_inference_inputs: false
+    nominal_label_var: 0.01
+    ensemble_size: 1
+    branch_key: protein_property
+    leaf_key: log_fluorescence  # Need to specify leaf_key for proper leaf creation
+    data_module:
+      _target_: cortex.data.data_module.HFTaskDataModule
+      dataset_config:
+        _target_: datasets.load_dataset
+        path: "InstaDeepAI/true-cds-protein-tasks"
+        name: "fluorescence"
+        trust_remote_code: true
+      batch_size: ${fit.batch_size}
+      num_workers: ${num_workers}
+      drop_last: true
+      text_field: "sequence"
+      label_field: "label"
+      add_spaces_between_chars: true
+      tokenization_batch_size: 1000
+      tokenization_num_proc: 2  # Reduced for Mac
+      skip_task_setup: true  # Setup will be called after tokenizer config is set
+
+# Training configuration
+fit:
+  batch_size: 16  # Smaller batch size for Mac
+  optimizer:
+    _target_: torch.optim.AdamW
+    lr: 1e-3  # Higher LR for faster convergence in demo
+    weight_decay: 0.01
+  lr_scheduler:
+    _target_: torch.optim.lr_scheduler.CosineAnnealingLR
+    T_max: 10  # Shorter schedule
+    eta_min: 1e-5
+
+trainer:
+  _target_: lightning.pytorch.Trainer
+  max_epochs: 2  # Just 2 epochs for demo
+  accelerator: auto
+  devices: 1
+  precision: 32  # Full precision on Mac
+  # gradient_clip_val: 1.0  # Not supported with manual optimization
+  accumulate_grad_batches: 1
+  log_every_n_steps: 10
+  val_check_interval: 0.5
+  enable_checkpointing: true
+  enable_progress_bar: true
+  enable_model_summary: true
+  num_sanity_val_steps: 0
