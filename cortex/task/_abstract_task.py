@@ -23,18 +23,24 @@ class BaseTask(ABC):
         self.data_module = data_module
         self.input_map = input_map
         self.leaf_key = leaf_key
-        self._dataloaders = {
-            "train": iter(self.data_module.train_dataloader()),
-            "val": iter(self.data_module.val_dataloader()),
-            "test": iter(self.data_module.test_dataloader()),
-        }
+        self._dataloaders = None  # Lazy load
         self.corrupt_train_inputs = corrupt_train_inputs
         self.corrupt_inference_inputs = corrupt_inference_inputs
+
+    def _ensure_dataloaders(self):
+        """Lazy load dataloaders when first needed."""
+        if self._dataloaders is None:
+            self._dataloaders = {
+                "train": iter(self.data_module.train_dataloader()),
+                "val": iter(self.data_module.val_dataloader()),
+                "test": iter(self.data_module.test_dataloader()),
+            }
 
     def sample_minibatch(self, split: str = "train", as_df: bool = False) -> dict | pd.DataFrame:
         """
         Return a random minibatch of data formatted for a `NeuralTree` object
         """
+        self._ensure_dataloaders()
         try:
             batch = next(self._dataloaders[split])
         except StopIteration:

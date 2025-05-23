@@ -227,6 +227,16 @@ class HuggingFaceRoot(RootNode):
         return next(self.model.parameters()).device
 
     @property
+    def out_dim(self) -> int:
+        """Get output dimension based on pooling strategy."""
+        if self.pooling_strategy == "none":
+            # Full sequence output
+            return self.config.hidden_size
+        else:
+            # Pooled output
+            return self.config.hidden_size
+
+    @property
     def max_length(self) -> int:
         """Get maximum sequence length from model config."""
         # Different models use different config names

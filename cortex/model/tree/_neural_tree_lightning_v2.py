@@ -412,13 +412,26 @@ class NeuralTreeLightningV2(NeuralTree, L.LightningModule):
 
             task_loaders = {}
             for task_key, task in self.task_dict.items():
-                if hasattr(task, "get_dataloader"):
-                    task_loaders[f"{task_key}_leaf"] = task.get_dataloader(split)
+                if hasattr(task, "data_module"):
+                    # Get the appropriate dataloader method
+                    dataloader_method = getattr(task.data_module, f"{split}_dataloader", None)
+                    if dataloader_method:
+                        dataloader = dataloader_method()
+                        if dataloader is not None:
+                            task_loaders[f"{task_key}_0"] = dataloader
 
             if task_loaders:
                 return CombinedLoader(task_loaders, mode="min_size")
 
         return None
+
+    def train_dataloader(self):
+        """Return training dataloader."""
+        return self.get_dataloader("train")
+
+    def val_dataloader(self):
+        """Return validation dataloader."""
+        return self.get_dataloader("val")
 
     # Abstract method implementations for NeuralTree compatibility
     def _predict_batch(self, batch, leaf_keys=None):

@@ -68,29 +68,35 @@ class HFTaskDataModule(LightningDataModule):
         """Load and optionally tokenize HuggingFace dataset."""
         import hydra
 
-        # Load dataset
-        if hasattr(self.dataset_config, "_target_") and self.dataset_config._target_ == "lambda: small_dataset":
-            # Handle test case
-            dataset = eval(self.dataset_config._target_)()
-        else:
-            dataset = hydra.utils.instantiate(self.dataset_config)
+        # Only load dataset if not already loaded
+        if self.train_dataset is None and self.val_dataset is None and self.test_dataset is None:
+            # Check if dataset_config is already instantiated by Hydra
+            if isinstance(self.dataset_config, (DatasetDict, Dataset, IterableDataset)):
+                # Already loaded by Hydra
+                dataset = self.dataset_config
+            elif hasattr(self.dataset_config, "_target_") and self.dataset_config._target_ == "lambda: small_dataset":
+                # Handle test case
+                dataset = eval(self.dataset_config._target_)()
+            else:
+                # Need to instantiate
+                dataset = hydra.utils.instantiate(self.dataset_config)
 
-        # Handle different dataset types
-        if isinstance(dataset, DatasetDict):
-            self.train_dataset = dataset.get("train")
-            self.val_dataset = dataset.get("validation", dataset.get("val"))
-            self.test_dataset = dataset.get("test", self.val_dataset)
-        elif isinstance(dataset, Dataset):
-            # Single dataset - need to split
-            splits = dataset.train_test_split(test_size=0.2, seed=42)
-            self.train_dataset = splits["train"]
-            self.val_dataset = splits["test"]
-            self.test_dataset = splits["test"]
-        elif isinstance(dataset, IterableDataset):
-            # Streaming dataset
-            self.train_dataset = dataset
-            self.val_dataset = dataset
-            self.test_dataset = dataset
+            # Handle different dataset types
+            if isinstance(dataset, DatasetDict):
+                self.train_dataset = dataset.get("train")
+                self.val_dataset = dataset.get("validation", dataset.get("val"))
+                self.test_dataset = dataset.get("test", self.val_dataset)
+            elif isinstance(dataset, Dataset):
+                # Single dataset - need to split
+                splits = dataset.train_test_split(test_size=0.2, seed=42)
+                self.train_dataset = splits["train"]
+                self.val_dataset = splits["test"]
+                self.test_dataset = splits["test"]
+            elif isinstance(dataset, IterableDataset):
+                # Streaming dataset
+                self.train_dataset = dataset
+                self.val_dataset = dataset
+                self.test_dataset = dataset
 
         # Apply tokenization if tokenizer config is available
         if self._tokenizer_config and not self._tokenized:
