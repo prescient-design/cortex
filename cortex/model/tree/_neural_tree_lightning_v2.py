@@ -88,15 +88,60 @@ class NeuralTreeLightningV2(NeuralTree, L.LightningModule):
         """
         Build neural tree from configuration.
 
-        This method maintains compatibility with existing training scripts
-        while supporting both v1 and v2/v3 infrastructure.
-
         Args:
-            cfg: Hydra configuration
+            cfg: Hydra configuration with roots, trunk, branches, and tasks
             skip_task_setup: Whether to skip task setup
         """
-        # Delegate to parent for tree construction
-        task_dict = super().build_tree(cfg, skip_task_setup=skip_task_setup)
+        import hydra
+
+        # Build root nodes
+        self._build_roots(cfg)
+
+        # Build trunk node
+        self._build_trunk(cfg)
+
+        # Build tasks
+        task_dict = {}
+        for task_key, task_cfg in cfg.tasks.items():
+            # Set up data module options
+            if hasattr(task_cfg, "data_module"):
+                task_cfg.data_module["skip_task_setup"] = skip_task_setup
+
+            # Instantiate task
+            task = hydra.utils.instantiate(task_cfg)
+
+            # Pass tokenizer config from root to task's data module
+            if hasattr(task, "root_key") and task.root_key in self.root_nodes:
+                root = self.root_nodes[task.root_key]
+                if hasattr(root, "get_tokenizer_config") and hasattr(task, "data_module"):
+                    # Store tokenizer config on data module for use in dataloaders
+                    task.data_module._tokenizer_config = root.get_tokenizer_config()
+
+            task_dict[task_key] = task
+
+            # Create branch and leaf nodes
+            ensemble_size = getattr(task_cfg, "ensemble_size", 1)
+            branch_key = getattr(task_cfg, "branch_key", task_key)
+
+            if branch_key in cfg.branches:
+                branch_cfg = cfg.branches[branch_key]
+
+                # Ensure branch has correct input dimension
+                branch_cfg["in_dim"] = self.trunk_node.out_dim
+
+                # Create ensemble of branches and leaves
+                for idx in range(ensemble_size):
+                    # Create branch
+                    b_key = f"{branch_key}_{idx}"
+                    if b_key not in self.branch_nodes:
+                        self.add_branch(branch_cfg, b_key)
+
+                    # Create leaf
+                    l_key = f"{task_key}_{idx}"
+                    leaf_in_dim = branch_cfg.out_dim
+                    leaf_node = task.create_leaf(leaf_in_dim, b_key)
+                    self.add_leaf(leaf_node, l_key)
+
         self.task_dict = task_dict
         return task_dict
 

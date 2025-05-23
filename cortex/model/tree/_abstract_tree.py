@@ -52,6 +52,35 @@ class NeuralTree(ABC, nn.Module):
         self.branch_nodes = branch_nodes
         self.leaf_nodes = leaf_nodes
 
+    def _build_roots(self, cfg: DictConfig) -> nn.ModuleDict:
+        """Build root nodes from configuration."""
+        if not hasattr(cfg, "roots"):
+            return self.root_nodes
+
+        for root_key, root_cfg in cfg.roots.items():
+            self.root_nodes[root_key] = hydra.utils.instantiate(root_cfg)
+
+        return self.root_nodes
+
+    def _build_trunk(self, cfg: DictConfig) -> nn.Module:
+        """Build trunk node from configuration."""
+        if not hasattr(cfg, "trunk") or self.trunk_node is not None:
+            return self.trunk_node
+
+        # Calculate input dimensions from root nodes
+        root_out_dims = [r_node.out_dim for r_node in self.root_nodes.values()]
+
+        # Set output dimension if not specified
+        if not hasattr(cfg.trunk, "out_dim"):
+            cfg.trunk["out_dim"] = max(root_out_dims) if root_out_dims else 768
+
+        self.trunk_node = hydra.utils.instantiate(
+            cfg.trunk,
+            in_dims=root_out_dims,
+        )
+
+        return self.trunk_node
+
     @abstractmethod
     def build_tree(self, *args, **kwargs):
         pass

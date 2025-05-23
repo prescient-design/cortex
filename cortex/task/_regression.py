@@ -67,24 +67,47 @@ class RegressionTask(BaseTask):
         Format input DataFrame for a `NeuralTree` object
         """
         inputs = {}
-        for root_key, input_cols in self.input_map.items():
+
+        # Check if batch contains HuggingFace-style tokenized inputs
+        if "input_ids" in batch and len(self.input_map) == 1:
+            # Direct pass-through for tokenized inputs
+            root_key = list(self.input_map.keys())[0]
             inputs[root_key] = {
-                "inputs": np.concatenate([np.array(batch[col]).reshape(-1, 1) for col in input_cols], axis=-1),
-                "corrupt_frac": corrupt_frac,
+                "input_ids": batch["input_ids"],
+                "attention_mask": batch.get("attention_mask"),
+                "token_type_ids": batch.get("token_type_ids"),
             }
+            if corrupt_frac > 0:
+                inputs[root_key]["corrupt_frac"] = corrupt_frac
+        else:
+            # Original column-based formatting (to be deprecated)
+            for root_key, input_cols in self.input_map.items():
+                inputs[root_key] = {
+                    "inputs": np.concatenate([np.array(batch[col]).reshape(-1, 1) for col in input_cols], axis=-1),
+                    "corrupt_frac": corrupt_frac,
+                }
         return inputs
 
     def format_targets(self, batch: Dict[str, Any]) -> dict:
         """
         Format target DataFrame for a `NeuralTree` object
         """
-        targets = {
-            self.leaf_key: {
-                "targets": np.concatenate(
-                    [np.array(batch[col]).astype(float).reshape(-1, 1) for col in self.outcome_cols], axis=-1
-                )
-            }
-        }
+        # Check if we have a single outcome column that's already a tensor/array
+        if len(self.outcome_cols) == 1 and isinstance(batch.get(self.outcome_cols[0]), (torch.Tensor, np.ndarray)):
+            # Direct tensor/array from HF dataset
+            targets_array = batch[self.outcome_cols[0]]
+            if isinstance(targets_array, torch.Tensor):
+                targets_array = targets_array.cpu().numpy()
+            # Ensure 2D shape
+            if targets_array.ndim == 1:
+                targets_array = targets_array.reshape(-1, 1)
+        else:
+            # Original column-based formatting
+            targets_array = np.concatenate(
+                [np.array(batch[col]).astype(float).reshape(-1, 1) for col in self.outcome_cols], axis=-1
+            )
+
+        targets = {self.leaf_key: {"targets": targets_array}}
         return targets
 
     def create_leaf(self, in_dim: int, branch_key: str) -> RegressorLeaf:

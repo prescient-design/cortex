@@ -226,6 +226,27 @@ class HuggingFaceRoot(RootNode):
         """Get model device."""
         return next(self.model.parameters()).device
 
+    @property
+    def max_length(self) -> int:
+        """Get maximum sequence length from model config."""
+        # Different models use different config names
+        if hasattr(self.config, "max_position_embeddings"):
+            return self.config.max_position_embeddings
+        elif hasattr(self.config, "max_length"):
+            return self.config.max_length
+        elif hasattr(self.config, "n_positions"):
+            return self.config.n_positions
+        else:
+            # Default fallback
+            return 512
+
+    def get_tokenizer_config(self) -> Dict[str, Any]:
+        """Get configuration for tokenizer instantiation in data loaders."""
+        return {
+            "pretrained_model_name_or_path": self.model_name_or_path,
+            "max_length": self.max_length,
+        }
+
     @classmethod
     def from_pretrained(cls, model_name_or_path: str, **kwargs) -> "HuggingFaceRoot":
         """
