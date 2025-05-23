@@ -6,5 +6,8 @@ docs/build
 temp
 .coverage
 *.ipynb_checkpoints
-*/.cache
-*/lightning_logs
+.cache
+lightning_logs
+wandb
+outputs
+checkpoints

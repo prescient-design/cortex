@@ -1,5 +1,4 @@
-from collections import OrderedDict
-from typing import Optional
+from typing import Any, Dict, Optional
 
 import numpy as np
 import torch
@@ -23,7 +22,7 @@ class RegressionTask(BaseTask):
         data_module: TaskDataModule,
         input_map: dict[str, str],
         outcome_cols: list[str],
-        leaf_key: str,
+        leaf_key: str,  # in practice NeuralTree models are passing task keys
         corrupt_train_inputs: bool = False,
         corrupt_inference_inputs: bool = False,
         root_key: Optional[str] = None,
@@ -53,7 +52,7 @@ class RegressionTask(BaseTask):
         outcome_transform(outcomes)
         outcome_transform.eval()
 
-    def format_batch(self, batch: OrderedDict, corrupt_frac: float = None) -> dict:
+    def format_batch(self, batch: Dict[str, Any], corrupt_frac: float = None) -> dict:
         """
         Format a batch of data for a `NeuralTree` object
         """
@@ -63,29 +62,51 @@ class RegressionTask(BaseTask):
             "leaf_targets": self.format_targets(batch),
         }
 
-    def format_inputs(self, batch: OrderedDict, corrupt_frac: float = 0.0) -> dict:
+    def format_inputs(self, batch: Dict[str, Any], corrupt_frac: float = 0.0) -> dict:
         """
         Format input DataFrame for a `NeuralTree` object
         """
         inputs = {}
-        for root_key, input_cols in self.input_map.items():
+
+        # Check if batch contains HuggingFace-style tokenized inputs
+        if "input_ids" in batch and len(self.input_map) == 1:
+            # Direct pass-through for tokenized inputs
+            root_key = list(self.input_map.keys())[0]
             inputs[root_key] = {
-                "inputs": np.concatenate([np.array(batch[col]).reshape(-1, 1) for col in input_cols], axis=-1),
-                "corrupt_frac": corrupt_frac,
+                "input_ids": batch["input_ids"],
+                "attention_mask": batch.get("attention_mask"),
+                "token_type_ids": batch.get("token_type_ids"),
             }
+            inputs[root_key]["corrupt_frac"] = corrupt_frac
+        else:
+            # Original column-based formatting (to be deprecated)
+            for root_key, input_cols in self.input_map.items():
+                inputs[root_key] = {
+                    "inputs": np.concatenate([np.array(batch[col]).reshape(-1, 1) for col in input_cols], axis=-1),
+                    "corrupt_frac": corrupt_frac,
+                }
         return inputs
 
-    def format_targets(self, batch: OrderedDict) -> dict:
+    def format_targets(self, batch: Dict[str, Any]) -> dict:
         """
         Format target DataFrame for a `NeuralTree` object
         """
-        targets = {
-            self.leaf_key: {
-                "targets": np.concatenate(
-                    [np.array(batch[col]).astype(float).reshape(-1, 1) for col in self.outcome_cols], axis=-1
-                )
-            }
-        }
+        # Check if we have a single outcome column that's already a tensor/array
+        if len(self.outcome_cols) == 1 and isinstance(batch.get(self.outcome_cols[0]), (torch.Tensor, np.ndarray)):
+            # Direct tensor/array from HF dataset
+            targets_array = batch[self.outcome_cols[0]]
+            # if isinstance(targets_array, torch.Tensor):
+            #     targets_array = targets_array.cpu().numpy()
+            # Ensure 2D shape
+            if targets_array.ndim == 1:
+                targets_array = targets_array.reshape(-1, 1)
+        else:
+            # Original column-based formatting
+            targets_array = np.concatenate(
+                [np.array(batch[col]).astype(float).reshape(-1, 1) for col in self.outcome_cols], axis=-1
+            )
+
+        targets = {self.leaf_key: {"targets": targets_array}}
         return targets
 
     def create_leaf(self, in_dim: int, branch_key: str) -> RegressorLeaf:

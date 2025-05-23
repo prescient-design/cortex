@@ -1,0 +1,9 @@
+_target_: cortex.model.root.HuggingFaceRoot
+model_name_or_path: Rostlab/prot_bert_bfd
+model_max_length: 512
+freeze: false
+pooling_type: mean
+# HuggingFace model config overrides
+model_config:
+  hidden_dropout_prob: 0.1
+  attention_probs_dropout_prob: 0.1

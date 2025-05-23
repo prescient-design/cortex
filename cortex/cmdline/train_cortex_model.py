@@ -77,6 +77,8 @@ def execute(cfg):
     model = hydra.utils.instantiate(cfg.tree)
     model.build_tree(cfg, skip_task_setup=False)
 
+    model = torch.compile(model, backend="inductor", mode="reduce-overhead")
+
     trainer.fit(
         model,
         train_dataloaders=model.get_dataloader(split="train"),
